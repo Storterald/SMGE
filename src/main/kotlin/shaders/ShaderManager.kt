@@ -1,0 +1,5 @@
+package shaders
+
+class ShaderManager {
+
+}
