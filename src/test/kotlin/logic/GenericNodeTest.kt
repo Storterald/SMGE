@@ -383,6 +383,33 @@ class GenericNodeTest {
     }
 
     @Test
+    fun removeChildById_throwsIfIdIsEmpty() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        assertThrows<IllegalArgumentException> { node.removeChildById("") }
+    }
+
+    @Test
+    fun removeChildById_throwsIfIdHasOnlySpaces() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        assertThrows<IllegalArgumentException> { node.removeChildById("    ") }
+    }
+
+    @Test
+    fun removeChildById_throwsIfIdHasSpaceAsFirstChar() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        assertThrows<IllegalArgumentException> { node.removeChildById(" id") }
+    }
+
+    @Test
     fun removeChildAtIndex_removesCorrectChild() {
         val node = GenericNode()
         val childNode1 = GenericNode("childNode1")

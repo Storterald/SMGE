@@ -78,6 +78,10 @@ class GenericNode(iId: String = "", iPosition: FloatArray = floatArrayOf(0.0f, 0
     }
 
     fun removeChildById(id: String) {
+        require(id != "") { "The id must contain at least one char." }
+        require(id.indexOfFirst { it in " " } == -1) { "The id must contain at least one non ' ' char." }
+        require(id[0] != ' ') { "The id mustn't have a space as it's first character." }
+
         if (!children.removeAll { it.id == id }) throw Exception("No node with the given id is in the children list.")
     }
 
