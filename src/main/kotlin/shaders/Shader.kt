@@ -1,11 +1,5 @@
 package shaders
 
-import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
-import org.lwjgl.glfw.GLFW.*
-import org.lwjgl.glfw.GLFWErrorCallback
-import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11.*
-import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.opengl.GL20.*
 
 import java.io.File
@@ -33,7 +27,7 @@ class Shader(vertexPath: String, fragmentPath: String) {
         val fragmentFile = File(fragmentPath)
 
         check(vertexFile.exists()) { "Vertex shader source file doesn't exist." }
-        check(fragmentFile.exists()) { "Vertex shader source file doesn't exist." }
+        check(fragmentFile.exists()) { "Fragment shader source file doesn't exist." }
 
         println("CCCCCC")
 
