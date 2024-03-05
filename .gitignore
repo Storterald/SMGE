@@ -3,6 +3,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### Crashlogs ###
+/crashlogs/
+.log
+
 ### Eclipse ###
 .apt_generated
 .classpath
