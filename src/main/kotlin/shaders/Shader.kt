@@ -16,12 +16,9 @@ class Shader(vertexPath: String, fragmentPath: String) {
         require(vertexPath != "") { "Vertex path cannot be empty." }
         require(fragmentPath != "") { "Fragment path cannot be empty." }
 
-        println("AAAAAA")
-
         programId = glCreateProgram()
         check(programId != 0) { "Could not create shader program." }
 
-        println("BBBBB")
 
         val vertexFile = File(vertexPath)
         val fragmentFile = File(fragmentPath)
@@ -29,22 +26,17 @@ class Shader(vertexPath: String, fragmentPath: String) {
         check(vertexFile.exists()) { "Vertex shader source file doesn't exist." }
         check(fragmentFile.exists()) { "Fragment shader source file doesn't exist." }
 
-        println("CCCCCC")
 
         val vertexCode = vertexFile.readText()
         val fragmentCode = fragmentFile.readText()
 
         createVertexShader(vertexCode)
 
-        println("DDDDDD")
-
         createFragmentShader(fragmentCode)
 
-        println("EEEEEEE")
 
         link()
 
-        println("FFFFFF")
     }
 
     private fun createVertexShader(shaderCode: String) {
