@@ -1,29 +1,23 @@
+import gameLoop.close
+import gameLoop.start
+import gameLoop.update
+import math.Vec2
 import org.lwjgl.glfw.GLFW.*
 import renderEngine.DisplayManager
-import shaders.Shader
+import renderEngine.THREE_DIMENSIONS
 
-
-lateinit var RESOLUTION: Pair<Int, Int>
-var WIDTH: Int = 144
-var HEIGHT: Int = 144
+lateinit var RESOLUTION: Vec2
+var WIDTH: Float = 300f
+var HEIGHT: Float = 300f
 var WINDOW = 0L
 
 fun main() {
-    val display = DisplayManager("titolo molto bello uwu sos")
-
-    val shader = Shader(
-        "src\\main\\kotlin\\shaders\\vertexShader.glsl",
-        "src\\main\\kotlin\\shaders\\fragmentShader.glsl"
-    )
-
-    glfwSetKeyCallback(WINDOW) {
-        window, key, scancode, action, mods -> if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-            glfwSetWindowShouldClose(window, true)
-    }
+    val display = DisplayManager("titolo", THREE_DIMENSIONS)
+    display.start()
 
     while (!glfwWindowShouldClose(WINDOW)) {
-        display.render()
+        display.update()
     }
 
-    display.closeDisplay()
+    display.close()
 }

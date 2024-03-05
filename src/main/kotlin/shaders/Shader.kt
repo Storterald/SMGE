@@ -19,24 +19,19 @@ class Shader(vertexPath: String, fragmentPath: String) {
         programId = glCreateProgram()
         check(programId != 0) { "Could not create shader program." }
 
-
         val vertexFile = File(vertexPath)
         val fragmentFile = File(fragmentPath)
 
         check(vertexFile.exists()) { "Vertex shader source file doesn't exist." }
         check(fragmentFile.exists()) { "Fragment shader source file doesn't exist." }
 
-
         val vertexCode = vertexFile.readText()
         val fragmentCode = fragmentFile.readText()
 
         createVertexShader(vertexCode)
-
-        createFragmentShader(fragmentCode)
-
-
+        createFragmentShader(fragmentCode
+        )
         link()
-
     }
 
     private fun createVertexShader(shaderCode: String) {
