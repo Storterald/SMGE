@@ -2,10 +2,11 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.idea/
 
 ### Crashlogs ###
-/crashlogs/
-.log
+crashlogs/
+*.log
 
 ### Eclipse ###
 .apt_generated
