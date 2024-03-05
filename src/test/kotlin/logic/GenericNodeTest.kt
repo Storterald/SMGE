@@ -2,6 +2,7 @@ package logic
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
 
 class GenericNodeTest {
 
@@ -238,6 +239,192 @@ class GenericNodeTest {
     fun anchorPoint_throwsIfiAnchorPointIsHigherThanOne() {
         val node = GenericNode()
         assertThrows<IllegalArgumentException> { node.anchorPoint = floatArrayOf(1.1f, 1.1f) }
+    }
+
+    // ### FUNCTION TEST ###
+
+    @Test
+    fun addChild_addsTheNodeToTheChildrenList() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        assertEquals(1, node.getChildrenCount())
+        assertEquals(childNode, node.getChildById("childNode"))
+    }
+
+    @Test
+    fun addChild_throwsIfTriedToAdd() {
+        val node = GenericNode()
+        assertThrows<IllegalArgumentException> { node.addChild(node) }
+    }
+
+    @Test
+    fun getChildById_returnsCorrectNode() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        assertEquals(childNode, node.getChildById("childNode"))
+    }
+
+    @Test
+    fun getChildById_throwsIfIdIsEmpty() {
+        val node = GenericNode()
+        assertThrows<IllegalArgumentException> { node.getChildById("") }
+    }
+
+    @Test
+    fun getChildById_throwsIfIdIsOnlyMadeBySpaces() {
+        val node = GenericNode()
+        assertThrows<IllegalArgumentException> { node.getChildById("    ") }
+    }
+
+    @Test
+    fun getChildById_throwsIfIdHasASpaceAsFirstChar() {
+        val node = GenericNode()
+        assertThrows<IllegalArgumentException> { node.getChildById(" id") }
+    }
+
+    @Test
+    fun getChildById_throwsIfNoChildIsFound() {
+        val node = GenericNode()
+        assertThrows<Exception> { node.getChildById("id") }
+    }
+
+    @Test
+    fun getChildAtIndex_removesCorrectChild() {
+        val node = GenericNode()
+        val childNode1 = GenericNode("childNode1")
+        node.addChild(childNode1)
+        val childNode2 = GenericNode("childNode2")
+        node.addChild(childNode2)
+        val childNode3 = GenericNode("childNode3")
+        node.addChild(childNode3)
+        val childNode4 = GenericNode("childNode4")
+        node.addChild(childNode4)
+
+        assertEquals(childNode2, node.getChildAtIndex(1))
+    }
+
+    @Test
+    fun getChildAtIndex_throwsIfIndexIsOutOfBounds() {
+        val node = GenericNode()
+        val childNode1 = GenericNode("childNode1")
+        node.addChild(childNode1)
+
+        assertThrows<IllegalArgumentException> { node.getChildAtIndex(2) }
+    }
+
+    @Test
+    fun getChildAtIndex_throwsIfIndexIsNegative() {
+        val node = GenericNode()
+        val childNode1 = GenericNode("childNode1")
+        node.addChild(childNode1)
+
+        assertThrows<IllegalArgumentException> { node.getChildAtIndex(-1) }
+    }
+
+    @Test
+    fun getChildAtIndex_throwsIfThereAreNoChildren() {
+        val node = GenericNode()
+
+        assertThrows<IllegalStateException> { node.getChildAtIndex(0) }
+    }
+
+    @Test
+    fun getChildrenCount_returnsCorrectChildrenCount() {
+        val node = GenericNode()
+        val childNode1 = GenericNode()
+        node.addChild(childNode1)
+        val childNode2 = GenericNode()
+        node.addChild(childNode2)
+        val childNode3 = GenericNode()
+        node.addChild(childNode3)
+        val childNode4 = GenericNode()
+        node.addChild(childNode4)
+
+        assertEquals(4, node.getChildrenCount())
+    }
+
+    @Test
+    fun removeChild_removesChildCorrectly() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        assertEquals(childNode, node.getChildById("childNode"))
+        node.removeChild(childNode)
+        assertThrows<Exception> { node.getChildById("childNode") }
+    }
+
+    @Test
+    fun removeChild_throwsIfChildIsNotPresent() {
+        val node1 = GenericNode()
+        val node2 = GenericNode()
+
+        assertThrows<Exception> { node1.removeChild(node2) }
+    }
+
+    @Test
+    fun removeChildById_removesChildCorrectly() {
+        val node = GenericNode()
+        val childNode = GenericNode("childNode")
+        node.addChild(childNode)
+
+        node.removeChildById("childNode")
+        assertEquals(0, node.getChildrenCount())
+    }
+
+    @Test
+    fun removeChildById_throwsIfChildIsNotPresent() {
+        val node = GenericNode()
+        assertThrows<Exception> { node.removeChildById("childNode") }
+    }
+
+    @Test
+    fun removeChildAtIndex_removesCorrectChild() {
+        val node = GenericNode()
+        val childNode1 = GenericNode("childNode1")
+        node.addChild(childNode1)
+        val childNode2 = GenericNode("childNode2")
+        node.addChild(childNode2)
+        val childNode3 = GenericNode("childNode3")
+        node.addChild(childNode3)
+        val childNode4 = GenericNode("childNode4")
+        node.addChild(childNode4)
+
+        node.removeChildAtIndex(2)
+
+        assertEquals(childNode1, node.getChildById("childNode1"))
+        assertEquals(childNode2, node.getChildById("childNode2"))
+        assertThrows<Exception> { node.getChildById("childNode3") }
+        assertEquals(childNode4, node.getChildById("childNode4"))
+    }
+
+    @Test
+    fun removeChildAtIndex_throwsIfIndexIsOutOfBounds() {
+        val node = GenericNode()
+        val childNode1 = GenericNode("childNode1")
+        node.addChild(childNode1)
+
+        assertThrows<IllegalArgumentException> { node.removeChildAtIndex(2) }
+    }
+
+    @Test
+    fun removeChildAtIndex_throwsIfIndexIsNegative() {
+        val node = GenericNode()
+        val childNode1 = GenericNode("childNode1")
+        node.addChild(childNode1)
+
+        assertThrows<IllegalArgumentException> { node.removeChildAtIndex(-1) }
+    }
+
+    @Test
+    fun removeChildAtIndex_throwsIfThereAreNoChildren() {
+        val node = GenericNode()
+
+        assertThrows<IllegalStateException> { node.removeChildAtIndex(0) }
     }
 
 }
