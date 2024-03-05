@@ -8,29 +8,28 @@ import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryStack.stackPush
 import shaders.Shader
-import java.awt.SystemColor.window
 
 
 class DisplayManager(private val windowTitle: String) {
 
-    var currentShader: Shader = Shader(
-        "C:\\IntelliJ IDEA\\SMGE\\src\\main\\kotlin\\shaders\\vertexShader.vert",
-        "C:\\IntelliJ IDEA\\SMGE\\src\\main\\kotlin\\shaders\\fragmentShader.frag"
+    val currentShader: Shader = Shader(
+        "src\\main\\kotlin\\shaders\\vertexShader.glsl",
+        "src\\main\\kotlin\\shaders\\fragmentShader.glsl"
     )
 
     init {
+        require(windowTitle != "") { "The window name must contain at least one char." }
         require(windowTitle.indexOfFirst { it in " " } != -1) { "The window name must contain at least one non ' ' char." }
         require(windowTitle[0] != ' ') { "The window mustn't have a space as it's first character." }
 
-        //RESOLUTION = Pair(glfwGetVideoMode(glfwGetPrimaryMonitor())!!.width(), glfwGetVideoMode(glfwGetPrimaryMonitor())!!.height())
-        //WIDTH = RESOLUTION.first
-        //HEIGHT = RESOLUTION.second
-
         createDisplay()
+
+        RESOLUTION = Pair(glfwGetVideoMode(glfwGetPrimaryMonitor())!!.width(), glfwGetVideoMode(glfwGetPrimaryMonitor())!!.height())
+        WIDTH = RESOLUTION.first
+        HEIGHT = RESOLUTION.second
     }
 
     private fun createDisplay() {
