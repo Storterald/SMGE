@@ -24,7 +24,6 @@ fun main() {
     while (!glfwWindowShouldClose(WINDOW)) {
         display.render()
     }
-    //display.currentShader.cleanup()
 
     display.closeDisplay()
 }
