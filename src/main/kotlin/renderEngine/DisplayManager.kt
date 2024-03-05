@@ -15,11 +15,6 @@ import shaders.Shader
 
 class DisplayManager(private val windowTitle: String) {
 
-    val currentShader: Shader = Shader(
-        "src\\main\\kotlin\\shaders\\vertexShader.glsl",
-        "src\\main\\kotlin\\shaders\\fragmentShader.glsl"
-    )
-
     init {
         require(windowTitle != "") { "The window name must contain at least one char." }
         require(windowTitle.indexOfFirst { it in " " } != -1) { "The window name must contain at least one non ' ' char." }
