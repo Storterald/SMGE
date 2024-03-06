@@ -1,4 +1,4 @@
-package logic
+package nodeLogic
 
 abstract class Node(initialId: String = "") {
     init {
