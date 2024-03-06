@@ -1,6 +1,6 @@
 package logic
 
-open class Node(initialId: String = "") {
+abstract class Node(initialId: String = "") {
     init {
         if (initialId != "") {
             require(initialId.trim() != "") { "The id must contain at least one non ' ' char." }
@@ -42,7 +42,7 @@ open class Node(initialId: String = "") {
             if (it.id == id) return it
         }
 
-        throw Exception("No child the id '$id'")
+        throw Exception("No child has the id '$id'.")
     }
 
     fun getChildAtIndex(i: Int): Node {
