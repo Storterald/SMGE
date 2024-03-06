@@ -5,12 +5,9 @@ import org.lwjgl.opengl.GL20.*
 import java.io.File
 
 class Shader(vertexPath: String, fragmentPath: String) {
-    var programId = 0
-        private set
-    var vertexShaderId = 0
-        private set
-    var fragmentShaderId = 0
-        private set
+    private var programId = 0
+    private var vertexShaderId = 0
+    private var fragmentShaderId = 0
 
     init {
         require(vertexPath != "") { "Vertex path cannot be empty." }
@@ -29,8 +26,8 @@ class Shader(vertexPath: String, fragmentPath: String) {
         val fragmentCode = fragmentFile.readText()
 
         createVertexShader(vertexCode)
-        createFragmentShader(fragmentCode
-        )
+        createFragmentShader(fragmentCode)
+
         link()
     }
 

@@ -5,14 +5,14 @@ import shaders.Shader
 
 open class Scene2D(initialId: String = "", override val shader: Shader): Scene(initialId, shader) {
     override fun start() {
-        TODO("Not yet implemented")
+        super.start()
     }
 
     override fun update() {
-        TODO("Not yet implemented")
+        super.update()
     }
 
     override fun close() {
-        TODO("Not yet implemented")
+        super.close()
     }
 }
