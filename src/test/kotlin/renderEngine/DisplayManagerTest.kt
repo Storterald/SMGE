@@ -7,22 +7,22 @@ class DisplayManagerTest {
 
     @Test
     fun constructor_createsDisplayWithoutThrowing() {
-        assertDoesNotThrow { DisplayManager("Title") }
+        assertDoesNotThrow { DisplayManager("Title", TWO_DIMENSIONS) }
     }
 
     @Test
     fun constructor_throwsIfNameIsEmpty() {
-        assertThrows<IllegalArgumentException> { DisplayManager("") }
+        assertThrows<IllegalArgumentException> { DisplayManager("", TWO_DIMENSIONS) }
     }
 
     @Test
     fun constructor_throwsIfNameIsOnlyMadeBySpaces() {
-        assertThrows<IllegalArgumentException> { DisplayManager("           ") }
+        assertThrows<IllegalArgumentException> { DisplayManager("    ", TWO_DIMENSIONS) }
     }
 
     @Test
     fun constructor_throwsIfNameHasSpaceAsFirstChar() {
-        assertThrows<IllegalArgumentException> { DisplayManager(" Title") }
+        assertThrows<IllegalArgumentException> { DisplayManager(" Title", TWO_DIMENSIONS) }
     }
 
 }
