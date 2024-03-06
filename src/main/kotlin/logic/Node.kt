@@ -1,7 +1,5 @@
 package logic
 
-import logic.logic3d.Node3D
-
 open class Node(initialId: String = "") {
     init {
         if (initialId != "") {
@@ -22,8 +20,16 @@ open class Node(initialId: String = "") {
     var children: MutableList<Node> = mutableListOf()
         private set
 
+    var parent: Node? = null
+        private set(value) {
+            check(parent == null || value == null) { "You can't change the parent of the node." }
+            check(value != this)
+            field = value
+        }
+
     fun addChild(node: Node) {
         require(node != this) { "A node cannot have itself as a child." }
+        node.parent = this
         children.add(node)
     }
 
@@ -51,6 +57,7 @@ open class Node(initialId: String = "") {
 
     fun removeChild(node: Node) {
         if (!children.removeAll { it == node }) throw Exception("The given node isn't in the children list.")
+        node.parent = null
     }
 
     fun removeChildById(id: String) {
@@ -58,7 +65,14 @@ open class Node(initialId: String = "") {
         require(id.indexOfFirst { it in " " } == -1) { "The id must contain at least one non ' ' char." }
         require(id[0] != ' ') { "The id mustn't have a space as it's first character." }
 
-        if (!children.removeAll { it.id == id }) throw Exception("No node with the given id is in the children list.")
+        children.forEach {
+            if (it.id == id) {
+                children.remove(it)
+                it.parent = null
+                return
+            }
+        }
+        throw Exception("No node with the given id is in the children list.")
     }
 
     fun removeChildAtIndex(i: Int) {
@@ -66,6 +80,14 @@ open class Node(initialId: String = "") {
         require(i >= 0) { "The index must be 0 or higher" }
         require(i < children.size) { "The index must be between 0 and children.size-1" }
 
+        children[i].parent = null
         children.removeAt(i)
+    }
+
+    fun removeAllChildren() {
+        children.forEach {
+            it.parent = null
+        }
+        children.clear()
     }
 }
