@@ -1,6 +1,5 @@
-package logic.logic2d
+package nodeLogic.nodeLogic2d
 
-import logic.logic2d.Node2D
 import math.Vec2
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*

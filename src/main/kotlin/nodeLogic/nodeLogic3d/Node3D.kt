@@ -1,6 +1,6 @@
-package logic.logic3d
+package nodeLogic.nodeLogic3d
 
-import logic.Node
+import nodeLogic.Node
 import math.Vec3
 
 open class Node3D(initialId: String = "", initialPosition: Vec3 = Vec3(0.0f, 0.0f, 0.0f), initialAnchorPoint: Vec3 = Vec3(0.0f, 0.0f, 0.0f)): Node(initialId) {

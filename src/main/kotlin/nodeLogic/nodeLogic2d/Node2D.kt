@@ -1,9 +1,9 @@
-package logic.logic2d
+package nodeLogic.nodeLogic2d
 
-import logic.Object
+import nodeLogic.Node
 import math.Vec2
 
-class Object2D(initialId: String = "", initialPosition: Vec2 = Vec2(0.0f, 0.0f), initialAnchorPoint: Vec2 = Vec2(0.0f, 0.0f)): Object(initialId) {
+open class Node2D(initialId: String = "", initialPosition: Vec2 = Vec2(0.0f, 0.0f), initialAnchorPoint: Vec2 = Vec2(0.0f, 0.0f)): Node(initialId) {
     init {
         require(initialPosition.x >= 0.0f) { "The x position must be positive" }
         require(initialPosition.y >= 0.0f) { "The y position must be positive" }

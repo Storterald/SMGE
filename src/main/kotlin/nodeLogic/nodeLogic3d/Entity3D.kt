@@ -1,6 +1,6 @@
-package logic.logic3d
+package nodeLogic.nodeLogic3d
 
-import logic.Entity
+import nodeLogic.Entity
 import math.Vec3
 
 class Entity3D(initialId: String = "", initialPosition: Vec3 = Vec3(0.0f, 0.0f, 0.0f), initialAnchorPoint: Vec3 = Vec3(0.0f, 0.0f, 0.0f)) : Entity(initialId) {
