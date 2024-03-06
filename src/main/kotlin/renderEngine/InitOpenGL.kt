@@ -1,9 +1,8 @@
-package shaders
+package renderEngine
 
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 
 import RESOLUTION
@@ -11,6 +10,7 @@ import WINDOW
 import WIDTH
 import HEIGHT
 import math.Vec2
+import org.lwjgl.opengl.GL11.glClearColor
 
 fun createDisplay(windowTitle: String) {
     initDisplay()
@@ -20,7 +20,7 @@ fun createDisplay(windowTitle: String) {
     require(windowTitle[0] != ' ') { "The window mustn't have a space as it's first character." }
 
     // Create the window
-    WINDOW = glfwCreateWindow(WIDTH.toInt(), HEIGHT.toInt(), windowTitle, 0, 0)
+    WINDOW = glfwCreateWindow(WIDTH.toInt()/2, HEIGHT.toInt()/2, windowTitle, 0, 0)
     if (WINDOW == 0L) throw RuntimeException("Failed to create the GLFW window.")
 
     glfwSetKeyCallback(WINDOW) { window: Long, key: Int, scancode: Int, action: Int, mods: Int ->
@@ -52,7 +52,7 @@ fun createDisplay(windowTitle: String) {
 
     GL.createCapabilities()
 
-    GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f)
 }
 
 private fun initDisplay() {

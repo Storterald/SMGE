@@ -3,11 +3,11 @@ import math.Vec2
 import org.lwjgl.glfw.GLFW
 import renderEngine.SceneManager
 import shaders.Shader
-import shaders.createDisplay
+import renderEngine.createDisplay
 
 lateinit var RESOLUTION: Vec2
-var WIDTH: Float = 300f
-var HEIGHT: Float = 300f
+var WIDTH: Float = 0.0f
+var HEIGHT: Float = 0.0f
 var WINDOW = 0L
 
 fun main() {
