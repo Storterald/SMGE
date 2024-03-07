@@ -1,17 +1,19 @@
 package nodeLogic
 
-abstract class Node(initialId: String = "") {
+import renderEngine.SceneManager
+
+abstract class Node(id: String = "") {
     init {
-        if (initialId != "") {
-            require(initialId.trim() != "") { "The id must contain at least one non ' ' char." }
-            require(initialId[0] != ' ') { "The id mustn't have a space as it's first character." }
+        if (id != "") {
+            require(id.trim() != "") { "The id must contain at least one non ' ' char." }
+            require(id[0] != ' ') { "The id mustn't have a space as it's first character." }
         }
     }
 
-    var id: String = initialId
+    var id: String = id
         set(value) {
             require(value != "") { "The id must contain at least one char." }
-            require(value.indexOfFirst { it in " " } == -1) { "The id must contain at least one non ' ' char." }
+            require(id.trim() != "") { "The id must contain at least one non ' ' char." }
             require(value[0] != ' ') { "The id mustn't have a space as it's first character." }
 
             field = value
@@ -24,8 +26,8 @@ abstract class Node(initialId: String = "") {
 
     open var visible = true
         set(value) {
-            if (scene != null && this in scene!!.r) {
-                scene!!.r[this] = value
+            if (scene != null && this in scene!!.nodesToRender) {
+                scene!!.nodesToRender[this] = value
                 children.forEach {
                     it.visible = value
                 }
@@ -43,10 +45,14 @@ abstract class Node(initialId: String = "") {
     open fun addChild(node: Node) {
         require(node != this) { "A node cannot have itself as a child." }
         require(node.parent == null) { "The node is already a child of another node." }
+        require((this is SceneManager).xor(node !is Scene)) { "You can't add a scene as a child unless the parent is a SceneManager." }
 
         node.parent = this
 
-        if (scene != null && scene!!.r[this]!!) {
+        if (this is Scene) {
+            node.scene = this
+            node.loadNodeAndBelowToScene()
+        } else if (scene != null && scene!!.nodesToRender[this]!!) {
             node.scene = scene
             node.loadNodeAndBelowToScene()
         }
@@ -56,7 +62,7 @@ abstract class Node(initialId: String = "") {
 
     fun getChildById(id: String): Node {
         require(id != "") { "The id must contain at least one char." }
-        require(id.indexOfFirst { it in " " } == -1) { "The id must contain at least one non ' ' char." }
+        require(id.trim() != "") { "The id must contain at least one non ' ' char." }
         require(id[0] != ' ') { "The id mustn't have a space as it's first character." }
 
         children.forEach {
@@ -74,27 +80,34 @@ abstract class Node(initialId: String = "") {
         return children[i]
     }
 
-    fun getChildrenCount(): Int = children.size
+    fun getChildrenCount(): Int {
+        return children.size
+    }
 
-    open fun removeChild(node: Node) {
+    fun removeChild(node: Node) {
         if (!children.remove(node)) throw Exception("The given node isn't in the children list.")
 
         node.parent = null
 
-        if (node.scene != null && node.scene!!.r[this]!!) {
+        if (this is Scene) {
+            node.unloadNodeAndBelowFromScene()
+        } else if (node.scene != null && node.scene!!.nodesToRender[this]!!) {
             node.unloadNodeAndBelowFromScene()
         }
     }
 
-    open fun removeChildById(id: String) {
+    fun removeChildById(id: String) {
         require(id != "") { "The id must contain at least one char." }
-        require(id.indexOfFirst { it in " " } == -1) { "The id must contain at least one non ' ' char." }
+        require(id.trim() != "") { "The id must contain at least one non ' ' char." }
         require(id[0] != ' ') { "The id mustn't have a space as it's first character." }
 
         children.forEach {
             if (it.id == id) {
                 it.parent = null
-                if (it.scene != null && it.scene!!.r[this]!!) {
+
+                if (this is Scene) {
+                    it.unloadNodeAndBelowFromScene()
+                } else if (it.scene != null && it.scene!!.nodesToRender[this]!!) {
                     it.unloadNodeAndBelowFromScene()
                 }
 
@@ -106,35 +119,39 @@ abstract class Node(initialId: String = "") {
         throw Exception("No node with the given id is in the children list.")
     }
 
-    open fun removeChildAtIndex(i: Int) {
+    fun removeChildAtIndex(i: Int) {
         check(children.size > 0) { "The node does not contain any children" }
         require(i >= 0) { "The index must be 0 or higher" }
         require(i < children.size) { "The index must be between 0 and children.size-1" }
 
         children[i].parent = null
 
-        if (children[i].scene != null && children[i].scene!!.r[this]!!) {
+        if (this is Scene) {
+            children[i].unloadNodeAndBelowFromScene()
+        } else if (children[i].scene != null && children[i].scene!!.nodesToRender[this]!!) {
             children[i].unloadNodeAndBelowFromScene()
         }
 
         children.removeAt(i)
     }
 
-    open fun removeAllChildren() {
+    fun removeAllChildren() {
         children.forEach {
             it.parent = null
 
-            if (it.scene != null && it.scene!!.r[this]!!) {
+            if (this is Scene) {
+                it.unloadNodeAndBelowFromScene()
+            } else if (it.scene != null && it.scene!!.nodesToRender[this]!!) {
                 it.unloadNodeAndBelowFromScene()
             }
         }
         children.clear()
     }
 
-    fun loadNodeAndBelowToScene() {
+    private fun loadNodeAndBelowToScene() {
         check(scene != null) { "The node isn't in a scene" }
 
-        scene!!.r[this] = true
+        scene!!.nodesToRender[this] = true
         if (getChildrenCount() > 0) {
             children.forEach {
                 it.scene = scene
@@ -143,11 +160,11 @@ abstract class Node(initialId: String = "") {
         }
     }
 
-    fun unloadNodeAndBelowFromScene() {
+    private fun unloadNodeAndBelowFromScene() {
         check(scene != null) { "The node isn't in a scene" }
         
         if (parent == scene) parent = null
-        scene!!.r.remove(this)
+        scene!!.nodesToRender.remove(this)
         scene = null
         if (getChildrenCount() > 0) {
             children.forEach {

@@ -37,7 +37,7 @@ class NodeTest {
     // --------------------
 
     @Test
-    fun id_doesNotThrowIfValid() {
+    fun id_doesNotThrowIfValueIsValid() {
         val node = Node3D()
         assertDoesNotThrow { node.id = "id" }
     }
@@ -70,12 +70,12 @@ class NodeTest {
         childNode.visible = false
 
         assertEquals(scene, childNode.scene)
-        assertEquals(false, scene.r[childNode])
+        assertEquals(false, scene.nodesToRender[childNode])
 
         childNode.visible = true
 
         assertEquals(scene, childNode.scene)
-        assertEquals(true, scene.r[childNode])
+        assertEquals(true, scene.nodesToRender[childNode])
     }
 
     @Test
@@ -94,13 +94,13 @@ class NodeTest {
         childNode1.visible = false
 
         assertEquals(scene, childNode1.scene)
-        assertEquals(false, scene.r[childNode1])
+        assertEquals(false, scene.nodesToRender[childNode1])
         assertEquals(scene, childNode2.scene)
-        assertEquals(false, scene.r[childNode2])
+        assertEquals(false, scene.nodesToRender[childNode2])
         assertEquals(scene, childNode3.scene)
-        assertEquals(false, scene.r[childNode3])
+        assertEquals(false, scene.nodesToRender[childNode3])
         assertEquals(scene, childNode4.scene)
-        assertEquals(false, scene.r[childNode4])
+        assertEquals(false, scene.nodesToRender[childNode4])
     }
 
     // ### FUNCTIONS TEST ###
@@ -141,13 +141,22 @@ class NodeTest {
         childNode0.addChild(childNode1)
 
         assertEquals(scene, childNode1.scene)
-        assertEquals(true, scene.r[childNode1])
+        assertEquals(true, scene.nodesToRender[childNode1])
         assertEquals(scene, childNode2.scene)
-        assertEquals(true, scene.r[childNode2])
+        assertEquals(true, scene.nodesToRender[childNode2])
         assertEquals(scene, childNode3.scene)
-        assertEquals(true, scene.r[childNode3])
+        assertEquals(true, scene.nodesToRender[childNode3])
         assertEquals(scene, childNode4.scene)
-        assertEquals(true, scene.r[childNode4])
+        assertEquals(true, scene.nodesToRender[childNode4])
+    }
+
+    @Test
+    fun addChild_throwsIfTriesToAddASceneAsAChild() {
+        createDisplay("Title")
+        val node = Node3D()
+        val scene = Scene3D()
+
+        assertThrows<IllegalArgumentException> { node.addChild(scene) }
     }
 
     @Test
@@ -269,13 +278,13 @@ class NodeTest {
         childNode0.removeChild(childNode1)
 
         assertEquals(null, childNode1.scene)
-        assertEquals(null, scene.r[childNode1])
+        assertEquals(null, scene.nodesToRender[childNode1])
         assertEquals(null, childNode2.scene)
-        assertEquals(null, scene.r[childNode2])
+        assertEquals(null, scene.nodesToRender[childNode2])
         assertEquals(null, childNode3.scene)
-        assertEquals(null, scene.r[childNode3])
+        assertEquals(null, scene.nodesToRender[childNode3])
         assertEquals(null, childNode4.scene)
-        assertEquals(null, scene.r[childNode4])
+        assertEquals(null, scene.nodesToRender[childNode4])
     }
 
     @Test
