@@ -5,13 +5,31 @@ import shaders.Shader
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil
-
-import WINDOW
 import org.lwjgl.glfw.Callbacks
 
-abstract class Scene(initialId: String = "", open val shader: Shader): Node(initialId) {
+import WINDOW
+import renderEngine.SceneManager
+
+abstract class Scene(open val shader: Shader): Node("") {
+    init {
+        check(WINDOW != 0L) { "Initialize the display before creating a scene" }
+    }
+
+    val nodesToRender: HashMap<Node, Boolean> = HashMap()
+
     private var vaoID: Int = 0
     private var vboID: Int = 0
+
+    override var scene: Scene? = null
+        set(value) {
+            field = null
+        }
+
+    override var visible: Boolean = true
+        set(value) {
+            field = true
+        }
+
 
     open fun start() {
         val vertices = floatArrayOf(
@@ -90,41 +108,11 @@ abstract class Scene(initialId: String = "", open val shader: Shader): Node(init
         glfwSetErrorCallback(null)?.free()
     }
 
-    override var scene: Scene? = null
-        set(value) {
-            field = null
-        }
-
-    override var visible: Boolean = true
-        set(value) {
-            field = true
-        }
-
-    var r: HashMap<Node, Boolean> = hashMapOf()
-
-    override fun addChild(node: Node) {
-        super.addChild(node)
-        node.scene = this
-        node.loadNodeAndBelowToScene()
+    inline fun<reified T: Resource> setResource(toAdd: T) {
+        (parent as SceneManager).setResource<T>(toAdd)
     }
 
-    override fun removeChild(node: Node) {
-        node.unloadNodeAndBelowFromScene()
-        super.removeChild(node)
-    }
-
-    override fun removeChildAtIndex(i: Int) {
-        children[i].unloadNodeAndBelowFromScene()
-        super.removeChildAtIndex(i)
-    }
-
-    override fun removeChildById(id: String) {
-        children.forEach { if (it.id == id) it.unloadNodeAndBelowFromScene() }
-        super.removeChildById(id)
-    }
-
-    override fun removeAllChildren() {
-        children.forEach { it.unloadNodeAndBelowFromScene() }
-        super.removeAllChildren()
+    inline fun<reified T: Resource> getResource(): T {
+        return (parent as SceneManager).getResource<T>()
     }
 }

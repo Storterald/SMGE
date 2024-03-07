@@ -5,10 +5,8 @@ import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.system.MemoryStack
 
-import RESOLUTION
+import SCREEN_RESOLUTION
 import WINDOW
-import WIDTH
-import HEIGHT
 import math.Vec2
 import org.lwjgl.opengl.GL11.glClearColor
 
@@ -20,7 +18,7 @@ fun createDisplay(windowTitle: String) {
     require(windowTitle[0] != ' ') { "The window mustn't have a space as it's first character." }
 
     // Create the window
-    WINDOW = glfwCreateWindow(WIDTH.toInt()/2, HEIGHT.toInt()/2, windowTitle, 0, 0)
+    WINDOW = glfwCreateWindow((SCREEN_RESOLUTION.x/2.0f).toInt(), (SCREEN_RESOLUTION.y/2.0f).toInt(), windowTitle, 0, 0)
     if (WINDOW == 0L) throw RuntimeException("Failed to create the GLFW window.")
 
     glfwSetKeyCallback(WINDOW) { window: Long, key: Int, scancode: Int, action: Int, mods: Int ->
@@ -64,7 +62,5 @@ private fun initDisplay() {
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
 
-    RESOLUTION = Vec2(glfwGetVideoMode(glfwGetPrimaryMonitor())!!.width().toFloat(), glfwGetVideoMode(glfwGetPrimaryMonitor())!!.height().toFloat())
-    WIDTH = RESOLUTION.x
-    HEIGHT = RESOLUTION.y
+    SCREEN_RESOLUTION = Vec2(glfwGetVideoMode(glfwGetPrimaryMonitor())!!.width().toFloat(), glfwGetVideoMode(glfwGetPrimaryMonitor())!!.height().toFloat())
 }

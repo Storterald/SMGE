@@ -4,6 +4,8 @@ import org.lwjgl.opengl.GL20.*
 
 import java.io.File
 
+import WINDOW
+
 class Shader(vertexPath: String, fragmentPath: String) {
     private var programId = 0
     private var vertexShaderId = 0
@@ -12,6 +14,7 @@ class Shader(vertexPath: String, fragmentPath: String) {
     init {
         require(vertexPath != "") { "Vertex path cannot be empty." }
         require(fragmentPath != "") { "Fragment path cannot be empty." }
+        check(WINDOW != 0L) { "Initialize the display before creating a shader" }
 
         programId = glCreateProgram()
         check(programId != 0) { "Could not create shader program." }

@@ -1,25 +1,39 @@
 import nodeLogic.nodeLogic2d.Scene2D
 import math.Vec2
+import nodeLogic.Resource
 import org.lwjgl.glfw.GLFW
 import renderEngine.SceneManager
-import shaders.Shader
 import renderEngine.createDisplay
 
-lateinit var RESOLUTION: Vec2
-var WIDTH: Float = 0.0f
-var HEIGHT: Float = 0.0f
+lateinit var SCREEN_RESOLUTION: Vec2
+lateinit var WINDOW_RESOLUTION: Vec2
 var WINDOW = 0L
 
+data class Timer(var time: Int): Resource()
+data class DeltaTime(var lastFrameTime: Float, var deltaTime: Float): Resource()
+
+class TimerScene: Scene2D() {
+    override fun start() {
+        super.start()
+        setResource(Timer(0))
+    }
+
+    override fun update() {
+        super.update()
+        val time = getResource<Timer>().time
+        println(time)
+        setResource<Timer>(Timer(time+1))
+    }
+}
+
 fun main() {
-    createDisplay("titolo")
-    val shader = Shader(
-        "src\\main\\kotlin\\shaders\\VertexShader.glsl",
-        "src\\main\\kotlin\\shaders\\FragmentShader.glsl"
-    )
-    val scene = Scene2D("bob", shader = shader)
-    val sceneManager = SceneManager(scene)
+    createDisplay("Title")
+    val timerScene = TimerScene()
+    val sceneManager = SceneManager(timerScene)
 
     while (!GLFW.glfwWindowShouldClose(WINDOW)) {
         sceneManager.update()
     }
+
+    sceneManager.closeProgram()
 }
