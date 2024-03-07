@@ -91,10 +91,14 @@ abstract class Scene(initialId: String = "", open val shader: Shader): Node(init
     }
 
     override var scene: Scene? = null
-        set(value) {}
+        set(value) {
+            field = null
+        }
 
     override var visible: Boolean = true
-        set(value) {}
+        set(value) {
+            field = true
+        }
 
     var r: HashMap<Node, Boolean> = hashMapOf()
 
