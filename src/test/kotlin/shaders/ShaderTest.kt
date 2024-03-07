@@ -11,6 +11,7 @@ class ShaderTest {
 
     // ### CONSTRUCTOR TEST ###
     // ------------------------
+
     @Test
     fun constructor_DoesNotThrowIfDisplayIsInitialized() {
         createDisplay("Title")
