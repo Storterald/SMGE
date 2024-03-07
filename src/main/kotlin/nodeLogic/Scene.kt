@@ -105,26 +105,26 @@ abstract class Scene(initialId: String = "", open val shader: Shader): Node(init
     override fun addChild(node: Node) {
         super.addChild(node)
         node.scene = this
-        node.loadOnScene()
+        node.loadNodeAndBelowToScene()
     }
 
     override fun removeChild(node: Node) {
-        node.unloadFromScene()
+        node.unloadNodeAndBelowFromScene()
         super.removeChild(node)
     }
 
     override fun removeChildAtIndex(i: Int) {
-        children[i].unloadFromScene()
+        children[i].unloadNodeAndBelowFromScene()
         super.removeChildAtIndex(i)
     }
 
     override fun removeChildById(id: String) {
-        children.forEach { if (it.id == id) it.unloadFromScene() }
+        children.forEach { if (it.id == id) it.unloadNodeAndBelowFromScene() }
         super.removeChildById(id)
     }
 
     override fun removeAllChildren() {
-        children.forEach { it.unloadFromScene() }
+        children.forEach { it.unloadNodeAndBelowFromScene() }
         super.removeAllChildren()
     }
 }

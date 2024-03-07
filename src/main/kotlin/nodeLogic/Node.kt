@@ -48,7 +48,7 @@ abstract class Node(initialId: String = "") {
 
         if (scene != null && scene!!.r[this]!!) {
             node.scene = scene
-            node.loadOnScene()
+            node.loadNodeAndBelowToScene()
         }
 
         children.add(node)
@@ -82,7 +82,7 @@ abstract class Node(initialId: String = "") {
         node.parent = null
 
         if (node.scene != null && node.scene!!.r[this]!!) {
-            node.unloadFromScene()
+            node.unloadNodeAndBelowFromScene()
         }
     }
 
@@ -95,7 +95,7 @@ abstract class Node(initialId: String = "") {
             if (it.id == id) {
                 it.parent = null
                 if (it.scene != null && it.scene!!.r[this]!!) {
-                    it.unloadFromScene()
+                    it.unloadNodeAndBelowFromScene()
                 }
 
                 children.remove(it)
@@ -114,7 +114,7 @@ abstract class Node(initialId: String = "") {
         children[i].parent = null
 
         if (children[i].scene != null && children[i].scene!!.r[this]!!) {
-            children[i].unloadFromScene()
+            children[i].unloadNodeAndBelowFromScene()
         }
 
         children.removeAt(i)
@@ -125,32 +125,33 @@ abstract class Node(initialId: String = "") {
             it.parent = null
 
             if (it.scene != null && it.scene!!.r[this]!!) {
-                it.unloadFromScene()
+                it.unloadNodeAndBelowFromScene()
             }
         }
         children.clear()
     }
 
-    fun loadOnScene() {
+    fun loadNodeAndBelowToScene() {
         check(scene != null) { "The node isn't in a scene" }
 
         scene!!.r[this] = true
         if (getChildrenCount() > 0) {
             children.forEach {
                 it.scene = scene
-                it.loadOnScene()
+                it.loadNodeAndBelowToScene()
             }
         }
     }
 
-    fun unloadFromScene() {
+    fun unloadNodeAndBelowFromScene() {
         check(scene != null) { "The node isn't in a scene" }
-
+        
+        if (parent == scene) parent = null
         scene!!.r.remove(this)
         scene = null
         if (getChildrenCount() > 0) {
             children.forEach {
-                it.unloadFromScene()
+                it.unloadNodeAndBelowFromScene()
                 it.scene = null
             }
         }
