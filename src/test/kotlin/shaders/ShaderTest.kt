@@ -1,4 +1,0 @@
-package shaders
-
-class ShaderTest {
-}
