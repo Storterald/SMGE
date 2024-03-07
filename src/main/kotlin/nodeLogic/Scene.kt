@@ -89,4 +89,38 @@ abstract class Scene(initialId: String = "", open val shader: Shader): Node(init
         glfwTerminate()
         glfwSetErrorCallback(null)?.free()
     }
+
+    override var scene: Scene? = null
+        set(value) {}
+
+    override var visible: Boolean = true
+        set(value) {}
+
+    var r: HashMap<Node, Boolean> = hashMapOf()
+
+    override fun addChild(node: Node) {
+        super.addChild(node)
+        node.scene = this
+        node.loadOnScene()
+    }
+
+    override fun removeChild(node: Node) {
+        node.unloadFromScene()
+        super.removeChild(node)
+    }
+
+    override fun removeChildAtIndex(i: Int) {
+        children[i].unloadFromScene()
+        super.removeChildAtIndex(i)
+    }
+
+    override fun removeChildById(id: String) {
+        children.forEach { if (it.id == id) it.unloadFromScene() }
+        super.removeChildById(id)
+    }
+
+    override fun removeAllChildren() {
+        children.forEach { it.unloadFromScene() }
+        super.removeAllChildren()
+    }
 }

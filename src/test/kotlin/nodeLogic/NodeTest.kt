@@ -1,10 +1,12 @@
 package nodeLogic
 
 import nodeLogic.nodeLogic3d.Node3D
+import nodeLogic.nodeLogic3d.Scene3D
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import renderEngine.createDisplay
 
 class NodeTest {
 
@@ -58,33 +60,103 @@ class NodeTest {
         assertThrows<IllegalArgumentException> { node.id = " id" }
     }
 
-    // ### FUNCTION TEST ###
+    @Test
+    fun visible_changesTheValueInsideRenderMapIfInsideAScene() {
+        createDisplay("Title")
+        val scene = Scene3D()
+        val childNode = Node3D()
+        scene.addChild(childNode)
+
+        childNode.visible = false
+
+        assertEquals(scene, childNode.scene)
+        assertEquals(false, scene.r[childNode])
+
+        childNode.visible = true
+
+        assertEquals(scene, childNode.scene)
+        assertEquals(true, scene.r[childNode])
+    }
+
+    @Test
+    fun visible_changesTheValueInsideRenderForAllBelowNodesMapIfInsideAScene() {
+        createDisplay("Title")
+        val scene = Scene3D()
+        val childNode1 = Node3D()
+        scene.addChild(childNode1)
+        val childNode2 = Node3D()
+        childNode1.addChild(childNode2)
+        val childNode3 = Node3D()
+        childNode2.addChild(childNode3)
+        val childNode4 = Node3D()
+        childNode2.addChild(childNode4)
+
+        childNode1.visible = false
+
+        assertEquals(scene, childNode1.scene)
+        assertEquals(false, scene.r[childNode1])
+        assertEquals(scene, childNode2.scene)
+        assertEquals(false, scene.r[childNode2])
+        assertEquals(scene, childNode3.scene)
+        assertEquals(false, scene.r[childNode3])
+        assertEquals(scene, childNode4.scene)
+        assertEquals(false, scene.r[childNode4])
+    }
+
+    // ### FUNCTIONS TEST ###
     // ---------------------
 
     @Test
     fun addChild_worksCorrectly() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
         assertEquals(1, node.getChildrenCount())
-        assertEquals(childNode3D, node.getChildById("childNode3D"))
-        assertEquals(node, childNode3D.parent)
+        assertEquals(childNode, node.getChildById("childNode"))
+        assertEquals(node, childNode.parent)
     }
 
     @Test
-    fun addChild_throwsIfTriedToAdd() {
+    fun addChild_throwsIfTriedToAddItselfAsAChild() {
         val node = Node3D()
         assertThrows<IllegalArgumentException> { node.addChild(node) }
     }
 
     @Test
+    fun addChild_addsChildToRenderMapIfConnectedToScene() {
+        createDisplay("Title")
+        val scene = Scene3D()
+        val childNode0 = Node3D()
+        scene.addChild(childNode0)
+
+        val childNode1 = Node3D()
+        val childNode2 = Node3D()
+        childNode1.addChild(childNode2)
+        val childNode3 = Node3D()
+        childNode2.addChild(childNode3)
+        val childNode4 = Node3D()
+        childNode2.addChild(childNode4)
+
+        childNode0.addChild(childNode1)
+
+        assertEquals(scene, childNode1.scene)
+        assertEquals(true, scene.r[childNode1])
+        assertEquals(scene, childNode2.scene)
+        assertEquals(true, scene.r[childNode2])
+        assertEquals(scene, childNode3.scene)
+        assertEquals(true, scene.r[childNode3])
+        assertEquals(scene, childNode4.scene)
+        assertEquals(true, scene.r[childNode4])
+    }
+
+    @Test
     fun getChildById_returnsCorrectNode3D() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
-        assertEquals(childNode3D, node.getChildById("childNode3D"))
+        assertEquals(childNode, node.getChildById("childNode"))
     }
 
     @Test
@@ -114,23 +186,23 @@ class NodeTest {
     @Test
     fun getChildAtIndex_removesCorrectChild() {
         val node = Node3D()
-        val childNode3D1 = Node3D("childNode3D1")
-        node.addChild(childNode3D1)
-        val childNode3D2 = Node3D("childNode3D2")
-        node.addChild(childNode3D2)
-        val childNode3D3 = Node3D("childNode3D3")
-        node.addChild(childNode3D3)
-        val childNode3D4 = Node3D("childNode3D4")
-        node.addChild(childNode3D4)
+        val childNode1 = Node3D("childNode1")
+        node.addChild(childNode1)
+        val childNode2 = Node3D("childNode2")
+        node.addChild(childNode2)
+        val childNode3 = Node3D("childNode3")
+        node.addChild(childNode3)
+        val childNode4 = Node3D("childNode4")
+        node.addChild(childNode4)
 
-        assertEquals(childNode3D2, node.getChildAtIndex(1))
+        assertEquals(childNode2, node.getChildAtIndex(1))
     }
 
     @Test
     fun getChildAtIndex_throwsIfIndexIsOutOfBounds() {
         val node = Node3D()
-        val childNode3D1 = Node3D("childNode3D1")
-        node.addChild(childNode3D1)
+        val childNode1 = Node3D("childNode1")
+        node.addChild(childNode1)
 
         assertThrows<IllegalArgumentException> { node.getChildAtIndex(2) }
     }
@@ -138,8 +210,8 @@ class NodeTest {
     @Test
     fun getChildAtIndex_throwsIfIndexIsNegative() {
         val node = Node3D()
-        val childNode3D1 = Node3D("childNode3D1")
-        node.addChild(childNode3D1)
+        val childNode1 = Node3D("childNode1")
+        node.addChild(childNode1)
 
         assertThrows<IllegalArgumentException> { node.getChildAtIndex(-1) }
     }
@@ -154,14 +226,14 @@ class NodeTest {
     @Test
     fun getChildrenCount_returnsCorrectChildrenCount() {
         val node = Node3D()
-        val childNode3D1 = Node3D()
-        node.addChild(childNode3D1)
-        val childNode3D2 = Node3D()
-        node.addChild(childNode3D2)
-        val childNode3D3 = Node3D()
-        node.addChild(childNode3D3)
-        val childNode3D4 = Node3D()
-        node.addChild(childNode3D4)
+        val childNode1 = Node3D()
+        node.addChild(childNode1)
+        val childNode2 = Node3D()
+        node.addChild(childNode2)
+        val childNode3 = Node3D()
+        node.addChild(childNode3)
+        val childNode4 = Node3D()
+        node.addChild(childNode4)
 
         assertEquals(4, node.getChildrenCount())
     }
@@ -169,12 +241,41 @@ class NodeTest {
     @Test
     fun removeChild_removesChildCorrectly() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
-        node.removeChild(childNode3D)
+        node.removeChild(childNode)
         assertEquals(0, node.getChildrenCount())
-        assertEquals(null, childNode3D.parent)
+        assertEquals(null, childNode.parent)
+    }
+
+    @Test
+    fun removeChild_removesNodesFromSceneIfParentWasConnected() {
+        createDisplay("Title")
+        val scene = Scene3D()
+        val childNode0 = Node3D()
+        scene.addChild(childNode0)
+
+        val childNode1 = Node3D()
+        val childNode2 = Node3D()
+        childNode1.addChild(childNode2)
+        val childNode3 = Node3D()
+        childNode2.addChild(childNode3)
+        val childNode4 = Node3D()
+        childNode2.addChild(childNode4)
+
+        childNode0.addChild(childNode1)
+
+        childNode0.removeChild(childNode1)
+
+        assertEquals(null, childNode1.scene)
+        assertEquals(null, scene.r[childNode1])
+        assertEquals(null, childNode2.scene)
+        assertEquals(null, scene.r[childNode2])
+        assertEquals(null, childNode3.scene)
+        assertEquals(null, scene.r[childNode3])
+        assertEquals(null, childNode4.scene)
+        assertEquals(null, scene.r[childNode4])
     }
 
     @Test
@@ -188,25 +289,25 @@ class NodeTest {
     @Test
     fun removeChildById_removesChildCorrectly() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
-        node.removeChildById("childNode3D")
+        node.removeChildById("childNode")
         assertEquals(0, node.getChildrenCount())
-        assertEquals(null, childNode3D.parent)
+        assertEquals(null, childNode.parent)
     }
 
     @Test
     fun removeChildById_throwsIfChildIsNotPresent() {
         val node = Node3D()
-        assertThrows<Exception> { node.removeChildById("childNode3D") }
+        assertThrows<Exception> { node.removeChildById("childNode") }
     }
 
     @Test
     fun removeChildById_throwsIfIdIsEmpty() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
         assertThrows<IllegalArgumentException> { node.removeChildById("") }
     }
@@ -214,8 +315,8 @@ class NodeTest {
     @Test
     fun removeChildById_throwsIfIdHasOnlySpaces() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
         assertThrows<IllegalArgumentException> { node.removeChildById("    ") }
     }
@@ -223,8 +324,8 @@ class NodeTest {
     @Test
     fun removeChildById_throwsIfIdHasSpaceAsFirstChar() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
         assertThrows<IllegalArgumentException> { node.removeChildById(" id") }
     }
@@ -232,29 +333,29 @@ class NodeTest {
     @Test
     fun removeChildAtIndex_removesCorrectChild() {
         val node = Node3D()
-        val childNode3D1 = Node3D("childNode3D1")
-        node.addChild(childNode3D1)
-        val childNode3D2 = Node3D("childNode3D2")
-        node.addChild(childNode3D2)
-        val childNode3D3 = Node3D("childNode3D3")
-        node.addChild(childNode3D3)
-        val childNode3D4 = Node3D("childNode3D4")
-        node.addChild(childNode3D4)
+        val childNode1 = Node3D("childNode1")
+        node.addChild(childNode1)
+        val childNode2 = Node3D("childNode2")
+        node.addChild(childNode2)
+        val childNode3 = Node3D("childNode3")
+        node.addChild(childNode3)
+        val childNode4 = Node3D("childNode4")
+        node.addChild(childNode4)
 
         node.removeChildAtIndex(2)
 
-        assertEquals(childNode3D1, node.getChildById("childNode3D1"))
-        assertEquals(childNode3D2, node.getChildById("childNode3D2"))
-        assertThrows<Exception> { node.getChildById("childNode3D3") }
-        assertEquals(null, childNode3D3.parent)
-        assertEquals(childNode3D4, node.getChildById("childNode3D4"))
+        assertEquals(childNode1, node.getChildById("childNode1"))
+        assertEquals(childNode2, node.getChildById("childNode2"))
+        assertThrows<Exception> { node.getChildById("childNode3") }
+        assertEquals(null, childNode3.parent)
+        assertEquals(childNode4, node.getChildById("childNode4"))
     }
 
     @Test
     fun removeChildAtIndex_throwsIfIndexIsOutOfBounds() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
         assertThrows<IllegalArgumentException> { node.removeChildAtIndex(2) }
     }
@@ -262,8 +363,8 @@ class NodeTest {
     @Test
     fun removeChildAtIndex_throwsIfIndexIsNegative() {
         val node = Node3D()
-        val childNode3D = Node3D("childNode3D")
-        node.addChild(childNode3D)
+        val childNode = Node3D("childNode")
+        node.addChild(childNode)
 
         assertThrows<IllegalArgumentException> { node.removeChildAtIndex(-1) }
     }
