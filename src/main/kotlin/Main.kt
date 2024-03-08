@@ -1,13 +1,14 @@
 import nodeLogic.nodeLogic2d.Scene2D
 import math.Vec2
 import nodeLogic.Resource
-import org.lwjgl.glfw.GLFW
 import renderEngine.SceneManager
 import renderEngine.createDisplay
+import renderEngine.gameLoop
 
 lateinit var SCREEN_RESOLUTION: Vec2
 lateinit var WINDOW_RESOLUTION: Vec2
 var WINDOW = 0L
+val FPS_CAP = 360
 
 data class Timer(var time: Int): Resource()
 data class DeltaTime(var lastFrameTime: Float, var deltaTime: Float): Resource()
@@ -31,7 +32,7 @@ fun main() {
     val timerScene = TimerScene()
     val sceneManager = SceneManager(timerScene)
 
-    while (!GLFW.glfwWindowShouldClose(WINDOW)) {
+    gameLoop(WINDOW, FPS_CAP) {
         sceneManager.update()
     }
 

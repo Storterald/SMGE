@@ -46,7 +46,7 @@ fun createDisplay(windowTitle: String) {
      * 1: VSync
      * 0: As fast as possible
      */
-    glfwSwapInterval(1)
+    glfwSwapInterval(0)
 
     GL.createCapabilities()
 
