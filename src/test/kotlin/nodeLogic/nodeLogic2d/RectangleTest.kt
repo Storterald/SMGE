@@ -17,6 +17,11 @@ class RectangleTest {
     }
 
     @Test
+    fun defaultConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
+        assertDoesNotThrow{ Rectangle(-1.0f, -3.0f, 5.0f, -2.0f) }
+    }
+
+    @Test
     fun defaultConstructor_throwsIfX2IsLowerThanX1() {
         assertThrows<IllegalArgumentException> { Rectangle(5.0f, 1.0f, 1.0f, 1.0f) }
     }
@@ -47,6 +52,11 @@ class RectangleTest {
     }
 
     @Test
+    fun thirdConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
+        assertDoesNotThrow { Rectangle(Vec2(-20.0f, -10.0f), 100.0f, 30.0f) }
+    }
+
+    @Test
     fun thirdConstructor_createsRectangleWithCorrectValues() {
         val rect = Rectangle(Vec2(20.0f, 10.0f), 100.0f, 30.0f)
         assertEquals(rect.x1, 20.0f)
@@ -68,6 +78,11 @@ class RectangleTest {
     @Test
     fun fourthConstructor_createsRectangleWithoutThrowing() {
         assertDoesNotThrow { Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, 30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
+        assertDoesNotThrow { Rectangle(Vec2(-20.0f, -10.0f), Vec2(100.0f, 30.0f)) }
     }
 
     @Test
