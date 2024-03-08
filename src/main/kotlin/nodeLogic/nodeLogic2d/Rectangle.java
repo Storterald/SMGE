@@ -6,7 +6,7 @@ public class Rectangle {
     
     private final float x1, y1, x2, y2;
     
-    Rectangle(float x1, float y1, float x2, float y2) {
+    public Rectangle(float x1, float y1, float x2, float y2) {
         if (x2 < x1) throw new IllegalArgumentException("x2 must be higher or equal to x1");
         if (y2 < y1) throw new IllegalArgumentException("y2 must be higher or equal to y1");
         this.x1 = x1;
@@ -15,7 +15,7 @@ public class Rectangle {
         this.y2 = y2;
     }
 
-    Rectangle(float width, float height) {
+    public Rectangle(float width, float height) {
         if (width < 0.0f) throw new IllegalArgumentException("The width must be a positive number.");
         if (height < 0.0f) throw new IllegalArgumentException("The height must be a positive number.");
         this.x1 = 0.0f;
@@ -24,7 +24,7 @@ public class Rectangle {
         this.y2 = height;
     }
 
-    Rectangle(Vec2 position, float width, float height) {
+    public Rectangle(Vec2 position, float width, float height) {
         if (width < 0.0f) throw new IllegalArgumentException("The width must be a positive number.");
         if (height < 0.0f) throw new IllegalArgumentException("The height must be a positive number.");
         this.x1 = position.getX();
@@ -33,7 +33,7 @@ public class Rectangle {
         this.y2 = position.getY() + height;
     }
 
-    Rectangle(Vec2 position, Vec2 size) {
+    public Rectangle(Vec2 position, Vec2 size) {
         if (size.getX() < 0.0f) throw new IllegalArgumentException("The x size (width) must be a positive number.");
         if (size.getY() < 0.0f) throw new IllegalArgumentException("The y size (height) must be a positive number.");
         this.x1 = position.getX();
