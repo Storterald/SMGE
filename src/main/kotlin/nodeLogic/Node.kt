@@ -13,8 +13,10 @@ abstract class Node(id: String = "") {
     var id: String = id
         set(value) {
             require(value != "") { "The id must contain at least one char." }
-            require(id.trim() != "") { "The id must contain at least one non ' ' char." }
-            require(value[0] != ' ') { "The id mustn't have a space as it's first character." }
+            if (id != "") {
+                require(id.trim() != "") { "The id must contain at least one non ' ' char." }
+                require(value[0] != ' ') { "The id mustn't have a space as it's first character." }
+            }
 
             field = value
         }
