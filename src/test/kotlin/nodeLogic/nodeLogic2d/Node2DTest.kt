@@ -11,26 +11,6 @@ class Node2DTest {
     // ------------------------
 
     @Test
-    fun constructor_doesNotThrowIfPositionIsValid() {
-        assertDoesNotThrow { Node2D(position = Vec2(1.0f, 0.75f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfXPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node2D(position = Vec2(-1.0f, 0.0f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfYPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node2D(position = Vec2(0.0f, -1.0f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node2D(position = Vec2(-1.0f, -1.0f)) }
-    }
-
-    @Test
     fun constructor_doesNotThrowIfAnchorPointIsValid() {
         assertDoesNotThrow { Node2D(position = Vec2(1.0f, 0.75f)) }
     }

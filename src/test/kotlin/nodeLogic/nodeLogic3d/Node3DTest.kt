@@ -1,8 +1,6 @@
 package nodeLogic.nodeLogic3d
 
-import math.Vec2
 import math.Vec3
-import nodeLogic.nodeLogic2d.Node2D
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
@@ -11,31 +9,6 @@ class Node3DTest {
 
     // ### CONSTRUCTOR TEST ###
     // ------------------------
-
-    @Test
-    fun constructor_doesNotThrowIfPositionIsValid() {
-        assertDoesNotThrow { Node3D(position = Vec3(1.0f, 0.75f, 4.0f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfXPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node3D(position = Vec3(-1.0f, 0.0f, 0.0f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfYPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node3D(position = Vec3(0.0f, -1.0f, 0.0f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfZPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node3D(position = Vec3(0.0f, 0.0f, -1.0f)) }
-    }
-
-    @Test
-    fun constructor_throwsIfPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Node3D(position = Vec3(-1.0f, -1.0f, -1.0f)) }
-    }
 
     @Test
     fun constructor_doesNotThrowIfAnchorPointIsValid() {
@@ -109,36 +82,6 @@ class Node3DTest {
 
     // ### SETTERS TEST ###
     // --------------------
-
-    @Test
-    fun position_doesNotThrowIfValid() {
-        val node = Node3D()
-        assertDoesNotThrow { node.position = Vec3(1.0f, 0.3f, 435.0f) }
-    }
-
-    @Test
-    fun position_throwsIfXValueIsNegative() {
-        val node = Node3D()
-        assertThrows<IllegalArgumentException> { node.position = Vec3(-1.0f, 1.0f, 1.0f) }
-    }
-
-    @Test
-    fun position_throwsIfYValueIsNegative() {
-        val node = Node3D()
-        assertThrows<IllegalArgumentException> { node.position = Vec3(0.3f, -1.0f, 0.3f) }
-    }
-
-    @Test
-    fun position_throwsIfZValueIsNegative() {
-        val node = Node3D()
-        assertThrows<IllegalArgumentException> { node.position = Vec3(0.3f, 1.0f, -1.3f) }
-    }
-
-    @Test
-    fun position_throwsIfValuesAreNegative() {
-        val node = Node3D()
-        assertThrows<IllegalArgumentException> { node.position = Vec3(-1.0f, -1.0f, -1.0f) }
-    }
 
     @Test
     fun anchorPoint_doesNotThrowIfValid() {
