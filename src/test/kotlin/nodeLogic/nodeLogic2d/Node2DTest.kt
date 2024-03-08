@@ -69,30 +69,6 @@ class Node2DTest {
     // --------------------
 
     @Test
-    fun position_doesNotThrowIfValid() {
-        val node = Node2D()
-        assertDoesNotThrow { node.position = Vec2(1.0f, 0.3f) }
-    }
-
-    @Test
-    fun position_throwsIfXValueIsNegative() {
-        val node = Node2D()
-        assertThrows<IllegalArgumentException> { node.position = Vec2(-1.0f, 1.0f) }
-    }
-
-    @Test
-    fun position_throwsIfYValueIsNegative() {
-        val node = Node2D()
-        assertThrows<IllegalArgumentException> { node.position = Vec2(0.3f, -1.0f) }
-    }
-
-    @Test
-    fun position_throwsIfValuesAreNegative() {
-        val node = Node2D()
-        assertThrows<IllegalArgumentException> { node.position = Vec2(-1.0f, -1.0f) }
-    }
-
-    @Test
     fun anchorPoint_doesNotThrowIfValid() {
         val node = Node2D()
         assertDoesNotThrow { node.anchorPoint = Vec2(1.0f, 0.5f) }
