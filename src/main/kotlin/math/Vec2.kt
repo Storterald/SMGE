@@ -8,7 +8,7 @@ data class Vec2(var x: Float, var y: Float) {
     // ### OPERATORS ###
     // -----------------
 
-    operator fun Vec2.unaryMinus() = Vec2(-x, -y)
+    operator fun unaryMinus() = Vec2(-x, -y)
 
     operator fun plus(increment: Vec2): Vec2 {
         return Vec2(x + increment.x, y + increment.y)
