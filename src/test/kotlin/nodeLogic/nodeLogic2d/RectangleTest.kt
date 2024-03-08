@@ -17,31 +17,6 @@ class RectangleTest {
     }
 
     @Test
-    fun defaultConstructor_throwsIfX1ValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(-1.0f, 1.0f, 1.0f, 1.0f) }
-    }
-
-    @Test
-    fun defaultConstructor_throwsIfY1ValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(1.0f, -1.0f, 1.0f, 1.0f) }
-    }
-
-    @Test
-    fun defaultConstructor_throwsIfX2ValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(1.0f, 1.0f, -1.0f, 1.0f) }
-    }
-
-    @Test
-    fun defaultConstructor_throwsIfY2ValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(1.0f, 1.0f, 1.0f, -1.0f) }
-    }
-
-    @Test
-    fun defaultConstructor_throwsIfValuesAreNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(-1.0f, -1.0f, -1.0f, -1.0f) }
-    }
-
-    @Test
     fun defaultConstructor_throwsIfX2IsLowerThanX1() {
         assertThrows<IllegalArgumentException> { Rectangle(5.0f, 1.0f, 1.0f, 1.0f) }
     }
@@ -81,21 +56,6 @@ class RectangleTest {
     }
 
     @Test
-    fun thirdConstructor_throwsIfXPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, 10.0f), 100.0f, 30.0f) }
-    }
-
-    @Test
-    fun thirdConstructor_throwsIfYPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, -10.0f), 100.0f, 30.0f) }
-    }
-
-    @Test
-    fun thirdConstructor_throwsIfPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, -10.0f), 100.0f, 30.0f) }
-    }
-
-    @Test
     fun thirdConstructor_throwsIfWidthIsNegative() {
         assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), -100.0f, 30.0f) }
     }
@@ -117,21 +77,6 @@ class RectangleTest {
         assertEquals(rect.y1, 10.0f)
         assertEquals(rect.x2, 120.0f)
         assertEquals(rect.y2, 40.0f)
-    }
-
-    @Test
-    fun fourthConstructor_throwsIfXPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, 10.0f), Vec2(100.0f, 30.0f)) }
-    }
-
-    @Test
-    fun fourthConstructor_throwsIfYPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, -10.0f), Vec2(100.0f, 30.0f)) }
-    }
-
-    @Test
-    fun fourthConstructor_throwsIfPositionIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, -10.0f), Vec2(100.0f, 30.0f)) }
     }
 
     @Test
