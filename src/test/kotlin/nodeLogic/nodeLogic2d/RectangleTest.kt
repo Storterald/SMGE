@@ -91,6 +91,11 @@ class RectangleTest {
     }
 
     @Test
+    fun thirdConstructor_throwsIfPositionIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, -10.0f), 100.0f, 30.0f) }
+    }
+
+    @Test
     fun thirdConstructor_throwsIfWidthIsNegative() {
         assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), -100.0f, 30.0f) }
     }
@@ -98,6 +103,50 @@ class RectangleTest {
     @Test
     fun thirdConstructor_throwsIfHeightIsNegative() {
         assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), 100.0f, -30.0f) }
+    }
+
+    @Test
+    fun fourthConstructor_createsRectangleWithoutThrowing() {
+        assertDoesNotThrow { Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, 30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_createsRectangleWithCorrectValues() {
+        val rect = Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, 30.0f))
+        assertEquals(rect.x1, 20.0f)
+        assertEquals(rect.y1, 10.0f)
+        assertEquals(rect.x2, 120.0f)
+        assertEquals(rect.y2, 40.0f)
+    }
+
+    @Test
+    fun fourthConstructor_throwsIfXPositionIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, 10.0f), Vec2(100.0f, 30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_throwsIfYPositionIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, -10.0f), Vec2(100.0f, 30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_throwsIfPositionIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(-20.0f, -10.0f), Vec2(100.0f, 30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_throwsIfXSizeIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(-100.0f, 30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_throwsIfYSizeIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, -30.0f)) }
+    }
+
+    @Test
+    fun fourthConstructor_throwsIfSizeIsNegative() {
+        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(-100.0f, -30.0f)) }
     }
 
 }
