@@ -10,11 +10,9 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        val tempImage: BufferedImage = ImageIO.read(file)
-        size = Vec2(tempImage.width.toFloat(), tempImage.height.toFloat())
+        image = ImageIO.read(file)
+        size = Vec2(image.width.toFloat(), image.height.toFloat())
         check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
-
-        image = file
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
@@ -23,19 +21,19 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = file
+        image = ImageIO.read(file)
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
 
     constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), filePath: String): super(id, position, anchorPoint, scale) {
-        image = File(filePath)
-        check(image.exists()) { "The sprite image file doesn't exist." }
-        require(image.extension == "png" || image.extension == "jpeg" || image.extension == "jpg") { "The image must be a png, jpeg or jpg." }
+        val file = File(filePath)
+        check(file.exists()) { "The sprite image file doesn't exist." }
+        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        val tempImage: BufferedImage = ImageIO.read(image)
-        size = Vec2(tempImage.width.toFloat(), tempImage.height.toFloat())
+        image = ImageIO.read(file)
+        size = Vec2(image.width.toFloat(), image.height.toFloat())
         check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
 
         this.scale = scale
@@ -43,24 +41,36 @@ class Sprite: Object2D {
     }
 
     constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, filePath: String): super(id, position, anchorPoint, scale, size) {
-        image = File(filePath)
-        check(image.exists()) { "The sprite image file doesn't exist." }
-        require(image.extension == "png" || image.extension == "jpeg" || image.extension == "jpg") { "The image must be a png, jpeg or jpg." }
+        val file = File(filePath)
+        check(file.exists()) { "The sprite image file doesn't exist." }
+        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
+        image = ImageIO.read(file)
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
 
-    var image: File = File("file")
-        set(value) {
-            check(value.exists()) { "The sprite image file doesn't exist." }
-            require(value.extension == "png" || value.extension == "jpeg" || value.extension == "jpg") { "The image must be a png, jpeg or jpg." }
+    var image: BufferedImage
+        private set
 
-            val tempImage: BufferedImage = ImageIO.read(value)
-            size = Vec2(tempImage.width.toFloat(), tempImage.height.toFloat())
+    fun setImage(file: File) {
+        check(file.exists()) { "The sprite image file doesn't exist." }
+        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-            field = value
-        }
+        image = ImageIO.read(file)
+
+        size = Vec2(image.width.toFloat(), image.height.toFloat())
+    }
+
+    fun setImage(filePath: String) {
+        val file = File(filePath)
+        check(file.exists()) { "The sprite image file doesn't exist." }
+        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
+
+        image = ImageIO.read(file)
+
+        size = Vec2(image.width.toFloat(), image.height.toFloat())
+    }
 
 }
