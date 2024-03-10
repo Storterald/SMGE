@@ -24,29 +24,6 @@ class SpriteTest {
     }
 
     @Test
-    fun firstConstructor_calculatesScaledSize() {
-        val sprite = Sprite(scale = Vec2(0.5f, 0.5f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(512.0f, sprite.scaledSize.x)
-        assertEquals(512.0f, sprite.scaledSize.y)
-    }
-
-    @Test
-    fun firstConstructor_calculatesAnchoredPosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.5f, 0.25f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(-412.0f, sprite.anchoredPosition.x)
-        assertEquals(-156.0f, sprite.anchoredPosition.y)
-    }
-
-    @Test
-    fun firstConstructor_calculatesAbsolutePosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.25f, 0.50f), scale = Vec2(0.5f, 0.5f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(-28.0f, sprite.absolutePosition.x1)
-        assertEquals(-156.0f, sprite.absolutePosition.y1)
-        assertEquals(484.0f, sprite.absolutePosition.x2)
-        assertEquals(356.0f, sprite.absolutePosition.y2)
-    }
-
-    @Test
     fun firstConstructor_throwsIfFileDoesNotExist() {
         assertThrows<IllegalStateException> { Sprite(file = File("file.png")) }
     }
@@ -59,29 +36,6 @@ class SpriteTest {
     @Test
     fun secondConstructor_createsSpriteWithoutThrowing() {
         assertDoesNotThrow { Sprite(size = Vec2(100.0f, 100.0f), file = File("src\\test\\resources\\testImage.png")) }
-    }
-
-    @Test
-    fun secondConstructor_calculatesScaledSize() {
-        val sprite = Sprite(scale = Vec2(0.5f, 0.5f), size = Vec2(100.0f, 100.0f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(50.0f, sprite.scaledSize.x)
-        assertEquals(50.0f, sprite.scaledSize.y)
-    }
-
-    @Test
-    fun secondConstructor_calculatesAnchoredPosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.5f, 0.25f), size = Vec2(100.0f, 100.0f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(50.0f, sprite.anchoredPosition.x)
-        assertEquals(75.0f, sprite.anchoredPosition.y)
-    }
-
-    @Test
-    fun secondConstructor_calculatesAbsolutePosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.25f, 0.50f), scale = Vec2(0.5f, 0.5f), size = Vec2(100.0f, 100.0f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(87.5f, sprite.absolutePosition.x1)
-        assertEquals(75.0f, sprite.absolutePosition.y1)
-        assertEquals(137.5f, sprite.absolutePosition.x2)
-        assertEquals(125.0f, sprite.absolutePosition.y2)
     }
 
 
@@ -123,29 +77,6 @@ class SpriteTest {
     }
 
     @Test
-    fun thirdConstructor_calculatesScaledSize() {
-        val sprite = Sprite(scale = Vec2(0.5f, 0.5f), filePath = "src\\test\\resources\\testImage.png")
-        assertEquals(512.0f, sprite.scaledSize.x)
-        assertEquals(512.0f, sprite.scaledSize.y)
-    }
-
-    @Test
-    fun thirdConstructor_calculatesAnchoredPosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.5f, 0.25f), filePath = "src\\test\\resources\\testImage.png")
-        assertEquals(-412.0f, sprite.anchoredPosition.x)
-        assertEquals(-156.0f, sprite.anchoredPosition.y)
-    }
-
-    @Test
-    fun thirdConstructor_calculatesAbsolutePosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.25f, 0.50f), scale = Vec2(0.5f, 0.5f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(-28.0f, sprite.absolutePosition.x1)
-        assertEquals(-156.0f, sprite.absolutePosition.y1)
-        assertEquals(484.0f, sprite.absolutePosition.x2)
-        assertEquals(356.0f, sprite.absolutePosition.y2)
-    }
-
-    @Test
     fun thirdConstructor_throwsIfFileDoesNotExist() {
         assertThrows<IllegalStateException> { Sprite(filePath = "file.png") }
     }
@@ -158,29 +89,6 @@ class SpriteTest {
     @Test
     fun fourthConstructor_createsSpriteWithoutThrowing() {
         assertDoesNotThrow { Sprite(size = Vec2(100.0f, 100.0f), filePath = "src\\test\\resources\\testImage.png") }
-    }
-
-    @Test
-    fun fourthConstructor_calculatesScaledSize() {
-        val sprite = Sprite(scale = Vec2(0.5f, 0.5f), size = Vec2(100.0f, 100.0f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(50.0f, sprite.scaledSize.x)
-        assertEquals(50.0f, sprite.scaledSize.y)
-    }
-
-    @Test
-    fun fourthConstructor_calculatesAnchoredPosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.5f, 0.25f), size = Vec2(100.0f, 100.0f), filePath = "src\\test\\resources\\testImage.png")
-        assertEquals(50.0f, sprite.anchoredPosition.x)
-        assertEquals(75.0f, sprite.anchoredPosition.y)
-    }
-
-    @Test
-    fun fourthConstructor_calculatesAbsolutePosition() {
-        val sprite = Sprite(position = Vec2(100.0f, 100.0f), anchorPoint = Vec2(0.25f, 0.50f), scale = Vec2(0.5f, 0.5f), size = Vec2(100.0f, 100.0f), file = File("src\\test\\resources\\testImage.png"))
-        assertEquals(87.5f, sprite.absolutePosition.x1)
-        assertEquals(75.0f, sprite.absolutePosition.y1)
-        assertEquals(137.5f, sprite.absolutePosition.x2)
-        assertEquals(125.0f, sprite.absolutePosition.y2)
     }
 
     @Test
@@ -206,6 +114,17 @@ class SpriteTest {
     @Test
     fun fourthConstructor_throwsIfSizeValuesAreNegative() {
         assertThrows<IllegalArgumentException> { Sprite(size = Vec2(-100.0f, -100.0f), filePath = "src\\test\\resources\\testImage.png") }
+    }
+
+    // ### SETTERS TEST ###
+    // --------------------
+
+    @Test
+    fun image_doesNotThrowIfValidAndChangesSize() {
+        val sprite = Sprite(filePath = "src\\test\\resources\\testImage.png")
+        assertDoesNotThrow { sprite.image = File("src\\test\\resources\\testImage2.png") }
+        assertEquals(2500.0f, sprite.size.x)
+        assertEquals(2455.0f, sprite.size.y)
     }
 
 }

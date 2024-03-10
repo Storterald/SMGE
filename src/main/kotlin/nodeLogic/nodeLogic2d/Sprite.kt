@@ -19,8 +19,7 @@ class Sprite: Object2D {
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, file: File): super(id, position, anchorPoint, scale) {
-        require(size.x > 0.0f && size.y > 0.0f) { "The size must be higher than 0*0." }
+    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, file: File): super(id, position, anchorPoint, scale, size) {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
@@ -43,9 +42,7 @@ class Sprite: Object2D {
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, filePath: String): super(id, position, anchorPoint, scale) {
-        require(size.x > 0.0f && size.y > 0.0f) { "The size must be higher than 0*0." }
-
+    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, filePath: String): super(id, position, anchorPoint, scale, size) {
         image = File(filePath)
         check(image.exists()) { "The sprite image file doesn't exist." }
         require(image.extension == "png" || image.extension == "jpeg" || image.extension == "jpg") { "The image must be a png, jpeg or jpg." }
@@ -59,50 +56,11 @@ class Sprite: Object2D {
         set(value) {
             check(value.exists()) { "The sprite image file doesn't exist." }
             require(value.extension == "png" || value.extension == "jpeg" || value.extension == "jpg") { "The image must be a png, jpeg or jpg." }
-            field = value
-        }
 
-    var size: Vec2 = Vec2(0.0f, 0.0f)
-        set(value) {
-            require(value.x > 0.0f && value.y > 0.0f) { "The size must be higher than 0*0." }
-
-            scaledSize = value * scale
-            anchoredPosition = position - (value * scaledSize)
-            absolutePosition = Rectangle(anchoredPosition, scaledSize)
+            val tempImage: BufferedImage = ImageIO.read(value)
+            size = Vec2(tempImage.width.toFloat(), tempImage.height.toFloat())
 
             field = value
         }
-
-    override var scale: Vec2 = Vec2(1.0f, 1.0f)
-        set(value) {
-            require(value.x >= 0.0f) { "The x scale must be positive" }
-            require(value.y >= 0.0f) { "The y scale must be positive" }
-
-            scaledSize = value * size
-            anchoredPosition = position - (value * scaledSize)
-            absolutePosition = Rectangle(anchoredPosition, scaledSize)
-
-            field = value
-        }
-
-    override var anchorPoint: Vec2 = Vec2(0.0f, 0.0f)
-        set(value) {
-            require(value.x in 0.0f..1.0f) { "The x position must be within 0.0 and 1.0" }
-            require(value.y in 0.0f..1.0f) { "The y position must be within 0.0 and 1.0" }
-
-            anchoredPosition = position - (value * scaledSize)
-            absolutePosition = Rectangle(anchoredPosition, scaledSize)
-
-            field = value
-        }
-
-    var scaledSize: Vec2 = Vec2(0.0f, 0.0f)
-        private set
-
-    var anchoredPosition: Vec2 = Vec2(0.0f, 0.0f)
-        private set
-
-    var absolutePosition: Rectangle = Rectangle(0.0f, 0.0f, 0.0f, 0.0f)
-        private set
 
 }
