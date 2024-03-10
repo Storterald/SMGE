@@ -8,7 +8,6 @@ import org.lwjgl.system.MemoryUtil
 import org.lwjgl.glfw.Callbacks
 
 import WINDOW
-import renderEngine.SceneManager
 
 abstract class Scene(open val shader: Shader): Node("") {
     init {
@@ -106,13 +105,5 @@ abstract class Scene(open val shader: Shader): Node("") {
 
         glfwTerminate()
         glfwSetErrorCallback(null)?.free()
-    }
-
-    inline fun<reified T: Resource> setResource(toAdd: T) {
-        (parent as SceneManager).setResource<T>(toAdd)
-    }
-
-    inline fun<reified T: Resource> getResource(): T {
-        return (parent as SceneManager).getResource<T>()
     }
 }

@@ -5,6 +5,10 @@ import java.awt.Font
 import java.awt.RenderingHints
 import java.awt.image.BufferedImage
 import java.io.File
+import java.io.IOException
+import javax.imageio.ImageIO
+
+
 
 class TextLabel: Object2D {
     constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), text: String, font: Font = Font("Arial", Font.PLAIN, 12)): super(id, position, anchorPoint, scale) {
@@ -123,5 +127,12 @@ class TextLabel: Object2D {
         fontMetrics = graphics2D.fontMetrics
         graphics2D.drawString(text, 0, fontMetrics.ascent)
         graphics2D.dispose()
+
+        /* Remove to save the textLabel as an image in resources/
+        try {
+            ImageIO.write(image, "png", File("src\\main\\resources\\${font.name}.png"))
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        } */
     }
 }

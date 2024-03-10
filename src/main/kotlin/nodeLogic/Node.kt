@@ -1,7 +1,5 @@
 package nodeLogic
 
-import renderEngine.SceneManager
-
 abstract class Node(id: String = "") {
     init {
         if (id != "") {
@@ -45,7 +43,7 @@ abstract class Node(id: String = "") {
     open fun addChild(node: Node) {
         require(node != this) { "A node cannot have itself as a child." }
         require(node.parent == null) { "The node is already a child of another node." }
-        require((this is SceneManager).xor(node !is Scene)) { "You can't add a scene as a child unless the parent is a SceneManager." }
+        require(node !is Scene) { "You can't add a scene as a child." }
 
         node.parent = this
 

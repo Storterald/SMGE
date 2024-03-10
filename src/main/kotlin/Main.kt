@@ -1,40 +1,49 @@
 import nodeLogic.nodeLogic2d.Scene2D
 import math.Vec2
 import nodeLogic.Resource
-import renderEngine.SceneManager
-import renderEngine.createDisplay
-import renderEngine.gameLoop
+import renderEngine.*
+import java.lang.System.currentTimeMillis
+import kotlin.math.round
 
 lateinit var SCREEN_RESOLUTION: Vec2
 lateinit var WINDOW_RESOLUTION: Vec2
-var WINDOW = 0L
-val FPS_CAP = 360
+var WINDOW: Long = 0L
+const val FPS_CAP = 360
 
-data class Timer(var time: Int): Resource()
-data class DeltaTime(var lastFrameTime: Float, var deltaTime: Float): Resource()
+data class Time(var second: Long): Resource()
 
-class TimerScene: Scene2D() {
-    override fun start() {
-        super.start()
-        setResource(Timer(0))
-    }
+class FPSCounterScene: Scene2D() {
+
+    private var frames: Int = 0
 
     override fun update() {
         super.update()
-        val time = getResource<Timer>().time
-        println(time)
-        setResource<Timer>(Timer(time+1))
+
+        val lastSecond: Long = getResource<Time>().second
+        val currentSecond: Long = round(currentTimeMillis().toDouble()/1000).toLong()
+
+        if (currentSecond >= lastSecond + 1) {
+            println("FPS: $frames")
+            frames = 0
+            setResource<Time>(Time(currentSecond))
+        }
+
+        frames++
     }
 }
 
 fun main() {
     createDisplay("Title")
-    val timerScene = TimerScene()
-    val sceneManager = SceneManager(timerScene)
 
-    gameLoop(WINDOW, FPS_CAP) {
-        sceneManager.update()
+    createResource<Time>(Time(0))
+
+    loadScene(FPSCounterScene())
+
+    gameLoop(FPS_CAP) {
+        update()
     }
 
-    sceneManager.closeProgram()
+    deleteResource<Time>()
+
+    closeProgram()
 }
