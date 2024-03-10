@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic2d;
+package math;
 
 import math.Vec2;
 

@@ -1,6 +1,5 @@
-package nodeLogic.nodeLogic2d
+package math
 
-import math.Vec2
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
@@ -96,17 +95,32 @@ class RectangleTest {
 
     @Test
     fun fourthConstructor_throwsIfXSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(-100.0f, 30.0f)) }
+        assertThrows<IllegalArgumentException> {
+            Rectangle(
+                Vec2(20.0f, 10.0f),
+                Vec2(-100.0f, 30.0f)
+            )
+        }
     }
 
     @Test
     fun fourthConstructor_throwsIfYSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, -30.0f)) }
+        assertThrows<IllegalArgumentException> {
+            Rectangle(
+                Vec2(20.0f, 10.0f),
+                Vec2(100.0f, -30.0f)
+            )
+        }
     }
 
     @Test
     fun fourthConstructor_throwsIfSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(-100.0f, -30.0f)) }
+        assertThrows<IllegalArgumentException> {
+            Rectangle(
+                Vec2(20.0f, 10.0f),
+                Vec2(-100.0f, -30.0f)
+            )
+        }
     }
 
 }

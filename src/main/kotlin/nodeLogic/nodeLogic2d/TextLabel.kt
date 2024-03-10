@@ -107,6 +107,7 @@ class TextLabel: Object2D {
         private set
 
     private fun createImage(text: String, font: Font) {
+        // Completely stolen from https://javainfinite.com/java/convert-text-to-image-using-java/
         image = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
         var graphics2D = image.createGraphics()
         graphics2D.font = font
