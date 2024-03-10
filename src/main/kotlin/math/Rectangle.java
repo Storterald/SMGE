@@ -1,7 +1,5 @@
 package math;
 
-import math.Vec2;
-
 public class Rectangle {
     
     private final float x1, y1, x2, y2;
