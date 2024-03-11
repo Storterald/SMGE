@@ -5,6 +5,10 @@ import kotlin.math.sqrt
 
 data class Vec3(var x: Float, var y: Float, var z: Float) {
 
+    constructor(values: Float): this(values, values, values)
+
+    constructor(vec2: Vec2, z: Float): this(vec2.x, vec2.y, z)
+
     // ### OPERATORS ###
     // -----------------
 

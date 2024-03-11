@@ -5,6 +5,8 @@ import kotlin.math.sqrt
 
 data class Vec2(var x: Float, var y: Float) {
 
+    constructor(values: Float): this(values, values)
+
     // ### OPERATORS ###
     // -----------------
 
