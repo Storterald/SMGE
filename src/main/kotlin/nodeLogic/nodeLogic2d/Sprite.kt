@@ -10,9 +10,12 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = ImageIO.read(file)
-        size = Vec2(image.width.toFloat(), image.height.toFloat())
+        image = file
+
+        val imageBuffer: BufferedImage = ImageIO.read(file)
+        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
         check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
+
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
@@ -21,7 +24,7 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = ImageIO.read(file)
+        image = file
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
@@ -32,8 +35,10 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = ImageIO.read(file)
-        size = Vec2(image.width.toFloat(), image.height.toFloat())
+        image = file
+
+        val imageBuffer: BufferedImage = ImageIO.read(file)
+        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
         check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
 
         this.scale = scale
@@ -45,22 +50,23 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = ImageIO.read(file)
+        image = file
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
 
-    var image: BufferedImage
+    var image: File
         private set
 
     fun setImage(file: File) {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = ImageIO.read(file)
+        image = file
 
-        size = Vec2(image.width.toFloat(), image.height.toFloat())
+        val imageBuffer: BufferedImage = ImageIO.read(file)
+        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
     }
 
     fun setImage(filePath: String) {
@@ -68,9 +74,10 @@ class Sprite: Object2D {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
-        image = ImageIO.read(file)
+        image = file
 
-        size = Vec2(image.width.toFloat(), image.height.toFloat())
+        val imageBuffer: BufferedImage = ImageIO.read(file)
+        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
     }
 
 }

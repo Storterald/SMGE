@@ -11,7 +11,8 @@ open class Object2D(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPo
 
     open var size: Vec2 = size
         set(value) {
-            require(value.x >= 0.0f && value.y >= 0.0f) { "The size must be positive" }
+            require(value.x >= 0.0f) { "The x size (width) must be positive" }
+            require(value.y >= 0.0f) { "The y size (height) must be positive" }
 
             field = value
         }

@@ -1,5 +1,7 @@
 package math;
 
+import java.lang.reflect.Array;
+
 public class Rectangle {
     
     private final float x1, y1, x2, y2;
@@ -38,6 +40,18 @@ public class Rectangle {
         this.y1 = position.getY();
         this.x2 = position.getX() + size.getX();
         this.y2 = position.getY() + size.getY();
+    }
+
+    public float[] toVerticesArray(Vec2 windowSize) {
+        float width = windowSize.getX();
+        float height = windowSize.getY();
+
+        return new float[] {
+                x1 / width * 2 - 1, y2 / height * 2 - 1, 0.0f,
+                x1 / width * 2 - 1, y1 / height * 2 - 1, 0.0f,
+                x2 / width * 2 - 1, y1 / height * 2 - 1, 0.0f,
+                x2 / width * 2 - 1, y2 / height * 2 - 1, 0.0f
+        };
     }
 
     public float getX1() {
