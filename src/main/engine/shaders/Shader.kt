@@ -1,20 +1,25 @@
 package shaders
 
-import org.lwjgl.opengl.GL20.*
+import org.joml.Vector2f
+import org.joml.Vector3f
+import org.lwjgl.opengl.GL30.*
 
 import java.io.File
 
-import WINDOW
+import windowID
 
 class Shader(vertexPath: String, fragmentPath: String) {
-    private var programId = 0
+    var programId = 0
+        private set
     private var vertexShaderId = 0
     private var fragmentShaderId = 0
+
+    val uniforms = HashMap<String, Uniform<*>>()
 
     init {
         require(vertexPath != "") { "Vertex path cannot be empty." }
         require(fragmentPath != "") { "Fragment path cannot be empty." }
-        check(WINDOW != 0L) { "Initialize the display before creating a shader" }
+        check(windowID != 0L) { "Initialize the display before creating a shader" }
 
         programId = glCreateProgram()
         check(programId != 0) { "Could not create shader program." }
@@ -84,4 +89,40 @@ class Shader(vertexPath: String, fragmentPath: String) {
             glDeleteProgram(programId)
         }
     }
+
+    // Uniforms
+    // --------
+    fun <T> createUniform(name: String, value: T) {
+        val uniformLocation = glGetUniformLocation(programId, name)
+        check(uniformLocation >= 0) { "Error creating uniform $name with location $uniformLocation." }
+
+        val uniform = Uniform(name, value, uniformLocation)
+        uniforms[name] = uniform
+
+        setUniform(uniform, value)
+    }
+
+    inline fun <reified T> getUniform(name: String): Uniform<T> {
+        check(uniforms.containsKey(name)) { "The uniform was not properly initialized using createUniform." }
+        val uniform = uniforms[name]!!
+        check(uniform.value is T) { "Uniform type mismatch." }
+        return uniform as Uniform<T>
+    }
+
+    fun <T> setUniform(uniform: Uniform<T>, value: T) {
+        check(uniforms.containsKey(uniform.name)) { "The uniform was not properly initialized using createUniform." }
+
+        uniform.value = value
+        uniforms[uniform.name] = uniform
+
+        when (value) {
+            is Int -> glUniform1i(uniform.uniformLocation, value)
+            is Float -> glUniform1f(uniform.uniformLocation, value)
+            is Vector2f -> glUniform2f(uniform.uniformLocation, value.x, value.y)
+            is Vector3f -> glUniform3f(uniform.uniformLocation, value.x, value.y, value.z)
+            else -> throw Exception("Type not yet implemented, womp womp.")
+        }
+    }
 }
+
+data class Uniform<T>(val name: String, var value: T, val uniformLocation: Int)
