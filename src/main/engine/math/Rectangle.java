@@ -1,6 +1,6 @@
 package math;
 
-import java.lang.reflect.Array;
+import org.joml.Vector2f;
 
 public class Rectangle {
     
@@ -24,27 +24,27 @@ public class Rectangle {
         this.y2 = height;
     }
 
-    public Rectangle(Vec2 position, float width, float height) {
+    public Rectangle(Vector2f position, float width, float height) {
         if (width < 0.0f) throw new IllegalArgumentException("The width must be a positive number.");
         if (height < 0.0f) throw new IllegalArgumentException("The height must be a positive number.");
-        this.x1 = position.getX();
-        this.y1 = position.getY();
-        this.x2 = position.getX() + width;
-        this.y2 = position.getY() + height;
+        this.x1 = position.x;
+        this.y1 = position.y;
+        this.x2 = position.x + width;
+        this.y2 = position.y + height;
     }
 
-    public Rectangle(Vec2 position, Vec2 size) {
-        if (size.getX() < 0.0f) throw new IllegalArgumentException("The x size (width) must be a positive number.");
-        if (size.getY() < 0.0f) throw new IllegalArgumentException("The y size (height) must be a positive number.");
-        this.x1 = position.getX();
-        this.y1 = position.getY();
-        this.x2 = position.getX() + size.getX();
-        this.y2 = position.getY() + size.getY();
+    public Rectangle(Vector2f position, Vector2f size) {
+        if (size.x < 0.0f) throw new IllegalArgumentException("The x size (width) must be a positive number.");
+        if (size.y < 0.0f) throw new IllegalArgumentException("The y size (height) must be a positive number.");
+        this.x1 = position.x;
+        this.y1 = position.y;
+        this.x2 = position.x + size.x;
+        this.y2 = position.y + size.y;
     }
 
-    public float[] toVerticesArray(Vec2 windowSize) {
-        float width = windowSize.getX();
-        float height = windowSize.getY();
+    public float[] toVerticesArray(Vector2f windowSize) {
+        float width = windowSize.x;
+        float height = windowSize.y;
 
         return new float[] {
                 x1 / width * 2 - 1, y2 / height * 2 - 1, 0.0f,

@@ -1,26 +1,26 @@
 package nodeLogic.nodeLogic2d
 
-import math.Vec2
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
+import org.joml.Vector2f
 
 class Sprite: Object2D {
-    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), file: File): super(id, position, anchorPoint, scale) {
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f, 0.0f), anchorPoint: Vector2f = Vector2f(0.0f, 0.0f), scale: Vector2f = Vector2f(1.0f, 1.0f), file: File): super(id, position, anchorPoint, scale) {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
         image = file
 
         val imageBuffer: BufferedImage = ImageIO.read(file)
-        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
+        size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
         check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
 
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, file: File): super(id, position, anchorPoint, scale, size) {
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f, 0.0f), anchorPoint: Vector2f = Vector2f(0.0f, 0.0f), scale: Vector2f = Vector2f(1.0f, 1.0f), size: Vector2f, file: File): super(id, position, anchorPoint, scale, size) {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
@@ -30,7 +30,7 @@ class Sprite: Object2D {
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), filePath: String): super(id, position, anchorPoint, scale) {
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f, 0.0f), anchorPoint: Vector2f = Vector2f(0.0f, 0.0f), scale: Vector2f = Vector2f(1.0f, 1.0f), filePath: String): super(id, position, anchorPoint, scale) {
         val file = File(filePath)
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
@@ -38,14 +38,14 @@ class Sprite: Object2D {
         image = file
 
         val imageBuffer: BufferedImage = ImageIO.read(file)
-        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
+        size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
         check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
 
         this.scale = scale
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f), size: Vec2, filePath: String): super(id, position, anchorPoint, scale, size) {
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f, 0.0f), anchorPoint: Vector2f = Vector2f(0.0f, 0.0f), scale: Vector2f = Vector2f(1.0f, 1.0f), size: Vector2f, filePath: String): super(id, position, anchorPoint, scale, size) {
         val file = File(filePath)
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
@@ -66,18 +66,11 @@ class Sprite: Object2D {
         image = file
 
         val imageBuffer: BufferedImage = ImageIO.read(file)
-        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
+        size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
     }
 
     fun setImage(filePath: String) {
-        val file = File(filePath)
-        check(file.exists()) { "The sprite image file doesn't exist." }
-        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
-
-        image = file
-
-        val imageBuffer: BufferedImage = ImageIO.read(file)
-        size = Vec2(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
+        setImage(File(filePath))
     }
 
 }

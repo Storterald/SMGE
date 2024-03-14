@@ -1,9 +1,9 @@
 package nodeLogic.nodeLogic2d
 
+import org.joml.Vector2f
 import nodeLogic.Node
-import math.Vec2
 
-open class Node2D(id: String = "", open var position: Vec2 = Vec2(0.0f, 0.0f), anchorPoint: Vec2 = Vec2(0.0f, 0.0f), scale: Vec2 = Vec2(1.0f, 1.0f)): Node(id) {
+open class Node2D(id: String = "", open var position: Vector2f = Vector2f(0.0f, 0.0f), anchorPoint: Vector2f = Vector2f(0.0f, 0.0f), scale: Vector2f = Vector2f(1.0f, 1.0f)): Node(id) {
     init {
         require(anchorPoint.x in 0.0f..1.0f) { "The x position must be within 0.0 and 1.0" }
         require(anchorPoint.y in 0.0f..1.0f) { "The y position must be within 0.0 and 1.0" }

@@ -3,6 +3,7 @@ package math
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
+import org.joml.Vector3f
 
 class ParallelepipedTest {
 
@@ -56,17 +57,17 @@ class ParallelepipedTest {
 
     @Test
     fun thirdConstructor_createsParallelepipedWithoutThrowing() {
-        assertDoesNotThrow { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), 100.0f, 30.0f, 30.0f) }
+        assertDoesNotThrow { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), 100.0f, 30.0f, 30.0f) }
     }
 
     @Test
     fun thirdConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
-        assertDoesNotThrow { Parallelepiped(Vec3(-20.0f, -1.0f, -10.0f), 100.0f, 30.0f, 30.0f) }
+        assertDoesNotThrow { Parallelepiped(Vector3f(-20.0f, -1.0f, -10.0f), 100.0f, 30.0f, 30.0f) }
     }
 
     @Test
     fun thirdConstructor_createsParallelepipedWithCorrectValues() {
-        val rect = Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), 100.0f, 30.0f, 50.0f)
+        val rect = Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), 100.0f, 30.0f, 50.0f)
         assertEquals(rect.x1, 20.0f)
         assertEquals(rect.y1, 10.0f)
         assertEquals(rect.z1, 10.0f)
@@ -77,32 +78,32 @@ class ParallelepipedTest {
 
     @Test
     fun thirdConstructor_throwsIfWidthIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), -100.0f, 30.0f, 3.0f) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), -100.0f, 30.0f, 3.0f) }
     }
 
     @Test
     fun thirdConstructor_throwsIfHeightIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), 100.0f, -30.0f, 10.0f) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), 100.0f, -30.0f, 10.0f) }
     }
 
     @Test
     fun thirdConstructor_throwsIfDepthIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), 100.0f, 30.0f, -10.0f) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), 100.0f, 30.0f, -10.0f) }
     }
 
     @Test
     fun fourthConstructor_createsParallelepipedWithoutThrowing() {
-        assertDoesNotThrow { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), Vec3(20.0f, 10.0f, 10.0f)) }
+        assertDoesNotThrow { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), Vector3f(20.0f, 10.0f, 10.0f)) }
     }
 
     @Test
     fun fourthConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
-        assertDoesNotThrow { Parallelepiped(Vec3(-20.0f, -10.0f, -10.0f), Vec3(20.0f, 10.0f, 10.0f)) }
+        assertDoesNotThrow { Parallelepiped(Vector3f(-20.0f, -10.0f, -10.0f), Vector3f(20.0f, 10.0f, 10.0f)) }
     }
 
     @Test
     fun fourthConstructor_createsParallelepipedWithCorrectValues() {
-        val rect = Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), Vec3(100.0f, 30.0f, 1.0f))
+        val rect = Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), Vector3f(100.0f, 30.0f, 1.0f))
         assertEquals(rect.x1, 20.0f)
         assertEquals(rect.y1, 10.0f)
         assertEquals(rect.z1, 10.0f)
@@ -113,22 +114,22 @@ class ParallelepipedTest {
 
     @Test
     fun fourthConstructor_throwsIfXSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), Vec3(-100.0f, 30.0f, 5.0f)) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), Vector3f(-100.0f, 30.0f, 5.0f)) }
     }
 
     @Test
     fun fourthConstructor_throwsIfYSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), Vec3(100.0f, -30.0f, 1.0f)) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), Vector3f(100.0f, -30.0f, 1.0f)) }
     }
 
     @Test
     fun fourthConstructor_throwsIfZSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), Vec3(100.0f, 30.0f, -1.0f)) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), Vector3f(100.0f, 30.0f, -1.0f)) }
     }
 
     @Test
     fun fourthConstructor_throwsIfSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Parallelepiped(Vec3(20.0f, 10.0f, 10.0f), Vec3(-100.0f, -30.0f, -10.0f)) }
+        assertThrows<IllegalArgumentException> { Parallelepiped(Vector3f(20.0f, 10.0f, 10.0f), Vector3f(-100.0f, -30.0f, -10.0f)) }
     }
     
 }

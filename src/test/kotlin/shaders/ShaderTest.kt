@@ -5,7 +5,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import renderEngine.createDisplay
 
-import WINDOW
+import windowID
 
 class ShaderTest {
 
@@ -15,13 +15,13 @@ class ShaderTest {
     @Test
     fun constructor_DoesNotThrowIfDisplayIsInitialized() {
         createDisplay("Title")
-        assertDoesNotThrow { Shader("src\\main\\kotlin\\shaders\\VertexShader.glsl", "src\\main\\kotlin\\shaders\\FragmentShader.glsl") }
+        assertDoesNotThrow { Shader("src\\main\\engine\\shaders\\VertexShader.glsl", "src\\main\\engine\\shaders\\FragmentShader.glsl") }
     }
 
     @Test
     fun constructor_throwsIfDisplayIsNotInitialized() {
-        WINDOW = 0L // Thx kotlin for being bugged
-        assertThrows<IllegalStateException> { Shader("src\\main\\kotlin\\shaders\\VertexShader.glsl", "src\\main\\kotlin\\shaders\\FragmentShader.glsl") }
+        windowID = 0L // Thx kotlin for being bugged
+        assertThrows<IllegalStateException> { Shader("src\\main\\engine\\shaders\\VertexShader.glsl", "src\\main\\engine\\shaders\\FragmentShader.glsl") }
     }
 
 }

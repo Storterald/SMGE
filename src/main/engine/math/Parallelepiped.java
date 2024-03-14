@@ -1,5 +1,7 @@
 package math;
 
+import org.joml.Vector3f;
+
 public class Parallelepiped {
 
     private final float x1, y1, z1, x2, y2, z2;
@@ -28,28 +30,28 @@ public class Parallelepiped {
         this.z2 = depth;
     }
 
-    public Parallelepiped(Vec3 position, float width, float height, float depth) {
+    public Parallelepiped(Vector3f position, float width, float height, float depth) {
         if (width < 0.0f) throw new IllegalArgumentException("The width must be a positive number.");
         if (height < 0.0f) throw new IllegalArgumentException("The height must be a positive number.");
         if (depth < 0.0f) throw new IllegalArgumentException("The depth must be a positive number.");
-        this.x1 = position.getX();
-        this.y1 = position.getY();
-        this.z1 = position.getZ();
-        this.x2 = position.getX() + width;
-        this.y2 = position.getY() + height;
-        this.z2 = position.getZ() + depth;
+        this.x1 = position.x;
+        this.y1 = position.y;
+        this.z1 = position.z;
+        this.x2 = position.x + width;
+        this.y2 = position.y + height;
+        this.z2 = position.z + depth;
     }
 
-    public Parallelepiped(Vec3 position, Vec3 size) {
-        if (size.getX() < 0.0f) throw new IllegalArgumentException("The x size (width) must be a positive number.");
-        if (size.getY() < 0.0f) throw new IllegalArgumentException("The y size (height) must be a positive number.");
-        if (size.getZ() < 0.0f) throw new IllegalArgumentException("The z size (depth) must be a positive number.");
-        this.x1 = position.getX();
-        this.y1 = position.getY();
-        this.z1 = position.getZ();
-        this.x2 = position.getX() + size.getX();
-        this.y2 = position.getY() + size.getY();
-        this.z2 = position.getZ() + size.getZ();
+    public Parallelepiped(Vector3f position, Vector3f size) {
+        if (size.x < 0.0f) throw new IllegalArgumentException("The x size (width) must be a positive number.");
+        if (size.y < 0.0f) throw new IllegalArgumentException("The y size (height) must be a positive number.");
+        if (size.z < 0.0f) throw new IllegalArgumentException("The z size (depth) must be a positive number.");
+        this.x1 = position.x;
+        this.y1 = position.y;
+        this.z1 = position.z;
+        this.x2 = position.x + size.x;
+        this.y2 = position.y + size.y;
+        this.z2 = position.z + size.z;
     }
 
     public float getX1() {
@@ -75,5 +77,4 @@ public class Parallelepiped {
     public float getZ2() {
         return z2;
     }
-
 }

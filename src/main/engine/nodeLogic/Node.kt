@@ -1,5 +1,7 @@
 package nodeLogic
 
+import scene.Scene
+
 abstract class Node(id: String = "") {
     init {
         if (id != "") {
@@ -24,18 +26,17 @@ abstract class Node(id: String = "") {
 
     open var visible = true
         set(value) {
-            if (scene != null && this in scene!!.nodesToRender) {
-                scene!!.nodesToRender[this] = value
-                children.forEach {
-                    it.visible = value
-                }
+            // TODO disable rendering for nodes with visible == true if one node above has visible = false
+            children.forEach {
+                it.visible = value
             }
+
             field = value
         }
 
     var parent: Node? = null
         private set(value) {
-            check(parent == null || value == null) { "You can't change the parent of the node." }
+            check(parent == null || value == null) { "You can't change the parent of the node to null." }
             check(value != this)
             field = value
         }
@@ -50,7 +51,7 @@ abstract class Node(id: String = "") {
         if (this is Scene) {
             node.scene = this
             node.loadNodeAndBelowToScene()
-        } else if (scene != null && scene!!.nodesToRender[this]!!) {
+        } else if (scene != null) {
             node.scene = scene
             node.loadNodeAndBelowToScene()
         }
@@ -89,7 +90,7 @@ abstract class Node(id: String = "") {
 
         if (this is Scene) {
             node.unloadNodeAndBelowFromScene()
-        } else if (node.scene != null && node.scene!!.nodesToRender[this]!!) {
+        } else if (node.scene != null) {
             node.unloadNodeAndBelowFromScene()
         }
     }
@@ -105,7 +106,7 @@ abstract class Node(id: String = "") {
 
                 if (this is Scene) {
                     it.unloadNodeAndBelowFromScene()
-                } else if (it.scene != null && it.scene!!.nodesToRender[this]!!) {
+                } else if (it.scene != null) {
                     it.unloadNodeAndBelowFromScene()
                 }
 
@@ -126,7 +127,7 @@ abstract class Node(id: String = "") {
 
         if (this is Scene) {
             children[i].unloadNodeAndBelowFromScene()
-        } else if (children[i].scene != null && children[i].scene!!.nodesToRender[this]!!) {
+        } else if (children[i].scene != null) {
             children[i].unloadNodeAndBelowFromScene()
         }
 
@@ -139,7 +140,7 @@ abstract class Node(id: String = "") {
 
             if (this is Scene) {
                 it.unloadNodeAndBelowFromScene()
-            } else if (it.scene != null && it.scene!!.nodesToRender[this]!!) {
+            } else if (it.scene != null) {
                 it.unloadNodeAndBelowFromScene()
             }
         }
@@ -149,7 +150,8 @@ abstract class Node(id: String = "") {
     private fun loadNodeAndBelowToScene() {
         check(scene != null) { "The node isn't in a scene" }
 
-        scene!!.nodesToRender[this] = true
+        scene!!.nodesToRender.add(this)
+        if (this.parent!!.visible) visible = true
         if (getChildrenCount() > 0) {
             children.forEach {
                 it.scene = scene
@@ -167,7 +169,6 @@ abstract class Node(id: String = "") {
         if (getChildrenCount() > 0) {
             children.forEach {
                 it.unloadNodeAndBelowFromScene()
-                it.scene = null
             }
         }
     }

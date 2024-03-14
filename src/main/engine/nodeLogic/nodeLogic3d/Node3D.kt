@@ -1,9 +1,9 @@
 package nodeLogic.nodeLogic3d
 
 import nodeLogic.Node
-import math.Vec3
+import org.joml.Vector3f
 
-open class Node3D(id: String = "", open var position: Vec3 = Vec3(0.0f, 0.0f, 0.0f), anchorPoint: Vec3 = Vec3(0.0f, 0.0f, 0.0f), scale: Vec3 = Vec3(1.0f, 1.0f, 1.0f)): Node(id) {
+open class Node3D(id: String = "", open var position: Vector3f = Vector3f(0.0f, 0.0f, 0.0f), anchorPoint: Vector3f = Vector3f(0.0f, 0.0f, 0.0f), scale: Vector3f = Vector3f(1.0f, 1.0f, 1.0f)): Node(id) {
     init {
         require(anchorPoint.x in 0.0f..1.0f) { "The x position must be within 0.0 and 1.0" }
         require(anchorPoint.y in 0.0f..1.0f) { "The y position must be within 0.0 and 1.0" }

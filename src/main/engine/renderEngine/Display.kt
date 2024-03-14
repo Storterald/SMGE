@@ -1,15 +1,15 @@
 package renderEngine
 
+import org.joml.Vector2f
 import org.lwjgl.glfw.GLFW.*
-import nodeLogic.Scene
-import math.Vec2
-import nodeLogic.Resource
+import scene.Scene
+import scene.Resource
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 
-import SCREEN_RESOLUTION
-import WINDOW
+import screenResolution
+import windowID
 
 private var currentScene: Scene? = null
     set(value) {
@@ -30,7 +30,7 @@ private fun initDisplay() {
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
 
-    SCREEN_RESOLUTION = Vec2(
+    screenResolution = Vector2f(
         glfwGetVideoMode(glfwGetPrimaryMonitor())!!.width().toFloat(),
         glfwGetVideoMode(glfwGetPrimaryMonitor())!!.height().toFloat()
     )
@@ -44,16 +44,16 @@ fun createDisplay(windowTitle: String) {
     initDisplay()
 
     // Create the window
-    WINDOW = glfwCreateWindow((SCREEN_RESOLUTION.x / 2.0f).toInt(), (SCREEN_RESOLUTION.y / 2.0f).toInt(), windowTitle, 0, 0)
-    if (WINDOW == 0L) throw RuntimeException("Failed to create the GLFW window.")
+    windowID = glfwCreateWindow((screenResolution.x / 2.0f).toInt(), (screenResolution.y / 2.0f).toInt(), windowTitle, 0, 0)
+    if (windowID == 0L) throw RuntimeException("Failed to create the GLFW window.")
 
-    glfwSetKeyCallback(WINDOW) { window: Long, key: Int, scancode: Int, action: Int, mods: Int ->
+    glfwSetKeyCallback(windowID) { window: Long, key: Int, scancode: Int, action: Int, mods: Int ->
         if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) glfwSetWindowShouldClose(window, true)
     }
 
-    glfwMakeContextCurrent(WINDOW)
+    glfwMakeContextCurrent(windowID)
 
-    glfwShowWindow(WINDOW)
+    glfwShowWindow(windowID)
 
     /* https://stackoverflow.com/a/76840008
      * Sets fps to monitor hz / value
@@ -81,19 +81,19 @@ fun loadScene(scene: Scene) {
     currentScene!!.start()
 }
 
-fun closeProgram() {
-    currentScene!!.close()
-    glfwSetWindowShouldClose(WINDOW, true)
+fun closeDisplay() {
+    if (currentScene != null) currentScene!!.close()
+    glfwSetWindowShouldClose(windowID, true)
 }
 
 inline fun <reified T : Resource> createResource(value: T) {
-    check(!resources.containsKey(T::class.java)) { "A resource with this name and type already exist" }
+    check(!resources.containsKey(T::class.java)) { "A resource of this type already exist" }
     resources[T::class.java] = value
 }
 
 inline fun <reified T : Resource> setResource(value: T) {
-    check(resources.containsKey(T::class.java)) { "Cannot set a uninitialized resource." }
-    resources[T::class.java] = value
+    if (!resources.containsKey(T::class.java)) createResource(value)
+    else resources[T::class.java] = value
 }
 
 inline fun <reified T : Resource> getResource(): T {
@@ -104,4 +104,8 @@ inline fun <reified T : Resource> getResource(): T {
 inline fun <reified T : Resource> deleteResource() {
     check(resources.containsKey(T::class.java)) { "Cannot delete a uninitialized resource." }
     resources.remove(T::class.java)
+}
+
+fun deleteResources() {
+    resources.clear()
 }

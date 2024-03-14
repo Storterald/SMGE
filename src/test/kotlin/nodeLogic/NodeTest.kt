@@ -1,11 +1,12 @@
 package nodeLogic
 
+import GenericScene
 import nodeLogic.nodeLogic3d.Node3D
-import nodeLogic.nodeLogic3d.Scene3D
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import renderEngine.closeDisplay
 import renderEngine.createDisplay
 
 class NodeTest {
@@ -61,27 +62,27 @@ class NodeTest {
     }
 
     @Test
-    fun visible_changesTheValueInsideRenderMapIfInsideAScene() {
+    fun visible_changesTheValueOfVisibleIfInsideScene() {
         createDisplay("Title")
-        val scene = Scene3D()
+        val scene = GenericScene()
         val childNode = Node3D()
         scene.addChild(childNode)
 
         childNode.visible = false
 
         assertEquals(scene, childNode.scene)
-        assertEquals(false, scene.nodesToRender[childNode])
+        assertEquals(false, childNode.visible)
 
         childNode.visible = true
 
         assertEquals(scene, childNode.scene)
-        assertEquals(true, scene.nodesToRender[childNode])
+        assertEquals(true, childNode.visible)
     }
 
     @Test
     fun visible_changesTheValueInsideRenderForAllBelowNodesMapIfInsideAScene() {
         createDisplay("Title")
-        val scene = Scene3D()
+        val scene = GenericScene()
         val childNode1 = Node3D()
         scene.addChild(childNode1)
         val childNode2 = Node3D()
@@ -91,16 +92,26 @@ class NodeTest {
         val childNode4 = Node3D()
         childNode2.addChild(childNode4)
 
-        childNode1.visible = false
+        assertEquals(scene, childNode1.scene)
+        assertEquals(true, childNode1.visible)
+        assertEquals(scene, childNode2.scene)
+        assertEquals(true, childNode2.visible)
+        assertEquals(scene, childNode3.scene)
+        assertEquals(true, childNode3.visible)
+        assertEquals(scene, childNode4.scene)
+        assertEquals(true, childNode4.visible)
+
+        childNode2.visible = false
 
         assertEquals(scene, childNode1.scene)
-        assertEquals(false, scene.nodesToRender[childNode1])
+        assertEquals(true, childNode1.visible)
         assertEquals(scene, childNode2.scene)
-        assertEquals(false, scene.nodesToRender[childNode2])
+        assertEquals(false, childNode2.visible)
         assertEquals(scene, childNode3.scene)
-        assertEquals(false, scene.nodesToRender[childNode3])
+        assertEquals(false, childNode3.visible)
         assertEquals(scene, childNode4.scene)
-        assertEquals(false, scene.nodesToRender[childNode4])
+        assertEquals(false, childNode4.visible)
+        closeDisplay()
     }
 
     // ### FUNCTIONS TEST ###
@@ -126,7 +137,7 @@ class NodeTest {
     @Test
     fun addChild_addsChildToRenderMapIfConnectedToScene() {
         createDisplay("Title")
-        val scene = Scene3D()
+        val scene = GenericScene()
         val childNode0 = Node3D()
         scene.addChild(childNode0)
 
@@ -141,20 +152,21 @@ class NodeTest {
         childNode0.addChild(childNode1)
 
         assertEquals(scene, childNode1.scene)
-        assertEquals(true, scene.nodesToRender[childNode1])
+        assertEquals(true, childNode1.visible)
         assertEquals(scene, childNode2.scene)
-        assertEquals(true, scene.nodesToRender[childNode2])
+        assertEquals(true, childNode2.visible)
         assertEquals(scene, childNode3.scene)
-        assertEquals(true, scene.nodesToRender[childNode3])
+        assertEquals(true, childNode3.visible)
         assertEquals(scene, childNode4.scene)
-        assertEquals(true, scene.nodesToRender[childNode4])
+        assertEquals(true, childNode4.visible)
+        closeDisplay()
     }
 
     @Test
     fun addChild_throwsIfTriesToAddASceneAsAChild() {
         createDisplay("Title")
         val node = Node3D()
-        val scene = Scene3D()
+        val scene = GenericScene()
 
         assertThrows<IllegalArgumentException> { node.addChild(scene) }
     }
@@ -261,7 +273,7 @@ class NodeTest {
     @Test
     fun removeChild_removesNodesFromSceneIfParentWasConnected() {
         createDisplay("Title")
-        val scene = Scene3D()
+        val scene = GenericScene()
         val childNode0 = Node3D()
         scene.addChild(childNode0)
 
@@ -278,13 +290,14 @@ class NodeTest {
         childNode0.removeChild(childNode1)
 
         assertEquals(null, childNode1.scene)
-        assertEquals(null, scene.nodesToRender[childNode1])
+        assertEquals(false, scene.nodesToRender.contains(childNode1))
         assertEquals(null, childNode2.scene)
-        assertEquals(null, scene.nodesToRender[childNode2])
+        assertEquals(false, scene.nodesToRender.contains(childNode2))
         assertEquals(null, childNode3.scene)
-        assertEquals(null, scene.nodesToRender[childNode3])
+        assertEquals(false, scene.nodesToRender.contains(childNode3))
         assertEquals(null, childNode4.scene)
-        assertEquals(null, scene.nodesToRender[childNode4])
+        assertEquals(false, scene.nodesToRender.contains(childNode4))
+        closeDisplay()
     }
 
     @Test
@@ -383,5 +396,43 @@ class NodeTest {
         val node = Node3D()
 
         assertThrows<IllegalStateException> { node.removeChildAtIndex(0) }
+    }
+
+
+    // ### SETTERS TEST ###
+    // --------------------
+
+    @Test
+    fun visible_whenConnectedToSceneChangesAllNodesBelowVisibilityToTheSameValue() {
+        createDisplay("Title")
+        val scene = GenericScene()
+        val childNode0 = Node3D()
+        scene.addChild(childNode0)
+        val childNode1 = Node3D()
+        childNode0.addChild(childNode1)
+        val childNode2 = Node3D()
+        childNode1.addChild(childNode2)
+        val childNode3 = Node3D()
+        childNode2.addChild(childNode3)
+        val childNode4 = Node3D()
+        childNode3.addChild(childNode4)
+
+        childNode1.visible = false
+
+        assertEquals(true, childNode0.visible)
+        assertEquals(false, childNode1.visible)
+        assertEquals(false, childNode2.visible)
+        assertEquals(false, childNode3.visible)
+        assertEquals(false, childNode4.visible)
+
+        childNode3.visible = true
+
+        assertEquals(true, childNode0.visible)
+        assertEquals(false, childNode1.visible)
+        assertEquals(false, childNode2.visible)
+        assertEquals(true, childNode3.visible)
+        assertEquals(true, childNode4.visible)
+
+        closeDisplay()
     }
 }

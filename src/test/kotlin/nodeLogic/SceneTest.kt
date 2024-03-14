@@ -1,6 +1,6 @@
 package nodeLogic
 
-import nodeLogic.nodeLogic3d.Scene3D
+import GenericScene
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import renderEngine.createDisplay
@@ -13,8 +13,8 @@ class SceneTest {
     @Test
     fun scene_doesNotChangeTheValue() {
         createDisplay("Title")
-        val scene1 = Scene3D()
-        val scene2 = Scene3D()
+        val scene1 = GenericScene()
+        val scene2 = GenericScene()
         scene1.scene = scene2
 
         assertEquals(null, scene1.scene)
@@ -23,7 +23,7 @@ class SceneTest {
     @Test
     fun visible_doesNotChangeTheValue() {
         createDisplay("Title")
-        val scene = Scene3D()
+        val scene = GenericScene()
         scene.visible = false
 
         assertEquals(true, scene.visible)

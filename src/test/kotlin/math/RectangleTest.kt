@@ -3,7 +3,7 @@ package math
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-
+import org.joml.Vector2f
 
 class RectangleTest {
 
@@ -47,17 +47,17 @@ class RectangleTest {
 
     @Test
     fun thirdConstructor_createsRectangleWithoutThrowing() {
-        assertDoesNotThrow { Rectangle(Vec2(20.0f, 10.0f), 100.0f, 30.0f) }
+        assertDoesNotThrow { Rectangle(Vector2f(20.0f, 10.0f), 100.0f, 30.0f) }
     }
 
     @Test
     fun thirdConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
-        assertDoesNotThrow { Rectangle(Vec2(-20.0f, -10.0f), 100.0f, 30.0f) }
+        assertDoesNotThrow { Rectangle(Vector2f(-20.0f, -10.0f), 100.0f, 30.0f) }
     }
 
     @Test
     fun thirdConstructor_createsRectangleWithCorrectValues() {
-        val rect = Rectangle(Vec2(20.0f, 10.0f), 100.0f, 30.0f)
+        val rect = Rectangle(Vector2f(20.0f, 10.0f), 100.0f, 30.0f)
         assertEquals(rect.x1, 20.0f)
         assertEquals(rect.y1, 10.0f)
         assertEquals(rect.x2, 120.0f)
@@ -66,27 +66,27 @@ class RectangleTest {
 
     @Test
     fun thirdConstructor_throwsIfWidthIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), -100.0f, 30.0f) }
+        assertThrows<IllegalArgumentException> { Rectangle(Vector2f(20.0f, 10.0f), -100.0f, 30.0f) }
     }
 
     @Test
     fun thirdConstructor_throwsIfHeightIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), 100.0f, -30.0f) }
+        assertThrows<IllegalArgumentException> { Rectangle(Vector2f(20.0f, 10.0f), 100.0f, -30.0f) }
     }
 
     @Test
     fun fourthConstructor_createsRectangleWithoutThrowing() {
-        assertDoesNotThrow { Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, 30.0f)) }
+        assertDoesNotThrow { Rectangle(Vector2f(20.0f, 10.0f), Vector2f(100.0f, 30.0f)) }
     }
 
     @Test
     fun fourthConstructor_doesNotThrowIfValuesAreNegativeButSizeIsPositive() {
-        assertDoesNotThrow { Rectangle(Vec2(-20.0f, -10.0f), Vec2(100.0f, 30.0f)) }
+        assertDoesNotThrow { Rectangle(Vector2f(-20.0f, -10.0f), Vector2f(100.0f, 30.0f)) }
     }
 
     @Test
     fun fourthConstructor_createsRectangleWithCorrectValues() {
-        val rect = Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, 30.0f))
+        val rect = Rectangle(Vector2f(20.0f, 10.0f), Vector2f(100.0f, 30.0f))
         assertEquals(rect.x1, 20.0f)
         assertEquals(rect.y1, 10.0f)
         assertEquals(rect.x2, 120.0f)
@@ -95,17 +95,17 @@ class RectangleTest {
 
     @Test
     fun fourthConstructor_throwsIfXSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(-100.0f, 30.0f)) }
+        assertThrows<IllegalArgumentException> { Rectangle(Vector2f(20.0f, 10.0f), Vector2f(-100.0f, 30.0f)) }
     }
 
     @Test
     fun fourthConstructor_throwsIfYSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(100.0f, -30.0f)) }
+        assertThrows<IllegalArgumentException> { Rectangle(Vector2f(20.0f, 10.0f), Vector2f(100.0f, -30.0f)) }
     }
 
     @Test
     fun fourthConstructor_throwsIfSizeIsNegative() {
-        assertThrows<IllegalArgumentException> { Rectangle(Vec2(20.0f, 10.0f), Vec2(-100.0f, -30.0f)) }
+        assertThrows<IllegalArgumentException> { Rectangle(Vector2f(20.0f, 10.0f), Vector2f(-100.0f, -30.0f)) }
     }
 
 }
