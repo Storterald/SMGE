@@ -14,15 +14,17 @@ data class SecondCounter(var second: Long): Resource()
 
 class FPSCounterScene: Scene() {
     private var frames: Int = 0
+    private var framesButBetter = 0
     init {
-        val sprite = Sprite(position = Vector2f(windowSize/2), anchorPoint = Vector2f(0.5f), filePath = "src\\test\\resources\\dirt512x.png")
+        val sprite = Sprite(position = windowSize/2, filePath = "src\\test\\resources\\dirt512x.png")
         addChild(sprite)
 
         createResource(SecondCounter(0))
 
         addCodeBlock("start", CodeBlock.START) {
             // TODO muovi questo in privateStart() che e' l'unico codice che impedisce di avere la roba iniziale completamente nell'init.
-            shader.createUniform("test", Vector3f(1f, 0f, 0.5f))
+            shader.createUniform("test", Vector3f(1f, 1f, 1f))
+            shader.createUniform("time", frames.toFloat())
         }
 
         addCodeBlock("update", CodeBlock.UPDATE) {
@@ -34,7 +36,8 @@ class FPSCounterScene: Scene() {
                 frames = 0
                 setResource<SecondCounter>(SecondCounter(currentSecond))
             }
-
+            shader.setUniform(shader.getUniform("time"), framesButBetter.toFloat())
+            framesButBetter++
             frames++
         }
     }

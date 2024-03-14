@@ -21,12 +21,6 @@ val indices2D = intArrayOf(
     0, 1, 3,
     3, 1, 2,
 )
-val colors2D = arrayListOf(
-    Vector3f(0.5f, 0.0f, 0.0f),
-    Vector3f(0.0f, 0.5f, 0.0f),
-    Vector3f(0.0f, 0.0f, 0.5f),
-    Vector3f(0.0f, 0.5f, 0.5f),
-)
 
 abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shaders\\VertexShader.glsl", "src\\main\\engine\\shaders\\FragmentShader.glsl")): Node("") {
     init {
@@ -56,13 +50,22 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         shader.bind()
 
+        shader.createUniform("texture_sampler", 0);
+
         // Execute user code
         startCodeBlocks.forEach { it.value() }
 
+        val testTexCoords = floatArrayOf(
+            0f, 0f,
+            0f, 0.5f,
+            0.5f, 0.5f,
+            0.5f, 0f
+        )
+
         // Transform nodes to meshes
         nodesToRender.forEach {
-            if (it is Object2D) {
-                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, colors2D)
+            if (it is Sprite) {
+                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, it.image.path, testTexCoords)
             }
         }
 

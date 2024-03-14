@@ -1,0 +1,41 @@
+private fun loadTexture(filePath: String): Int {
+        check(File(filePath).exists()) { "The file does not exist." }
+
+        val width: Int
+        val height: Int
+        val buffer: ByteBuffer?
+
+        MemoryStack.stackPush().use {
+            val w: IntBuffer = it.mallocInt(1)
+            val h: IntBuffer = it.mallocInt(1)
+            val c: IntBuffer = it.mallocInt(1)
+
+            /* In case you were trying to get this to work with a jar:
+             * It should really be noted that STBImage.stbi_load doesn't know about your jar,
+             * it uses system path. So if you try to bundle your texture resources in your jar,
+             * it will not work. "Ship" textures next to jar archive.
+             */
+            buffer = STBImage.stbi_load(filePath, w, h, c, 4)
+            check(buffer != null) { "Failed to load image: ${STBImage.stbi_failure_reason()}." }
+
+            width = w.get()
+            height = h.get()
+
+            println("Image width: " + w.get(0))
+            println("Image height: " + h.get(0) + "\n")
+
+//            MemoryUtil.memFree(w)
+//            MemoryUtil.memFree(h)
+//            MemoryUtil.memFree(c)
+        }
+
+        val textureID: Int = GL11.glGenTextures()
+        textures.add(textureID)
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID)
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1)
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer)
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D)
+        STBImage.stbi_image_free(buffer!!)
+
+        return textureID
+    }

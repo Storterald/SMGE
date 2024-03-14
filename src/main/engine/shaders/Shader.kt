@@ -9,7 +9,7 @@ import java.io.File
 import windowID
 
 class Shader(vertexPath: String, fragmentPath: String) {
-    var programId = 0
+    var programID = 0
         private set
     private var vertexShaderId = 0
     private var fragmentShaderId = 0
@@ -21,8 +21,8 @@ class Shader(vertexPath: String, fragmentPath: String) {
         require(fragmentPath != "") { "Fragment path cannot be empty." }
         check(windowID != 0L) { "Initialize the display before creating a shader" }
 
-        programId = glCreateProgram()
-        check(programId != 0) { "Could not create shader program." }
+        programID = glCreateProgram()
+        check(programID != 0) { "Could not create shader program." }
 
         val vertexFile = File(vertexPath)
         val fragmentFile = File(fragmentPath)
@@ -56,27 +56,27 @@ class Shader(vertexPath: String, fragmentPath: String) {
 
         check(glGetShaderi(shaderId, GL_COMPILE_STATUS) != 0) { "Error compiling shader ${glGetShaderInfoLog(shaderId, 1024)}." }
 
-        glAttachShader(programId, shaderId)
+        glAttachShader(programID, shaderId)
         return shaderId
     }
 
     private fun link() {
-        glLinkProgram(programId)
-        check(glGetProgrami(programId, GL_LINK_STATUS) != 0) { "Error linking shader ${glGetProgramInfoLog(programId, 1024)}." }
+        glLinkProgram(programID)
+        check(glGetProgrami(programID, GL_LINK_STATUS) != 0) { "Error linking shader ${glGetProgramInfoLog(programID, 1024)}." }
 
         if (vertexShaderId != 0) {
-            glDetachShader(programId, vertexShaderId)
+            glDetachShader(programID, vertexShaderId)
         }
         if (fragmentShaderId != 0) {
-            glDetachShader(programId, fragmentShaderId)
+            glDetachShader(programID, fragmentShaderId)
         }
 
-        glValidateProgram(programId)
-        check(glGetProgrami(programId, GL_VALIDATE_STATUS) != 0) { "Warning validating shader ${glGetProgramInfoLog(programId, 1024)}." }
+        glValidateProgram(programID)
+        check(glGetProgrami(programID, GL_VALIDATE_STATUS) != 0) { "Warning validating shader ${glGetProgramInfoLog(programID, 1024)}." }
     }
 
     fun bind() {
-        glUseProgram(programId)
+        glUseProgram(programID)
     }
 
     fun unbind() {
@@ -85,15 +85,16 @@ class Shader(vertexPath: String, fragmentPath: String) {
 
     fun cleanup() {
         unbind()
-        if (programId != 0) {
-            glDeleteProgram(programId)
+        if (programID != 0) {
+            glDeleteProgram(programID)
         }
     }
 
     // Uniforms
     // --------
     fun <T> createUniform(name: String, value: T) {
-        val uniformLocation = glGetUniformLocation(programId, name)
+        val uniformLocation = glGetUniformLocation(programID, name)
+        check(!uniforms.containsKey(name)) { "A uniform with the same name \"$name\" has been already initialized." }
         check(uniformLocation >= 0) { "Error creating uniform $name with location $uniformLocation." }
 
         val uniform = Uniform(name, value, uniformLocation)

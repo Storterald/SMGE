@@ -1,10 +1,15 @@
 #version 330
 
-in vec3 color;
-out vec4 fragColor;
+uniform sampler2D texture_sampler;
 
 uniform vec3 test;
+uniform float time;
+
+in vec2 texCoord;
+
+out vec4 fragColor;
 
 void main() {
-    fragColor = vec4(test, 1.0);
+    float sprechiationSpazion = max(dot(test, vec3(1.0, 1.0, 1.0)) * time, 1.0);
+    fragColor = texture(texture_sampler, texCoord) * sprechiationSpazion;
 }

@@ -6,10 +6,10 @@ import scene.Component
 
 open class Object2D(
     id: String = "",
-    position: Vector2f = Vector2f(0.0f, 0.0f),
-    anchorPoint: Vector2f = Vector2f(0.0f, 0.0f),
-    scale: Vector2f = Vector2f(1.0f, 1.0f),
-    size: Vector2f = Vector2f(0.0f, 0.0f)
+    position: Vector2f = Vector2f(0.0f),
+    anchorPoint: Vector2f = Vector2f(0.5f),
+    scale: Vector2f = Vector2f(1.0f),
+    size: Vector2f = Vector2f(0.0f)
 ): Node2D(id, position, anchorPoint, scale) {
 
     init {
@@ -30,7 +30,7 @@ open class Object2D(
             field = value
         }
 
-    var scaledSize: Vector2f = Vector2f(0.0f, 0.0f)
+    var scaledSize: Vector2f = Vector2f(0.0f)
         get() {
             field = scale * size
 
@@ -38,7 +38,7 @@ open class Object2D(
         }
         private set
 
-    var anchoredPosition: Vector2f = Vector2f(0.0f, 0.0f)
+    var anchoredPosition: Vector2f = Vector2f(0.0f)
         get() {
             field = position - (anchorPoint * scaledSize)
 

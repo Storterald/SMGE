@@ -2,13 +2,21 @@ package shaders
 
 import org.joml.Vector3f
 import org.lwjgl.opengl.GL30.*
+import org.lwjgl.stb.STBImage
+import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
+import java.io.File
+import java.nio.ByteBuffer
+import java.nio.IntBuffer
 
-class Mesh(positions: FloatArray, indices: IntArray, colors: ArrayList<Vector3f>) {
+class Mesh(positions: FloatArray, indices: IntArray, texturePath: String, texCoords: FloatArray) {
     private var vaoID = 0
     private var vboID = 0
-    private var cboID = 0
     private var eboID = 0
+
+    private var textureID = 0
+    private var textureVboID = 0
+
     private var vertexCount = indices.size
 
     init {
@@ -27,23 +35,14 @@ class Mesh(positions: FloatArray, indices: IntArray, colors: ArrayList<Vector3f>
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0)
 
-        // Init CBO
-        val colorsFloat = ArrayList<Float>()
-        for (color in colors) {
-            colorsFloat.add(color.x)
-            colorsFloat.add(color.y)
-            colorsFloat.add(color.z)
-        }
-        val colorsFloatArray = colorsFloat.toFloatArray()
+        // Init Texture VBO
+        textureVboID = glGenBuffers()
+        val texCoordsBuffer = MemoryUtil.memAllocFloat(texCoords.size)
+        texCoordsBuffer.put(texCoords).flip()
 
-        val colorBuffer = MemoryUtil.memAllocFloat(colorsFloatArray.size)
-        colorBuffer.put(colorsFloatArray).flip()
-
-        cboID = glGenBuffers()
-        glBindBuffer(GL_ARRAY_BUFFER, cboID)
-        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW)
-        glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0)
+        glBindBuffer(GL_ARRAY_BUFFER, textureVboID)
+        glBufferData(GL_ARRAY_BUFFER, texCoordsBuffer, GL_STATIC_DRAW)
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0)
 
         // Init EBO
         val indicesBuffer = MemoryUtil.memAllocInt(indices.size)
@@ -61,6 +60,35 @@ class Mesh(positions: FloatArray, indices: IntArray, colors: ArrayList<Vector3f>
         MemoryUtil.memFree(indicesBuffer)
     }
 
+    fun loadTexture(texturePath: String) {
+        check(File(texturePath).exists()) { "The specified texture file does not exist." }
+
+        var width = 0
+        var height = 0
+        var buffer: ByteBuffer?
+
+        MemoryStack.stackPush().use {
+            val w: IntBuffer = it.mallocInt(1)
+            val h: IntBuffer = it.mallocInt(1)
+            val c: IntBuffer = it.mallocInt(1)
+
+            buffer = STBImage.stbi_load(texturePath, w, h, c, 4)
+            check(buffer != null) { "Failed to load image: ${STBImage.stbi_failure_reason()}." }
+
+            width = w.get()
+            height = h.get()
+        }
+
+        textureID = glGenTextures()
+        glBindTexture(GL_TEXTURE_2D, textureID);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
+        glGenerateMipmap(GL_TEXTURE_2D)
+
+        STBImage.stbi_image_free(buffer!!)
+    }
+
     fun cleanUp() {
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)
@@ -69,7 +97,6 @@ class Mesh(positions: FloatArray, indices: IntArray, colors: ArrayList<Vector3f>
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glDeleteBuffers(vboID)
         glDeleteBuffers(eboID)
-        glDeleteBuffers(cboID)
 
         // Delete VAO
         glBindVertexArray(0)
@@ -78,6 +105,8 @@ class Mesh(positions: FloatArray, indices: IntArray, colors: ArrayList<Vector3f>
 
     fun renderMesh() {
         glBindVertexArray(vaoID)
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_2D, textureID)
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
