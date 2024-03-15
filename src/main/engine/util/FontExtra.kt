@@ -1,16 +1,52 @@
 package util
 
-import org.joml.Vector2f
-import org.joml.Vector2i
+import org.lwjgl.system.MemoryUtil
+import renderEngine.Texture
 import java.awt.*
+import java.awt.geom.AffineTransform
+import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
+import java.nio.ByteBuffer
 import kotlin.math.max
 
-class FontExtra(val font: Font): Font(font) {
+
+private val fonts: HashMap<Font, Texture> = hashMapOf()
+
+// Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
+class FontExtra(font: Font): Font(font) {
+    var texture: Texture
+        private set
+
+    init {
+        texture = if (font !in fonts) createFontTexture(font) else fonts[font]!!
+    }
 
     private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
 
-    fun createFontTexture() {
+    var height: Int = 0
+        private set
+
+    fun getHeight(text: String): Int {
+        var height = 0
+        var lineHeight = 0
+        for (c in text) {
+            if (c == '\n') {
+                height += lineHeight
+                lineHeight = 0
+                continue
+            }
+            if (c == '\r') {
+                continue
+            }
+            val g = glyphs[c]
+            lineHeight = max(lineHeight.toDouble(), g!!.height.toDouble()).toInt()
+        }
+        height += lineHeight
+
+        return height
+    }
+
+    private fun createFontTexture(font: Font): Texture {
         var imageWidth = 0
         var imageHeight = 0
 
@@ -23,7 +59,7 @@ class FontExtra(val font: Font): Font(font) {
             imageHeight = max(imageHeight, charImage.height)
         }
 
-        val image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+        var image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
         val g: Graphics2D = image.createGraphics();
 
         var x = 0
@@ -42,10 +78,45 @@ class FontExtra(val font: Font): Font(font) {
             x += glyph.width
             glyphs[c] = glyph
         }
+
+        val transform: AffineTransform = AffineTransform.getRotateInstance(1.0, -1.0)
+        transform.translate(0.0, -image.height.toDouble())
+        val operation: AffineTransformOp = AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR)
+        operation.filter(image, null)
+
+        val width = image.width
+        val height = image.height
+
+        val pixels = IntArray(width*height)
+        image.getRGB(0, 0, width, height, pixels, 0, width)
+
+        val buffer: ByteBuffer = MemoryUtil.memAlloc(width*height*4)
+        for (i in 0..<height) {
+            for (j in 0..<width) {
+                /* Pixel as RGBA: 0xAARRGGBB */
+                val pixel = pixels[i * width + j]
+                /* Red component 0xAARRGGBB >> 16 = 0x0000AARR */
+                buffer.put(((pixel shr 16) and 0xFF).toByte())
+                /* Green component 0xAARRGGBB >> 8 = 0x00AARRGG */
+                buffer.put(((pixel shr 8) and 0xFF).toByte())
+                /* Blue component 0xAARRGGBB >> 0 = 0xAARRGGBB */
+                buffer.put((pixel and 0xFF).toByte())
+                /* Alpha component 0xAARRGGBB >> 24 = 0x000000AA */
+                buffer.put(((pixel shr 24) and 0xFF).toByte())
+            }
+        }
+
+        buffer.flip()
+
+        val fontTexture: Texture = Texture().createTexture(width, height, buffer)
+        MemoryUtil.memFree(buffer)
+
+        fonts[font] = fontTexture
+
+        return fontTexture
     }
 
-    fun createCharImage(font: Font, c: Char, antiAlias: Boolean): BufferedImage? {
-        // Stolen from https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/text/Font.java#L265
+    private fun createCharImage(font: Font, c: Char, antiAlias: Boolean): BufferedImage? {
         var image: BufferedImage = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
         var g: Graphics2D = image.createGraphics()
         if (antiAlias) {

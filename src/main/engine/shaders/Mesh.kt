@@ -1,10 +1,13 @@
 package shaders
 
 import org.joml.Vector3f
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
+import renderEngine.Texture
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
@@ -72,6 +75,7 @@ class Mesh(positions: FloatArray, indices: IntArray, texturePath: String, texCoo
             val h: IntBuffer = it.mallocInt(1)
             val c: IntBuffer = it.mallocInt(1)
 
+//            STBImage.stbi_set_flip_vertically_on_load(true)
             buffer = STBImage.stbi_load(texturePath, w, h, c, 4)
             check(buffer != null) { "Failed to load image: ${STBImage.stbi_failure_reason()}." }
 
@@ -80,11 +84,12 @@ class Mesh(positions: FloatArray, indices: IntArray, texturePath: String, texCoo
         }
 
         textureID = glGenTextures()
-        glBindTexture(GL_TEXTURE_2D, textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID)
+
+        glGenerateMipmap(GL_TEXTURE_2D)
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
-        glGenerateMipmap(GL_TEXTURE_2D)
 
         STBImage.stbi_image_free(buffer!!)
     }
