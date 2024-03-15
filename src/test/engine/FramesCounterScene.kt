@@ -8,8 +8,6 @@ import renderEngine.getResource
 import renderEngine.setResource
 import scene.CodeBlock
 import scene.Scene
-import shaders.Mesh
-import shaders.Shader
 
 data class Time(var time: Long): Resource() {
     private var lastFrameTime = System.nanoTime()

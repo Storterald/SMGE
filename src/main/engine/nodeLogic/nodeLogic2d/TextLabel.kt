@@ -1,12 +1,9 @@
 package nodeLogic.nodeLogic2d
 
 import org.joml.Vector2f
-import org.joml.Vector2i
-import util.Glyph
 import java.awt.*
 import java.awt.image.BufferedImage
 import java.io.File
-import kotlin.math.max
 
 class TextLabel: Object2D {
     constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), text: String, font: Font = Font("Arial", Font.PLAIN, 12)): super(id, position, anchorPoint, scale) {
@@ -28,60 +25,20 @@ class TextLabel: Object2D {
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), text: String, fontFile: File): super(id, position, anchorPoint, scale) {
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), text: String, fontFile: File): this(id, position, anchorPoint, scale, text, Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.createFont(Font.TRUETYPE_FONT, fontFile).style, 12.0f)) {
         check(fontFile.exists()) { "The font file does not exist." }
         require(fontFile.extension in arrayOf("otf", "ttf", "woff", "svg", "eof", "OTF", "TTF", "WOFF", "SVG", "EOF")) { "The font must be a otf, ttf, woff, svg or eof." }
-
-        val tempFont = Font.createFont(Font.TRUETYPE_FONT, fontFile)
-        this.font = tempFont.deriveFont(tempFont.style, fontSize)
-        this.text = text
-
-        this.scale = scale
-        this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), fontSize: Float, text: String, fontFile: File): super(id, position, anchorPoint, scale) {
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), fontSize: Float, text: String, fontFile: File): this(id, position, anchorPoint, scale, fontSize, text, Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.createFont(Font.TRUETYPE_FONT, fontFile).style, 12.0f)) {
         require(fontSize > 0.0f) { "The font size must be higher than 0." }
         check(fontFile.exists()) { "The font file does not exist." }
         require(fontFile.extension in arrayOf("otf", "ttf", "woff", "svg", "eof", "OTF", "TTF", "WOFF", "SVG", "EOF")) { "The font must be a otf, ttf, woff, svg or eof." }
-
-        val tempFont = Font.createFont(Font.TRUETYPE_FONT, fontFile)
-        this.font = tempFont.deriveFont(tempFont.style, fontSize)
-        this.text = text
-        this.fontSize = fontSize
-
-        this.scale = scale
-        this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), text: String, fontPath: String): super(id, position, anchorPoint, scale) {
-        val fontFile = File(fontPath)
-        check(fontFile.exists()) { "The font file does not exist." }
-        require(fontFile.extension in arrayOf("otf", "ttf", "woff", "svg", "eof", "OTF", "TTF", "WOFF", "SVG", "EOF")) { "The font must be a otf, ttf, woff, svg or eof." }
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), text: String, fontPath: String): this(id, position, anchorPoint, scale, text, File(fontPath))
 
-        val tempFont: Font = Font.createFont(Font.TRUETYPE_FONT, fontFile)
-        this.font = tempFont.deriveFont(tempFont.style, fontSize)
-        this.text = text
-
-        this.scale = scale
-        this.anchorPoint = anchorPoint
-    }
-
-    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), fontSize: Float, text: String, fontPath: String): super(id, position, anchorPoint, scale) {
-        require(fontSize > 0.0f) { "The font size must be higher than 0." }
-
-        val fontFile = File(fontPath)
-        check(fontFile.exists()) { "The font file does not exist." }
-        require(fontFile.extension in arrayOf("otf", "ttf", "woff", "svg", "eof", "OTF", "TTF", "WOFF", "SVG", "EOF")) { "The font must be a otf, ttf, woff, svg or eof." }
-
-        val tempFont: Font = Font.createFont(Font.TRUETYPE_FONT, fontFile)
-        this.font = tempFont.deriveFont(tempFont.style, fontSize)
-        this.text = text
-        this.fontSize = fontSize
-
-        this.scale = scale
-        this.anchorPoint = anchorPoint
-    }
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), fontSize: Float, text: String, fontPath: String): this(id, position, anchorPoint, scale, fontSize, text, File(fontPath))
 
     var text: String = ""
         set(value) {
@@ -126,12 +83,12 @@ class TextLabel: Object2D {
         graphics2D.drawString(text, 0, fontMetrics.ascent)
         graphics2D.dispose()
 
-        /* Remove to save the textLabel as an image in resources/
-        try {
-            ImageIO.write(image, "png", File("src\\main\\resources\\${font.name}.png"))
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        } */
+        // Remove comment to save the textLabel as an image in resources/
+//        try {
+//            ImageIO.write(image, "png", File("src\\main\\resources\\${font.name}.png"))
+//        } catch (ex: IOException) {
+//            ex.printStackTrace()
+//        }
     }
 
 }

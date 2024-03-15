@@ -1,6 +1,5 @@
 import math.div
 import nodeLogic.nodeLogic2d.Sprite
-import org.joml.Vector2f
 import org.joml.Vector3f
 import renderEngine.createResource
 import renderEngine.getResource

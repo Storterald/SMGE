@@ -30,31 +30,9 @@ class Sprite: Object2D {
         this.anchorPoint = anchorPoint
     }
 
-    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f, 1.0f), filePath: String): super(id, position, anchorPoint, scale) {
-        val file = File(filePath)
-        check(file.exists()) { "The sprite image file doesn't exist." }
-        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f, 1.0f), filePath: String): this(id, position, anchorPoint, scale, File(filePath))
 
-        image = file
-
-        val imageBuffer: BufferedImage = ImageIO.read(file)
-        size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
-        check(size.x != 0.0f && size.y != 0.0f) { "Error initializing the image." }
-
-        this.scale = scale
-        this.anchorPoint = anchorPoint
-    }
-
-    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), size: Vector2f, filePath: String): super(id, position, anchorPoint, scale, size) {
-        val file = File(filePath)
-        check(file.exists()) { "The sprite image file doesn't exist." }
-        require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
-
-        image = file
-        this.size = size
-        this.scale = scale
-        this.anchorPoint = anchorPoint
-    }
+    constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), size: Vector2f, filePath: String): this(id, position, anchorPoint, scale, size, File(filePath))
 
     var image: File
         private set
