@@ -10,6 +10,6 @@ in vec2 texCoord;
 out vec4 fragColor;
 
 void main() {
-    float sprechiationSpazion = max(test.r + time, 1.0);
+    float sprechiationSpazion = min(test.r + time, 1.0);
     fragColor = texture2D(texture_sampler, texCoord) * sprechiationSpazion;
 }

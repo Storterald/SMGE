@@ -1,8 +1,7 @@
-package shaders
+package renderEngine
 
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil
-import renderEngine.Texture
 
 class Mesh(positions: FloatArray, indices: IntArray, private var texture: Texture, texCoords: FloatArray) {
     private var vaoID = 0

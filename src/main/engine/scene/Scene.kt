@@ -8,18 +8,23 @@ import org.lwjgl.system.MemoryUtil
 import org.lwjgl.glfw.Callbacks
 
 import nodeLogic.Node
-import nodeLogic.nodeLogic2d.Object2D
 import nodeLogic.nodeLogic2d.Sprite
 import org.joml.Vector2f
-import org.joml.Vector3f
-import shaders.Mesh
+import renderEngine.Mesh
 
 import windowID
 import windowSize
 
-val indices2D = intArrayOf(
+private val indices2D = intArrayOf(
     0, 1, 3,
     3, 1, 2,
+)
+
+private val textureCoords2D = floatArrayOf(
+    0f, 0f,
+    0f, 1f,
+    1f, 1f,
+    1f, 0f
 )
 
 abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shaders\\VertexShader.glsl", "src\\main\\engine\\shaders\\FragmentShader.glsl")): Node("") {
@@ -53,17 +58,10 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         // Execute user code
         startCodeBlocks.forEach { it.value() }
 
-        val testTexCoords = floatArrayOf(
-            0f, 0f,
-            0f, 0.5f,
-            0.5f, 0.5f,
-            0.5f, 0f
-        )
-
         // Transform nodes to meshes
         nodesToRender.forEach {
             if (it is Sprite) {
-                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, it.texture, testTexCoords)
+                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, it.texture, textureCoords2D)
             }
         }
 
