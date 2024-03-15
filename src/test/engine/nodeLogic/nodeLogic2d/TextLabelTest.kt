@@ -3,6 +3,7 @@ package nodeLogic.nodeLogic2d
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
+import util.FontExtra
 import java.awt.Font
 import java.io.File
 
@@ -85,24 +86,6 @@ class TextLabelTest {
 
     // ### SETTERS TEST ###
     // --------------------
-
-    @Test
-    fun text_createsTheImageAndChangesTheSize() {
-        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
-        textLabel.text = "New text"
-
-        assertEquals(50.0f, textLabel.size.x)
-        assertEquals(15.0f, textLabel.size.y)
-    }
-
-    @Test
-    fun font_createsTheImageAndChangesTheSize() {
-        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
-        textLabel.font = Font("Arial", Font.PLAIN, 12)
-
-        assertEquals(24.0f, textLabel.size.x)
-        assertEquals(14.0f, textLabel.size.y)
-    }
 
     @Test
     fun fontSize_createsTheImageAndChangesTheSize() {

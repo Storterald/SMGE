@@ -1,27 +1,26 @@
 package util
 
 import org.lwjgl.system.MemoryUtil
-import renderEngine.Texture
 import java.awt.*
-import java.awt.geom.AffineTransform
-import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
-import java.nio.ByteBuffer
 import kotlin.math.max
 
+import renderEngine.Texture
+import java.awt.geom.AffineTransform
+import java.awt.image.AffineTransformOp
+import java.nio.ByteBuffer
 
-private val fonts: HashMap<Font, Texture> = hashMapOf()
+private val fontTextures: MutableList<FontExtra> = mutableListOf()
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
-class FontExtra(font: Font): Font(font) {
-    var texture: Texture
-        private set
-
+class FontExtra(font: Font) : Font(font) {
     init {
-        texture = if (font !in fonts) createFontTexture(font) else fonts[font]!!
+        if (font !in fontTextures) createFontTexture(font)
     }
 
     private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
+
+    private val texture = Texture()
 
     var height: Int = 0
         private set
@@ -46,6 +45,36 @@ class FontExtra(font: Font): Font(font) {
         return height
     }
 
+    private fun createCharImage(font: Font, c: Char, antiAlias: Boolean): BufferedImage? {
+        var image: BufferedImage = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
+        var g: Graphics2D = image.createGraphics()
+        if (antiAlias) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+        }
+        g.font = font
+        val metrics: FontMetrics = g.fontMetrics
+        g.dispose()
+
+        val charWidth: Int = metrics.charWidth(c)
+        val charHeight: Int = metrics.height
+
+        if (charWidth == 0) {
+            return null
+        }
+
+        image = BufferedImage(charWidth, charHeight, BufferedImage.TYPE_INT_ARGB)
+        g = image.createGraphics()
+        if (antiAlias) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+        }
+        g.font = font
+        g.paint = Color.WHITE
+        g.drawString("$c", 0, metrics.ascent)
+        g.dispose()
+
+        return image
+    }
+
     private fun createFontTexture(font: Font): Texture {
         var imageWidth = 0
         var imageHeight = 0
@@ -59,7 +88,7 @@ class FontExtra(font: Font): Font(font) {
             imageHeight = max(imageHeight, charImage.height)
         }
 
-        var image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+        val image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
         val g: Graphics2D = image.createGraphics();
 
         var x = 0
@@ -93,56 +122,25 @@ class FontExtra(font: Font): Font(font) {
         val buffer: ByteBuffer = MemoryUtil.memAlloc(width*height*4)
         for (i in 0..<height) {
             for (j in 0..<width) {
-                /* Pixel as RGBA: 0xAARRGGBB */
                 val pixel = pixels[i * width + j]
-                /* Red component 0xAARRGGBB >> 16 = 0x0000AARR */
                 buffer.put(((pixel shr 16) and 0xFF).toByte())
-                /* Green component 0xAARRGGBB >> 8 = 0x00AARRGG */
                 buffer.put(((pixel shr 8) and 0xFF).toByte())
-                /* Blue component 0xAARRGGBB >> 0 = 0xAARRGGBB */
                 buffer.put((pixel and 0xFF).toByte())
-                /* Alpha component 0xAARRGGBB >> 24 = 0x000000AA */
                 buffer.put(((pixel shr 24) and 0xFF).toByte())
             }
         }
 
         buffer.flip()
 
-        val fontTexture: Texture = Texture().createTexture(width, height, buffer)
+        val fontTexture: Texture = (Texture::generateTexture)(Texture(), width, height, buffer)
         MemoryUtil.memFree(buffer)
 
-        fonts[font] = fontTexture
+        fontTextures.add(this)
 
         return fontTexture
     }
 
-    private fun createCharImage(font: Font, c: Char, antiAlias: Boolean): BufferedImage? {
-        var image: BufferedImage = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
-        var g: Graphics2D = image.createGraphics()
-        if (antiAlias) {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        }
-        g.font = font
-        val metrics: FontMetrics = g.fontMetrics
-        g.dispose()
-
-        val charWidth: Int = metrics.charWidth(c)
-        val charHeight: Int = metrics.height
-
-        if (charWidth == 0) {
-            return null
-        }
-
-        image = BufferedImage(charWidth, charHeight, BufferedImage.TYPE_INT_ARGB)
-        g = image.createGraphics()
-        if (antiAlias) {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        }
-        g.font = font
-        g.paint = Color.WHITE
-        g.drawString("$c", 0, metrics.ascent)
-        g.dispose()
-
-        return image
+    fun createTextureWithText(text: String): Texture {
+        return texture
     }
 }

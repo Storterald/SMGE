@@ -50,8 +50,6 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         shader.bind()
 
-        shader.createUniform("texture_sampler", 0);
-
         // Execute user code
         startCodeBlocks.forEach { it.value() }
 
@@ -65,7 +63,7 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         // Transform nodes to meshes
         nodesToRender.forEach {
             if (it is Sprite) {
-                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, it.image.path, testTexCoords)
+                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, it.texture, testTexCoords)
             }
         }
 

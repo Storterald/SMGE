@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import org.joml.Vector2f
+import org.w3c.dom.Text
+import renderEngine.Texture
 
 class Sprite: Object2D {
     constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), file: File): super(id, position, anchorPoint, scale) {
@@ -25,6 +27,7 @@ class Sprite: Object2D {
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
         image = file
+
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
@@ -34,7 +37,14 @@ class Sprite: Object2D {
 
     constructor(id: String = "", position: Vector2f = Vector2f(0.0f), anchorPoint: Vector2f = Vector2f(0.5f), scale: Vector2f = Vector2f(1.0f), size: Vector2f, filePath: String): this(id, position, anchorPoint, scale, size, File(filePath))
 
-    var image: File
+    private var image: File
+
+    var texture: Texture = Texture()
+        get() {
+            field = Texture(image)
+
+            return field
+        }
         private set
 
     fun setImage(file: File) {
