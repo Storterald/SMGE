@@ -64,7 +64,7 @@ fun createDisplay(windowTitle: String) {
 
     GL.createCapabilities()
 
-    GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f)
+    GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
 }
 
 fun update() {

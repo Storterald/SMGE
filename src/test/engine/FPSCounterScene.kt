@@ -10,8 +10,6 @@ import renderEngine.setResource
 import scene.CodeBlock
 import scene.Resource
 import scene.Scene
-import java.awt.Font
-import java.io.File
 import kotlin.math.round
 
 data class SecondCounter(var second: Long): Resource()
@@ -26,7 +24,7 @@ class FPSCounterScene: Scene() {
         val sprite = Sprite(position = windowSize/2, anchorPoint = Vector2f(0.0f), filePath = "src\\test\\resources\\dirt512x.png")
         testNode.addChild(sprite)
 
-        val textLabel = TextLabel(fontSize = 25.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(anchorPoint = Vector2f(0.0f), fontSize = 25.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
         addChild(textLabel)
 
         createResource(SecondCounter(0))

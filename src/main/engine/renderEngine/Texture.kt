@@ -7,15 +7,23 @@ import java.io.File
 import java.nio.ByteBuffer
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/graphic/Texture.java
-class Texture() {
+class Texture {
     private var textureID = 0
 
-    constructor(imageFile: File): this() {
+    constructor()
+
+    constructor(imageFile: File) {
         check(imageFile.exists()) { "The provided image path does not exist." }
         initTextureWithFile(imageFile)
     }
 
     constructor(imagePath: String): this(File(imagePath))
+
+    constructor(width: Int, height: Int, imageBuffer: ByteBuffer) {
+        require(width >= 0) { "The texture width must be positive" }
+        require(height >= 0) { "The texture height mut be positive" }
+        generateTexture(width, height, imageBuffer)
+    }
 
     private fun initTextureWithFile(imageFile: File) {
         MemoryStack.stackPush().use { stack ->
@@ -32,12 +40,13 @@ class Texture() {
 
             generateTexture(width, height, imageBuffer)
 
+
             stbi_image_free(imageBuffer)
         }
     }
 
-    fun generateTexture(width: Int, height: Int, imageBuffer: ByteBuffer): Texture {
-        textureID = glGenTextures()
+    private fun generateTexture(width: Int, height: Int, imageBuffer: ByteBuffer) {
+        textureID = glGenTextures() // Causes crash in tests IDK why
 
         glBindTexture(GL_TEXTURE_2D, textureID)
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
@@ -49,8 +58,6 @@ class Texture() {
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer)
         glGenerateMipmap(GL_TEXTURE_2D)
-
-        return this
     }
 
     fun bind() {

@@ -12,16 +12,16 @@ import kotlin.math.max
 private val fontTextures: MutableList<FontExtra> = mutableListOf()
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
-class FontExtra(font: Font) : Font(font) {
+class FontExtra(private val font: Font) : Font(font) {
     private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
 
     init {
         if (font !in fontTextures) createFontTexture(font)
     }
 
-    private val texture = Texture()
-
     fun getWidth(text: String): Float {
+        if (glyphs.isEmpty()) createFontTexture(font)
+
         var width = 0
         var lineWidth = 0
         for (c in text) {
@@ -41,6 +41,8 @@ class FontExtra(font: Font) : Font(font) {
     }
 
     fun getHeight(text: String): Float {
+        if (glyphs.isEmpty()) createFontTexture(font)
+
         var height = 0
         var lineHeight = 0
         for (c in text) {
@@ -103,7 +105,7 @@ class FontExtra(font: Font) : Font(font) {
             imageHeight = max(imageHeight, charImage.height)
         }
 
-        var image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
+        val image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
         val g: Graphics2D = image.createGraphics()
 
         var x = 0
@@ -123,9 +125,8 @@ class FontExtra(font: Font) : Font(font) {
             glyphs[c] = glyph
         }
 
-        // IDK if this works
+        // IDK if all this shit is needed, it looks like it does nothing
         val image2: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
-
         val transform: AffineTransform = AffineTransform.getRotateInstance(1.0, -1.0)
         transform.translate(0.0, -image.height.toDouble())
         val operation: AffineTransformOp = AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR)
@@ -150,11 +151,11 @@ class FontExtra(font: Font) : Font(font) {
 
         buffer.flip()
 
-        val fontTexture: Texture = (Texture::generateTexture)(Texture(), width, height, buffer)
+        //val fontTexture: Texture = Texture(width, height, buffer)
         MemoryUtil.memFree(buffer)
 
         fontTextures.add(this)
 
-        return fontTexture
+        return Texture()
     }
 }
