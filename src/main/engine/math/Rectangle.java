@@ -1,5 +1,6 @@
 package math;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 public class Rectangle {
@@ -42,7 +43,7 @@ public class Rectangle {
         this.y2 = position.y + size.y;
     }
 
-    public float[] toVerticesArray(Vector2f windowSize) {
+    public float[] toVerticesArray(@NotNull Vector2f windowSize) {
         float width = windowSize.x;
         float height = windowSize.y;
 
@@ -52,6 +53,10 @@ public class Rectangle {
                 x2 / width * 2 - 1, y1 / height * 2 - 1, 0.0f,
                 x2 / width * 2 - 1, y2 / height * 2 - 1, 0.0f
         };
+    }
+
+    public Rectangle plus(@NotNull Rectangle toAdd) {
+        return new Rectangle(x1 + toAdd.x1, y1 + toAdd.y1, x2 + toAdd.x2, y2 + toAdd.y2);
     }
 
     public float getX1() {

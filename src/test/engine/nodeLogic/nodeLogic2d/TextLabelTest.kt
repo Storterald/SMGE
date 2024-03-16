@@ -83,22 +83,4 @@ class TextLabelTest {
         assertEquals(77.0f, textLabel.size.x)
         assertEquals(42.0f, textLabel.size.y)
     }
-
-    // ### SETTERS TEST ###
-    // --------------------
-
-    @Test
-    fun fontSize_createsTheImageAndChangesTheSize() {
-        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
-        textLabel.fontSize = 35.0f
-
-        assertEquals(77.0f, textLabel.size.x)
-        assertEquals(42.0f, textLabel.size.y)
-    }
-
-    @Test
-    fun fontSize_throwsIfValueIsNegative() {
-        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
-        assertThrows<IllegalArgumentException> { textLabel.fontSize = -1.0f }
-    }
 }

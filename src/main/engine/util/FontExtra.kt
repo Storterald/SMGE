@@ -1,31 +1,46 @@
 package util
 
 import org.lwjgl.system.MemoryUtil
-import java.awt.*
-import java.awt.image.BufferedImage
-import kotlin.math.max
-
 import renderEngine.Texture
+import java.awt.*
 import java.awt.geom.AffineTransform
 import java.awt.image.AffineTransformOp
+import java.awt.image.BufferedImage
 import java.nio.ByteBuffer
+import kotlin.math.max
 
 private val fontTextures: MutableList<FontExtra> = mutableListOf()
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
 class FontExtra(font: Font) : Font(font) {
+    private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
+
     init {
         if (font !in fontTextures) createFontTexture(font)
     }
 
-    private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
-
     private val texture = Texture()
 
-    var height: Int = 0
-        private set
+    fun getWidth(text: String): Float {
+        var width = 0
+        var lineWidth = 0
+        for (c in text) {
+            if (c == '\n') {
+                width = max(width.toDouble(), lineWidth.toDouble()).toInt()
+                lineWidth = 0
+                continue
+            }
+            if (c == '\r') {
+                continue
+            }
+            val g = glyphs[c]
+            lineWidth += g!!.width
+        }
+        width = max(width.toDouble(), lineWidth.toDouble()).toInt()
+        return width.toFloat()
+    }
 
-    fun getHeight(text: String): Int {
+    fun getHeight(text: String): Float {
         var height = 0
         var lineHeight = 0
         for (c in text) {
@@ -42,7 +57,7 @@ class FontExtra(font: Font) : Font(font) {
         }
         height += lineHeight
 
-        return height
+        return height.toFloat()
     }
 
     private fun createCharImage(font: Font, c: Char, antiAlias: Boolean): BufferedImage? {
@@ -88,8 +103,8 @@ class FontExtra(font: Font) : Font(font) {
             imageHeight = max(imageHeight, charImage.height)
         }
 
-        val image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
-        val g: Graphics2D = image.createGraphics();
+        var image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
+        val g: Graphics2D = image.createGraphics()
 
         var x = 0
 
@@ -108,10 +123,13 @@ class FontExtra(font: Font) : Font(font) {
             glyphs[c] = glyph
         }
 
+        // IDK if this works
+        val image2: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
+
         val transform: AffineTransform = AffineTransform.getRotateInstance(1.0, -1.0)
         transform.translate(0.0, -image.height.toDouble())
         val operation: AffineTransformOp = AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR)
-        operation.filter(image, null)
+        operation.filter(image, image2)
 
         val width = image.width
         val height = image.height
@@ -138,9 +156,5 @@ class FontExtra(font: Font) : Font(font) {
         fontTextures.add(this)
 
         return fontTexture
-    }
-
-    fun createTextureWithText(text: String): Texture {
-        return texture
     }
 }

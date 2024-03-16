@@ -13,6 +13,7 @@ class Sprite: Object2D {
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
         image = file
+        texture = Texture(image)
 
         val imageBuffer: BufferedImage = ImageIO.read(file)
         size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
@@ -27,6 +28,7 @@ class Sprite: Object2D {
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
         image = file
+        texture = Texture(image)
 
         this.size = size
         this.scale = scale
@@ -39,12 +41,7 @@ class Sprite: Object2D {
 
     private var image: File
 
-    var texture: Texture = Texture()
-        get() {
-            field = Texture(image)
-
-            return field
-        }
+    var texture: Texture
         private set
 
     fun setImage(file: File) {
@@ -52,6 +49,7 @@ class Sprite: Object2D {
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
         image = file
+        texture = Texture(image)
 
         val imageBuffer: BufferedImage = ImageIO.read(file)
         size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())

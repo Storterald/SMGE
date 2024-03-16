@@ -49,7 +49,6 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
             field = true
         }
 
-
     fun start() {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 

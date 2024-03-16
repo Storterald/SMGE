@@ -19,8 +19,7 @@ abstract class Node(id: String = "") {
             field = value
         }
 
-    var children: MutableList<Node> = mutableListOf()
-        private set
+    private var children: MutableList<Node> = mutableListOf()
 
     open var scene: Scene? = null
 
