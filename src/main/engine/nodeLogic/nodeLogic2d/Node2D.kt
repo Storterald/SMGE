@@ -19,6 +19,9 @@ open class Node2D(
 
         require(scale.x >= 0.0f) { "The x scale must be positive" }
         require(scale.y >= 0.0f) { "The y scale must be positive" }
+
+        require(size.x >= 0.0f) { "The x size (width) must be positive" }
+        require(size.y >= 0.0f) { "The y size (height) must be positive" }
     }
 
     open var anchorPoint = anchorPoint

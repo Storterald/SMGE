@@ -31,7 +31,6 @@ class Texture {
             val h = stack.mallocInt(1)
             val channels = stack.mallocInt(1)
 
-            //stbi_set_flip_vertically_on_load(true)
             val imageBuffer = stbi_load(imageFile.path, w, h, channels, 4)
             check(imageBuffer != null) { "Failed to load a texture file! ${stbi_failure_reason()}" }
 
@@ -39,7 +38,6 @@ class Texture {
             val height = h.get()
 
             generateTexture(width, height, imageBuffer)
-
 
             stbi_image_free(imageBuffer)
         }

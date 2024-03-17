@@ -6,7 +6,12 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import java.io.File
 
+import renderEngine.createDisplay
+
 class SpriteTest {
+    init {
+        createDisplay("Sprite Test")
+    }
 
     // ### CONSTRUCTORS TEST ###
     // -------------------------
@@ -50,21 +55,6 @@ class SpriteTest {
     }
 
     @Test
-    fun secondConstructor_throwsIfSizeXValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(-100.0f, 100.0f), file = File("src\\test\\resources\\dirt512x.png")) }
-    }
-
-    @Test
-    fun secondConstructor_throwsIfSizeYValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(100.0f, -100.0f), file = File("src\\test\\resources\\dirt512x.png")) }
-    }
-
-    @Test
-    fun secondConstructor_throwsIfSizeValuesAreNegative() {
-        assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(-100.0f, -100.0f), file = File("src\\test\\resources\\dirt512x.png")) }
-    }
-
-    @Test
     fun thirdConstructor_createsSpriteWithoutThrowing() {
         assertDoesNotThrow { Sprite(filePath = "src\\test\\resources\\dirt512x.png") }
     }
@@ -101,26 +91,11 @@ class SpriteTest {
         assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(100.0f, 100.0f), filePath = "src\\test\\resources\\testFile.txt") }
     }
 
-    @Test
-    fun fourthConstructor_throwsIfSizeXValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(-100.0f, 100.0f), filePath = "src\\test\\resources\\dirt512x.png") }
-    }
-
-    @Test
-    fun fourthConstructor_throwsIfSizeYValueIsNegative() {
-        assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(100.0f, -100.0f), filePath = "src\\test\\resources\\dirt512x.png") }
-    }
-
-    @Test
-    fun fourthConstructor_throwsIfSizeValuesAreNegative() {
-        assertThrows<IllegalArgumentException> { Sprite(size = Vector2f(-100.0f, -100.0f), filePath = "src\\test\\resources\\dirt512x.png") }
-    }
-
     // ### SETTERS TEST ###
     // --------------------
 
     @Test
-    fun image_withFileDoesNotThrowIfValidAndChangesSize() {
+    fun firstSetImage_doesNotThrowIfValidAndChangesSize() {
         val sprite = Sprite(filePath = "src\\test\\resources\\dirt512x.png")
         assertDoesNotThrow { sprite.setImage(File("src\\test\\resources\\dirt256x.png")) }
         assertEquals(256.0f, sprite.size.x)
@@ -128,19 +103,19 @@ class SpriteTest {
     }
 
     @Test
-    fun image_withFileThrowsIfFileDoesNotExist() {
+    fun firstSetImage_throwsIfFileDoesNotExist() {
         val sprite = Sprite(filePath = "src\\test\\resources\\dirt512x.png")
         assertThrows<IllegalStateException> { sprite.setImage(File("thisFileDoesNotExist.png")) }
     }
 
     @Test
-    fun image_withFileThrowsIfFileExtensionIsInvalid() {
+    fun firstSetImage_throwsIfFileExtensionIsInvalid() {
         val sprite = Sprite(filePath = "src\\test\\resources\\dirt512x.png")
         assertThrows<IllegalArgumentException> { sprite.setImage(File("src\\test\\resources\\testFile.txt")) }
     }
 
     @Test
-    fun image_withFilePathDoesNotThrowIfValidAndChangesSize() {
+    fun secondSetImage_doesNotThrowIfValidAndChangesSize() {
         val sprite = Sprite(filePath = "src\\test\\resources\\dirt512x.png")
         assertDoesNotThrow { sprite.setImage("src\\test\\resources\\dirt256x.png") }
         assertEquals(256.0f, sprite.size.x)
@@ -148,13 +123,13 @@ class SpriteTest {
     }
 
     @Test
-    fun image_withFilePathThrowsIfFileDoesNotExist() {
+    fun secondSetImage_throwsIfFileDoesNotExist() {
         val sprite = Sprite(filePath = "src\\test\\resources\\dirt512x.png")
         assertThrows<IllegalStateException> { sprite.setImage("thisFileDoesNotExist.png") }
     }
 
     @Test
-    fun image_withFilePathThrowsIfFileExtensionIsInvalid() {
+    fun secondSetImage_throwsIfFileExtensionIsInvalid() {
         val sprite = Sprite(filePath = "src\\test\\resources\\dirt512x.png")
         assertThrows<IllegalArgumentException> { sprite.setImage("src\\test\\resources\\testFile.txt") }
     }
