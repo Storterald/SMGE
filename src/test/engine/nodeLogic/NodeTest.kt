@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import renderEngine.closeDisplay
 import renderEngine.createDisplay
 
 class NodeTest {
@@ -106,7 +105,6 @@ class NodeTest {
         assertEquals(scene, childNode4.scene)
         assertEquals(true, childNode4.visible)
         assertEquals(false, scene.nodesToRender[childNode4])
-        closeDisplay()
     }
 
     @Test
@@ -150,8 +148,66 @@ class NodeTest {
         assertEquals(scene, childNode4.scene)
         assertEquals(true, childNode4.visible)
         assertEquals(false, scene.nodesToRender[childNode4])
+    }
 
-        closeDisplay()
+    @Test
+    fun visible_doesNotChangeRenderToValueIfOneNodeAboveIsNotRendered() {
+        val scene = GenericScene()
+        val childNode1 = Node()
+        scene.addChild(childNode1)
+        val childNode2 = Node()
+        childNode1.addChild(childNode2)
+        val childNode3 = Node()
+        childNode2.addChild(childNode3)
+        val childNode4 = Node()
+        childNode3.addChild(childNode4)
+
+        childNode2.visible = false
+
+        childNode4.visible = true
+
+        assertEquals(scene, childNode1.scene)
+        assertEquals(true, childNode1.visible)
+        assertEquals(true, scene.nodesToRender[childNode1])
+        assertEquals(scene, childNode2.scene)
+        assertEquals(false, childNode2.visible)
+        assertEquals(false, scene.nodesToRender[childNode2])
+        assertEquals(scene, childNode3.scene)
+        assertEquals(true, childNode3.visible)
+        assertEquals(false, scene.nodesToRender[childNode3])
+        assertEquals(scene, childNode4.scene)
+        assertEquals(true, childNode4.visible)
+        assertEquals(false, scene.nodesToRender[childNode4])
+    }
+
+    @Test
+    fun visible_changesRenderToValueIfParentIsRendered() {
+        val scene = GenericScene()
+        val childNode1 = Node()
+        scene.addChild(childNode1)
+        val childNode2 = Node()
+        childNode1.addChild(childNode2)
+        val childNode3 = Node()
+        childNode2.addChild(childNode3)
+        val childNode4 = Node()
+        childNode3.addChild(childNode4)
+
+        childNode2.visible = false
+
+        childNode2.visible = true
+
+        assertEquals(scene, childNode1.scene)
+        assertEquals(true, childNode1.visible)
+        assertEquals(true, scene.nodesToRender[childNode1])
+        assertEquals(scene, childNode2.scene)
+        assertEquals(true, childNode2.visible)
+        assertEquals(true, scene.nodesToRender[childNode2])
+        assertEquals(scene, childNode3.scene)
+        assertEquals(true, childNode3.visible)
+        assertEquals(true, scene.nodesToRender[childNode3])
+        assertEquals(scene, childNode4.scene)
+        assertEquals(true, childNode4.visible)
+        assertEquals(true, scene.nodesToRender[childNode4])
     }
 
     @Test
@@ -217,7 +273,6 @@ class NodeTest {
         assertEquals(true, childNode3.visible)
         assertEquals(scene, childNode4.scene)
         assertEquals(true, childNode4.visible)
-        closeDisplay()
     }
 
     @Test
@@ -352,7 +407,6 @@ class NodeTest {
         assertEquals(false, scene.nodesToRender.contains(childNode3))
         assertEquals(null, childNode4.scene)
         assertEquals(false, scene.nodesToRender.contains(childNode4))
-        closeDisplay()
     }
 
     @Test
@@ -485,7 +539,5 @@ class NodeTest {
         assertEquals(true, childNode2.visible)
         assertEquals(true, childNode3.visible)
         assertEquals(true, childNode4.visible)
-
-        closeDisplay()
     }
 }

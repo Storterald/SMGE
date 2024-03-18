@@ -29,8 +29,11 @@ open class Node(id: String = "") {
 
     open var visible = true
         set(value) {
-            if (scene != null) {
-                if (scene!!.nodesToRender[this]!!) changeNodeAndBelowRender(value)
+            if (parent != null && scene != null) {
+                // Kinda unsafe, if first condition is true, the second one causes a NullPointerException, but since it's an or if the first condition is true the second one is skipped
+                if (parent == scene || scene!!.nodesToRender[parent]!!) {
+                    changeNodeAndBelowRender(value)
+                }
             }
 
             field = value
