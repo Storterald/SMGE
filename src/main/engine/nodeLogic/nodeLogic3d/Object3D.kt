@@ -6,10 +6,10 @@ import scene.Component
 
 open class Object3D(
     id: String = "",
-    position: Vector3f = Vector3f(0.0f, 0.0f, 0.0f),
-    anchorPoint: Vector3f = Vector3f(0.0f, 0.0f, 0.0f),
-    scale: Vector3f = Vector3f(1.0f, 1.0f, 1.0f),
-    size: Vector3f = Vector3f(1.0f, 1.0f, 1.0f))
+    position: Vector3f = Vector3f(0.0f),
+    anchorPoint: Vector3f = Vector3f(0.5f),
+    scale: Vector3f = Vector3f(1.0f),
+    size: Vector3f = Vector3f(1.0f))
 : Node3D(id, position, anchorPoint, scale) {
 
     init {
@@ -29,7 +29,7 @@ open class Object3D(
             field = value
         }
 
-    var scaledSize: Vector3f = Vector3f(0.0f, 0.0f, 0.0f)
+    var scaledSize: Vector3f = Vector3f(0.0f)
         get() {
             field = size * scale
 
@@ -37,7 +37,7 @@ open class Object3D(
         }
         private set
 
-    var anchoredPosition: Vector3f = Vector3f(0.0f, 0.0f, 0.0f)
+    var anchoredPosition: Vector3f = Vector3f(0.0f)
         get() {
             field = position - (anchorPoint * scaledSize)
 

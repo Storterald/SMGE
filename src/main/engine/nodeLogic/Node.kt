@@ -2,7 +2,7 @@ package nodeLogic
 
 import scene.Scene
 
-abstract class Node(id: String = "") {
+open class Node(id: String = "") {
     init {
         if (id != "") {
             require(id.trim() != "") { "The id must contain at least one non ' ' char." }
@@ -19,16 +19,18 @@ abstract class Node(id: String = "") {
             field = value
         }
 
-    var children: MutableList<Node> = mutableListOf()
-        private set
+    private var children: MutableList<Node> = mutableListOf()
 
-    open var scene: Scene? = null
+    var scene: Scene? = null
+        private set(value) {
+            field = value
+            children.forEach { it.scene = value }
+        }
 
     open var visible = true
         set(value) {
-            // TODO disable rendering for nodes with visible == true if one node above has visible = false
-            children.forEach {
-                it.visible = value
+            if (scene != null) {
+                if (scene!!.nodesToRender[this]!!) changeNodeAndBelowRender(value)
             }
 
             field = value
@@ -84,14 +86,14 @@ abstract class Node(id: String = "") {
     }
 
     fun removeChild(node: Node) {
+        check(children.size > 0) { "The node does not contain any children" }
         if (!children.remove(node)) throw Exception("The given node isn't in the children list.")
 
         node.parent = null
 
-        if (this is Scene) {
+        if (this is Scene || scene != null) {
             node.unloadNodeAndBelowFromScene()
-        } else if (node.scene != null) {
-            node.unloadNodeAndBelowFromScene()
+            node.scene = null
         }
     }
 
@@ -102,59 +104,32 @@ abstract class Node(id: String = "") {
 
         children.forEach {
             if (it.id == id) {
-                it.parent = null
-
-                if (this is Scene) {
-                    it.unloadNodeAndBelowFromScene()
-                } else if (it.scene != null) {
-                    it.unloadNodeAndBelowFromScene()
-                }
-
-                children.remove(it)
-
+                removeChild(it)
                 return
             }
         }
-        throw Exception("No node with the given id is in the children list.")
+        throw IllegalStateException("No node with the given id is in the children list.")
     }
 
     fun removeChildAtIndex(i: Int) {
-        check(children.size > 0) { "The node does not contain any children" }
         require(i >= 0) { "The index must be 0 or higher" }
-        require(i < children.size) { "The index must be between 0 and children.size-1" }
+        require(i < children.size) { "The index must be higher than 0 and  lower than children.size" }
 
-        children[i].parent = null
-
-        if (this is Scene) {
-            children[i].unloadNodeAndBelowFromScene()
-        } else if (children[i].scene != null) {
-            children[i].unloadNodeAndBelowFromScene()
-        }
-
-        children.removeAt(i)
+        removeChild(children[i])
     }
 
     fun removeAllChildren() {
         children.forEach {
-            it.parent = null
-
-            if (this is Scene) {
-                it.unloadNodeAndBelowFromScene()
-            } else if (it.scene != null) {
-                it.unloadNodeAndBelowFromScene()
-            }
+            removeChild(it)
         }
-        children.clear()
     }
 
     private fun loadNodeAndBelowToScene() {
         check(scene != null) { "The node isn't in a scene" }
 
-        scene!!.nodesToRender.add(this)
-        if (this.parent!!.visible) visible = true
+        scene!!.nodesToRender[this] = true
         if (getChildrenCount() > 0) {
             children.forEach {
-                it.scene = scene
                 it.loadNodeAndBelowToScene()
             }
         }
@@ -162,13 +137,22 @@ abstract class Node(id: String = "") {
 
     private fun unloadNodeAndBelowFromScene() {
         check(scene != null) { "The node isn't in a scene" }
-        
-        if (parent == scene) parent = null
+
         scene!!.nodesToRender.remove(this)
-        scene = null
         if (getChildrenCount() > 0) {
             children.forEach {
                 it.unloadNodeAndBelowFromScene()
+            }
+        }
+    }
+
+    private fun changeNodeAndBelowRender(value: Boolean) {
+        check(scene != null) { "The node isn't in a scene" }
+
+        scene!!.nodesToRender[this] = value
+        if (getChildrenCount() > 0) {
+            children.forEach {
+                it.changeNodeAndBelowRender(value)
             }
         }
     }

@@ -33,16 +33,11 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
     }
 
     private val meshes: HashMap<Node, Mesh> = hashMapOf()
-    val nodesToRender: MutableList<Node> = mutableListOf()
+    val nodesToRender: HashMap<Node, Boolean> = hashMapOf()
 
     private var startCodeBlocks: HashMap<String, () -> Unit> = hashMapOf()
     private var updateCodeBlocks: HashMap<String, () -> Unit> = hashMapOf()
     private var closeCodeBlocks: HashMap<String, () -> Unit> = hashMapOf()
-
-    override var scene: Scene? = null
-        set(value) {
-            field = null
-        }
 
     override var visible: Boolean = true
         set(value) {
@@ -59,15 +54,14 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         // Transform nodes to meshes
         nodesToRender.forEach {
-            if (it is Sprite) {
-                meshes[it] = Mesh(it.absolutePosition.toVerticesArray(windowSize), indices2D, it.texture, textureCoords2D)
+            if (it.key is Sprite) {
+                meshes[it.key] = Mesh((it.key as Sprite).absolutePosition.toVerticesArray(windowSize), indices2D, (it.key as Sprite).texture, textureCoords2D)
             }
         }
 
         //Render meshes
         meshes.forEach {
-            // TODO add check for above nodes visibility before rendering
-            if (it.key.visible) it.value.renderMesh()
+            if (nodesToRender[it.key]!!) it.value.renderMesh()
         }
 
         shader.unbind()
@@ -86,7 +80,7 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         //Render meshes
         meshes.forEach {
-            if (it.key.visible) it.value.renderMesh()
+            if (nodesToRender[it.key]!!) it.value.renderMesh()
         }
 
         shader.unbind()

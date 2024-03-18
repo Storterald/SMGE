@@ -44,7 +44,7 @@ class Texture {
     }
 
     private fun generateTexture(width: Int, height: Int, imageBuffer: ByteBuffer) {
-        textureID = glGenTextures() // Causes crash in tests IDK why
+        textureID = glGenTextures()
 
         glBindTexture(GL_TEXTURE_2D, textureID)
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1)

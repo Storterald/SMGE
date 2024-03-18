@@ -11,16 +11,6 @@ class SceneTest {
     // ---------------------
 
     @Test
-    fun scene_doesNotChangeTheValue() {
-        createDisplay("Title")
-        val scene1 = GenericScene()
-        val scene2 = GenericScene()
-        scene1.scene = scene2
-
-        assertEquals(null, scene1.scene)
-    }
-
-    @Test
     fun visible_doesNotChangeTheValue() {
         createDisplay("Title")
         val scene = GenericScene()

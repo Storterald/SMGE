@@ -1,13 +1,14 @@
 package util
 
 import org.lwjgl.system.MemoryUtil
-import renderEngine.Texture
 import java.awt.*
 import java.awt.geom.AffineTransform
 import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 import java.nio.ByteBuffer
 import kotlin.math.max
+
+import renderEngine.Texture
 
 private val fontTextures: MutableList<FontExtra> = mutableListOf()
 
@@ -151,11 +152,11 @@ class FontExtra(private val font: Font) : Font(font) {
 
         buffer.flip()
 
-        //val fontTexture: Texture = Texture(width, height, buffer)
+        val fontTexture: Texture = Texture(width, height, buffer)
         MemoryUtil.memFree(buffer)
 
         fontTextures.add(this)
 
-        return Texture()
+        return fontTexture
     }
 }

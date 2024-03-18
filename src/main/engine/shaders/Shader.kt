@@ -9,8 +9,7 @@ import java.io.File
 import windowID
 
 class Shader(vertexPath: String, fragmentPath: String) {
-    var programID = 0
-        private set
+    private var programID = 0
     private var vertexShaderId = 0
     private var fragmentShaderId = 0
 
