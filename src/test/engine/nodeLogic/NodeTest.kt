@@ -360,7 +360,7 @@ class NodeTest {
         val node1 = Node()
         val node2 = Node()
 
-        assertThrows<Exception> { node1.removeChild(node2) }
+        assertThrows<IllegalStateException> { node1.removeChild(node2) }
     }
 
     @Test
@@ -377,7 +377,7 @@ class NodeTest {
     @Test
     fun removeChildById_throwsIfChildIsNotPresent() {
         val node = Node()
-        assertThrows<Exception> { node.removeChildById("childNode") }
+        assertThrows<IllegalStateException> { node.removeChildById("childNode") }
     }
 
     @Test

@@ -70,7 +70,7 @@ open class Node(id: String = "") {
             if (it.id == id) return it
         }
 
-        throw Exception("No child has the id '$id'.")
+        throw IllegalStateException("No child has the id '$id'.")
     }
 
     fun getChildAtIndex(i: Int): Node {
@@ -87,7 +87,7 @@ open class Node(id: String = "") {
 
     fun removeChild(node: Node) {
         check(children.size > 0) { "The node does not contain any children" }
-        if (!children.remove(node)) throw Exception("The given node isn't in the children list.")
+        check (children.remove(node)) { "The given node isn't in the children list." }
 
         node.parent = null
 
