@@ -51,29 +51,20 @@ open class Node2D(
             field = value
         }
 
-    var scaledSize: Vector2f = Vector2f(0.0f)
+    val scaledSize: Vector2f
         get() {
-            field = scale * size
-
-            return field
+            return scale * size
         }
-        private set
 
-    var anchoredPosition: Vector2f = Vector2f(0.0f)
+    val anchoredPosition: Vector2f
         get() {
-            field = position - (anchorPoint * scaledSize)
-
-            return field
+            return position - (anchorPoint * scaledSize)
         }
-        private set
 
-    var absolutePosition: Rectangle = Rectangle(0.0f, 0.0f, 0.0f, 0.0f)
+    val absolutePosition: Rectangle
         get() {
-            field = Rectangle(anchoredPosition, scaledSize)
-            if (parent != null && parent is Node2D) field += (parent as Node2D).absolutePosition
-
-            return field
+            val absolutePos = Rectangle(anchoredPosition, scaledSize)
+            return if (parent != null && parent is Node2D) (parent as Node2D).absolutePosition + absolutePos else absolutePos
         }
-        private set
 
 }

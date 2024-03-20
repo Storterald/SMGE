@@ -1,6 +1,11 @@
 package nodeLogic
 
+import nodeLogic.nodeLogic2d.CharLabel
+import nodeLogic.nodeLogic2d.Node2D
+import nodeLogic.nodeLogic2d.Object2D
+import nodeLogic.nodeLogic2d.TextLabel
 import scene.Scene
+import kotlin.reflect.KClass
 
 open class Node(id: String = "") {
     init {
@@ -30,8 +35,7 @@ open class Node(id: String = "") {
     open var visible = true
         set(value) {
             if (parent != null && scene != null) {
-                // Kinda unsafe, if first condition is true, the second one causes a NullPointerException, but since it's an or if the first condition is true the second one is skipped
-                if (parent == scene || scene!!.nodesToRender[parent]!!) {
+                if (parent == scene || scene!!.nodesToRender[parent] == true) {
                     changeNodeAndBelowRender(value)
                 }
             }
@@ -122,9 +126,31 @@ open class Node(id: String = "") {
     }
 
     fun removeAllChildren() {
+        val nodesToBeRemoved: MutableList<Node> = mutableListOf()
+
+        /* Using removeChild(it) inside the forEach causes a ConcurrentModificationException,
+         * Only way to fix this is to add the nodes that need to be removed in another list and then remove them.
+         */
+        children.forEach { nodesToBeRemoved.add(it) }
+
+        nodesToBeRemoved.forEach { removeChild(it) }
+    }
+
+    fun removeChildrenOfType(type: KClass<*>) {
+        require(Node::class.java.isAssignableFrom(type.java)) { "The type must be a Node or one of its sub classes." }
+
+        val nodesToBeRemoved: MutableList<Node> = mutableListOf()
+
+        /* Using removeChild(it) inside the forEach causes a ConcurrentModificationException,
+         * Only way to fix this is to add the nodes that need to be removed in another list and then remove them.
+         */
         children.forEach {
-            removeChild(it)
+            if (it::class == type) {
+                nodesToBeRemoved.add(it)
+            }
         }
+
+        nodesToBeRemoved.forEach { removeChild(it) }
     }
 
     private fun loadNodeAndBelowToScene() {
