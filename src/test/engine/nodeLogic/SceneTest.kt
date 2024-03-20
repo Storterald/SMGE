@@ -10,8 +10,7 @@ class SceneTest {
     // ### SETTERS TEST ###
     // ---------------------
 
-    @Test
-    fun visible_doesNotChangeTheValue() {
+    @Test fun visible_doesNotChangeTheValue() {
         createDisplay("Title")
         val scene = GenericScene()
         scene.visible = false
