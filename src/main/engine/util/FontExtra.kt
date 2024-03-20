@@ -1,23 +1,25 @@
 package util
 
 import org.lwjgl.system.MemoryUtil
+import renderEngine.Texture
 import java.awt.*
-import java.awt.geom.AffineTransform
-import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
-import java.nio.ByteBuffer
 import kotlin.math.max
 
-import renderEngine.Texture
-
-private val fontTextures: MutableList<FontExtra> = mutableListOf()
+private val fontTextures: HashMap<FontExtra, HashMap<Char, Texture>> = hashMapOf()
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
 class FontExtra(private val font: Font) : Font(font) {
     private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
+    var charTextures: HashMap<Char, Texture> = hashMapOf()
+        private set
 
     init {
-        if (font !in fontTextures) createFontTexture(font)
+        if (font !in fontTextures.keys) {
+            createFontTexture(font)
+        } else {
+            charTextures = fontTextures[font]!!
+        }
     }
 
     fun getWidth(text: String): Float {
@@ -63,7 +65,7 @@ class FontExtra(private val font: Font) : Font(font) {
         return height.toFloat()
     }
 
-    private fun createCharImage(font: Font, c: Char, antiAlias: Boolean): BufferedImage? {
+    private fun createCharTexture(font: Font, c: Char, antiAlias: Boolean): Texture? {
         var image: BufferedImage = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
         var g: Graphics2D = image.createGraphics()
         if (antiAlias) {
@@ -90,73 +92,46 @@ class FontExtra(private val font: Font) : Font(font) {
         g.drawString("$c", 0, metrics.ascent)
         g.dispose()
 
-        return image
-    }
-
-    private fun createFontTexture(font: Font): Texture {
-        var imageWidth = 0
-        var imageHeight = 0
-
-        for (i in 32..255) {
-            if (i == 127) continue
-
-            val charImage: BufferedImage = createCharImage(font, i.toChar(), true) ?: continue
-
-            imageWidth += charImage.width
-            imageHeight = max(imageHeight, charImage.height)
-        }
-
-        val image: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
-        val g: Graphics2D = image.createGraphics()
-
-        var x = 0
-
-        for (i in 32..255) {
-            if (i == 127) continue
-
-            val c = i.toChar()
-            val charImage: BufferedImage = createCharImage(font, c, true) ?: continue
-
-            val charWidth: Int = charImage.width
-            val charHeight: Int = charImage.height
-
-            val glyph = Glyph(charWidth, charHeight, x, image.height - charHeight, 0.0f)
-            g.drawImage(charImage, x, 0, null)
-            x += glyph.width
-            glyphs[c] = glyph
-        }
-
-        // IDK if all this shit is needed, it looks like it does nothing
-        val image2: BufferedImage = BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB)
-        val transform: AffineTransform = AffineTransform.getRotateInstance(1.0, -1.0)
-        transform.translate(0.0, -image.height.toDouble())
-        val operation: AffineTransformOp = AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR)
-        operation.filter(image, image2)
-
         val width = image.width
         val height = image.height
 
-        val pixels = IntArray(width*height)
+        val glyph = Glyph(charWidth, charHeight, 0, 0, 0.0f)
+        glyphs[c] = glyph
+
+        val pixels = IntArray(width * height)
         image.getRGB(0, 0, width, height, pixels, 0, width)
 
-        val buffer: ByteBuffer = MemoryUtil.memAlloc(width*height*4)
-        for (i in 0..<height) {
-            for (j in 0..<width) {
+        val buffer = MemoryUtil.memAlloc(width * height * 4)
+        for (i in 0 until height) {
+            for (j in 0 until width) {
                 val pixel = pixels[i * width + j]
                 buffer.put(((pixel shr 16) and 0xFF).toByte())
-                buffer.put(((pixel shr 8) and 0xFF).toByte())
-                buffer.put((pixel and 0xFF).toByte())
+                buffer.put(((pixel shr  8) and 0xFF).toByte())
+                buffer.put(((pixel       ) and 0xFF).toByte())
                 buffer.put(((pixel shr 24) and 0xFF).toByte())
             }
         }
 
         buffer.flip()
 
-        val fontTexture: Texture = Texture(width, height, buffer)
+        val charTexture: Texture = Texture(width, height, buffer)
         MemoryUtil.memFree(buffer)
 
-        fontTextures.add(this)
+        return charTexture
+    }
 
-        return fontTexture
+    fun createFontTexture(font: Font) {
+        for (i in 32..255) {
+            if (i == 127) continue
+
+            val char = i.toChar()
+            val charTexture = createCharTexture(font, char, true) ?: continue
+
+            charTextures[char] = charTexture
+        }
+
+        println("[SMGE] > Created font texture for font \"${font.name}\" with size ${font.size2D}")
+
+        fontTextures[this] = charTextures
     }
 }

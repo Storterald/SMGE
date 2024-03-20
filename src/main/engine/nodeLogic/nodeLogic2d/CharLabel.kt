@@ -18,7 +18,7 @@ class CharLabel: Object2D {
         this.font = FontExtra(font.deriveFont(font.style, 12.0f))
         this.char = char
 
-        texture = Texture()
+        texture = this.font.charTextures[char] ?: throw Exception("Error obtaining texture for char '$char' with font \"${font.name}\" and size ${font.size2D}")
 
         this.scale = scale
         this.anchorPoint = anchorPoint
@@ -38,7 +38,7 @@ class CharLabel: Object2D {
         this.font = FontExtra(font.deriveFont(font.style, fontSize))
         this.char = char
 
-        texture = Texture()
+        texture = this.font.charTextures[char] ?: throw Exception("Error obtaining texture for char '$char' with font \"${font.name}\" and size ${font.size2D}")
 
         this.scale = scale
         this.anchorPoint = anchorPoint
@@ -82,11 +82,9 @@ class CharLabel: Object2D {
         fontPath: String
     ): this(id, position, anchorPoint, scale, fontSize, char, File(fontPath))
 
-    var char: Char
-        private set
+    private val char: Char
 
-    var font: FontExtra = FontExtra(Font.createFont(Font.TRUETYPE_FONT, File("src\\main\\resources\\arial.ttf")))
-        private set
+    private val font: FontExtra
 
     var texture: Texture
         private set

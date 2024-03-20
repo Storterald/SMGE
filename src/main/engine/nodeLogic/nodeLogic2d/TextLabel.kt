@@ -11,9 +11,10 @@ class TextLabel: Object2D {
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         text: String,
         font: Font = Font("Arial", Font.PLAIN, 12)
-    ): super(id, position, anchorPoint, scale) {
+    ): super(id, position, anchorPoint, scale, rotation = rotation) {
         this.font = FontExtra(font.deriveFont(font.style, 12.0f))
         this.text = text
 
@@ -28,10 +29,11 @@ class TextLabel: Object2D {
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         fontSize: Float,
         text: String,
         font: Font = Font("Arial", Font.PLAIN, 20)
-    ): super(id, position, anchorPoint, scale) {
+    ): super(id, position, anchorPoint, scale, rotation = rotation) {
         require(fontSize > 0.0f) { "The font size must be higher than 0." }
 
         this.font = FontExtra(font.deriveFont(font.style, fontSize))
@@ -48,38 +50,42 @@ class TextLabel: Object2D {
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         text: String,
         fontFile: File
-    ): this(id, position, anchorPoint, scale, text, Font.createFont(Font.TRUETYPE_FONT, fontFile))
+    ): this(id, position, anchorPoint, scale, rotation, text, Font.createFont(Font.TRUETYPE_FONT, fontFile))
 
     constructor(
         id: String = "",
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         fontSize: Float,
         text: String,
         fontFile: File
-    ): this(id, position, anchorPoint, scale, fontSize, text, Font.createFont(Font.TRUETYPE_FONT, fontFile))
+    ): this(id, position, anchorPoint, scale, rotation, fontSize, text, Font.createFont(Font.TRUETYPE_FONT, fontFile))
 
     constructor(
         id: String = "",
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         text: String,
         fontPath: String
-    ): this(id, position, anchorPoint, scale, text, File(fontPath))
+    ): this(id, position, anchorPoint, scale, rotation, text, File(fontPath))
 
     constructor(
         id: String = "",
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         fontSize: Float,
         text: String,
         fontPath: String
-    ): this(id, position, anchorPoint, scale, fontSize, text, File(fontPath))
+    ): this(id, position, anchorPoint, scale, rotation, fontSize, text, File(fontPath))
 
     var text: String
         private set
@@ -88,9 +94,7 @@ class TextLabel: Object2D {
         private set
 
     fun setText(text: String) {
-        for (c in this.text) {
-            removeChildById("$c")
-        }
+        removeChildrenOfType(CharLabel::class)
 
         this.text = text
 
@@ -98,9 +102,7 @@ class TextLabel: Object2D {
     }
 
     fun setFont(font: Font) {
-        for (c in text) {
-            removeChildById("$c")
-        }
+        removeChildrenOfType(CharLabel::class)
 
         this.font = FontExtra(font.deriveFont(this.font.style, this.font.size2D))
 
@@ -119,9 +121,7 @@ class TextLabel: Object2D {
 
     fun setFontSize(fontSize: Float) {
         require(fontSize > 0.0) { "The font size must be higher than 0." }
-        for (c in text) {
-            removeChildById("$c")
-        }
+        removeChildrenOfType(CharLabel::class)
 
         font = FontExtra(font.deriveFont(font.style, fontSize))
 
