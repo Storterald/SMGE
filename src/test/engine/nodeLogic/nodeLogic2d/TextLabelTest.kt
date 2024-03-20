@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
 import renderEngine.createDisplay
-import util.FontExtra
 import java.awt.Font
 import java.io.File
 

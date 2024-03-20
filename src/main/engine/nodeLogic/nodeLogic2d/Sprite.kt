@@ -12,8 +12,9 @@ class Sprite: Object2D {
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         file: File
-    ): super(id, position, anchorPoint, scale) {
+    ): super(id, position, anchorPoint, scale, rotation = rotation) {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
@@ -33,8 +34,10 @@ class Sprite: Object2D {
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
-        size: Vector2f, file: File
-    ): super(id, position, anchorPoint, scale, size) {
+        size: Vector2f,
+        rotation: Vector2f = Vector2f(0.0f),
+        file: File
+    ): super(id, position, anchorPoint, scale, size, rotation) {
         check(file.exists()) { "The sprite image file doesn't exist." }
         require(file.extension == "png" || file.extension == "jpeg" || file.extension == "jpg") { "The image must be a png, jpeg or jpg." }
 
@@ -51,8 +54,9 @@ class Sprite: Object2D {
         position: Vector2f = Vector2f(0.0f),
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
+        rotation: Vector2f = Vector2f(0.0f),
         filePath: String
-    ): this(id, position, anchorPoint, scale, File(filePath))
+    ): this(id, position, anchorPoint, scale, rotation, File(filePath))
 
     constructor(
         id: String = "",
@@ -60,8 +64,9 @@ class Sprite: Object2D {
         anchorPoint: Vector2f = Vector2f(0.5f),
         scale: Vector2f = Vector2f(1.0f),
         size: Vector2f,
+        rotation: Vector2f = Vector2f(0.0f),
         filePath: String
-    ): this(id, position, anchorPoint, scale, size, File(filePath))
+    ): this(id, position, anchorPoint, scale, size, rotation, File(filePath))
 
     private var image: File
 

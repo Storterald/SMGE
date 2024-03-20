@@ -8,7 +8,8 @@ open class Object2D(
     position: Vector2f = Vector2f(0.0f),
     anchorPoint: Vector2f = Vector2f(0.5f),
     scale: Vector2f = Vector2f(1.0f),
-    size: Vector2f = Vector2f(0.0f)
+    size: Vector2f = Vector2f(0.0f),
+    rotation: Vector2f = Vector2f(0.0f)
 ): Node2D(id, position, anchorPoint, scale, size) {
     val components = HashMap<Class<*>, Component>()
 

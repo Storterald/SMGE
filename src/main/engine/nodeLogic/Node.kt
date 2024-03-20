@@ -1,9 +1,5 @@
 package nodeLogic
 
-import nodeLogic.nodeLogic2d.CharLabel
-import nodeLogic.nodeLogic2d.Node2D
-import nodeLogic.nodeLogic2d.Object2D
-import nodeLogic.nodeLogic2d.TextLabel
 import scene.Scene
 import kotlin.reflect.KClass
 

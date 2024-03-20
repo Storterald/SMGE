@@ -8,6 +8,8 @@ import org.lwjgl.system.MemoryUtil
 import org.lwjgl.glfw.Callbacks
 
 import nodeLogic.Node
+import nodeLogic.nodeLogic2d.CharLabel
+import nodeLogic.nodeLogic2d.Object2D
 import nodeLogic.nodeLogic2d.Sprite
 import org.joml.Vector2f
 import renderEngine.Mesh
@@ -52,10 +54,19 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         // Execute user code
         startCodeBlocks.forEach { it.value() }
 
-        // Transform nodes to meshes
-        nodesToRender.forEach {
-            if (it.key is Sprite) {
-                meshes[it.key] = Mesh((it.key as Sprite).absolutePosition.toVerticesArray(windowSize), indices2D, (it.key as Sprite).texture, textureCoords2D)
+        for (node in nodesToRender.keys) {
+            if (node is Object2D) {
+                for (componentEntry in node.components) {
+                    if (componentEntry.value is CustomScript) {
+                        (componentEntry.value as CustomScript).startCode.invoke()
+                    }
+                }
+            }
+
+            // Convert nodes to meshes
+            when (node) {
+                is Sprite -> meshes[node] = Mesh(node.absolutePosition.toVerticesArray(windowSize), indices2D, node.texture, textureCoords2D)
+                is CharLabel -> meshes[node] = Mesh(node.absolutePosition.toVerticesArray(windowSize), indices2D, node.texture, textureCoords2D)
             }
         }
 
@@ -77,6 +88,16 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         // Execute user code
         updateCodeBlocks.forEach { it.value() }
+
+        for (node in nodesToRender.keys) {
+            if (node is Object2D) {
+                for (componentEntry in node.components) {
+                    if (componentEntry.value is CustomScript) {
+                        (componentEntry.value as CustomScript).updateCode.invoke()
+                    }
+                }
+            }
+        }
 
         //Render meshes
         meshes.forEach {

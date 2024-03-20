@@ -24,7 +24,7 @@ class FPSCounterScene: Scene() {
         val sprite = Sprite(position = windowSize/2, anchorPoint = Vector2f(0.0f), filePath = "src\\test\\resources\\dirt512x.png")
         testNode.addChild(sprite)
 
-        val textLabel = TextLabel(anchorPoint = Vector2f(0.0f), fontSize = 25.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(position = windowSize/2, /*position = Vector2f(0.0f, windowSize.y),*/anchorPoint = Vector2f(0.0f, 1.0f), fontSize = 25.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
         addChild(textLabel)
 
         createResource(SecondCounter(0))
@@ -32,6 +32,7 @@ class FPSCounterScene: Scene() {
         addCodeBlock("start", CodeBlock.START) {
             shader.createUniform("test", Vector3f(1f, 1f, 1f))
             shader.createUniform("time", frames.toFloat())
+            textLabel.setText("FPS: 0")
         }
 
         addCodeBlock("update", CodeBlock.UPDATE) {
