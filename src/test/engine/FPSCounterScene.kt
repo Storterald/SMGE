@@ -17,14 +17,15 @@ data class SecondCounter(var second: Long): Resource()
 class FPSCounterScene: Scene() {
     private var frames: Int = 0
     private var framesButBetter = 0
+
     init {
         val testNode = Node2D(position = Vector2f(100.0f), anchorPoint = Vector2f(0.3f, 0.25f), scale = Vector2f(0.75f))
         addChild(testNode)
 
-        val sprite = Sprite(position = windowSize/2, anchorPoint = Vector2f(0.0f), filePath = "src\\test\\resources\\dirt512x.png")
+        val sprite = Sprite(id = "dirt",position = windowSize/2, anchorPoint = Vector2f(0.0f), filePath = "src\\test\\resources\\dirt512x.png")
         testNode.addChild(sprite)
 
-        val textLabel = TextLabel(position = windowSize/2, /*position = Vector2f(0.0f, windowSize.y),*/anchorPoint = Vector2f(0.0f, 1.0f), fontSize = 25.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(position = Vector2f(0.0f, windowSize.y), anchorPoint = Vector2f(0.0f, 1.0f), fontSize = 25.0f, text = "aaaa", fontPath = "src\\test\\resources\\testFont.otf")
         addChild(textLabel)
 
         createResource(SecondCounter(0))
@@ -32,7 +33,7 @@ class FPSCounterScene: Scene() {
         addCodeBlock("start", CodeBlock.START) {
             shader.createUniform("test", Vector3f(1f, 1f, 1f))
             shader.createUniform("time", frames.toFloat())
-            textLabel.setText("FPS: 0")
+            //textLabel.setText("FPS: 0")
         }
 
         addCodeBlock("update", CodeBlock.UPDATE) {
@@ -41,6 +42,7 @@ class FPSCounterScene: Scene() {
 
             if (currentSecond >= lastSecond + 1) {
                 println("[DebugScene] > FPS: $frames")
+                textLabel.setText("FPS: $frames")
                 frames = 0
                 setResource<SecondCounter>(SecondCounter(currentSecond))
             }

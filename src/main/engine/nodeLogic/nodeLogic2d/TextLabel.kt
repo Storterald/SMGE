@@ -131,7 +131,7 @@ class TextLabel: Object2D {
     private fun createTexture() {
         var drawnText = ""
         for (c in text) {
-            val charLabel = CharLabel(id = if (c == ' ') "" else "$c", position = Vector2f(font.getWidth(drawnText), font.getHeight(drawnText)), anchorPoint = Vector2f(0.0f, 1.0f), fontSize = font.size2D, char = c, font = font)
+            val charLabel = CharLabel(id = if (c == ' ') "" else "$c", position = Vector2f(font.getWidth(drawnText), 0.0f), anchorPoint = Vector2f(0.0f, 1.0f), fontSize = font.size2D, char = c, font = font)
             addChild(charLabel)
             drawnText += c
         }

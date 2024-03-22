@@ -1,10 +1,26 @@
 package nodeLogic.nodeLogic2d
 
 import org.joml.Vector2f
-import renderEngine.Texture
-import util.FontExtra
 import java.awt.Font
 import java.io.File
+
+import renderEngine.Mesh
+import renderEngine.Texture
+import util.FontExtra
+
+import windowSize
+
+private val indices2D = intArrayOf(
+    0, 1, 3,
+    3, 1, 2,
+)
+
+private val textureCoords2D = floatArrayOf(
+    0f, 0f,
+    0f, 1f,
+    1f, 1f,
+    1f, 0f
+)
 
 class CharLabel: Object2D {
     constructor(
@@ -20,8 +36,11 @@ class CharLabel: Object2D {
 
         texture = this.font.charTextures[char] ?: throw Exception("Error obtaining texture for char '$char' with font \"${font.name}\" and size ${font.size2D}")
 
+        this.size = Vector2f(this.font.getWidth("$char"), this.font.getHeight("$char"))
         this.scale = scale
         this.anchorPoint = anchorPoint
+
+        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -40,8 +59,11 @@ class CharLabel: Object2D {
 
         texture = this.font.charTextures[char] ?: throw Exception("Error obtaining texture for char '$char' with font \"${font.name}\" and size ${font.size2D}")
 
+        this.size = Vector2f(this.font.getWidth("$char"), this.font.getHeight("$char"))
         this.scale = scale
         this.anchorPoint = anchorPoint
+
+        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -86,6 +108,5 @@ class CharLabel: Object2D {
 
     private val font: FontExtra
 
-    var texture: Texture
-        private set
+    private var texture: Texture
 }

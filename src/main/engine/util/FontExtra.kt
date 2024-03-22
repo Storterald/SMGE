@@ -6,7 +6,8 @@ import java.awt.*
 import java.awt.image.BufferedImage
 import kotlin.math.max
 
-private val fontTextures: HashMap<FontExtra, HashMap<Char, Texture>> = hashMapOf()
+// TODO fix this shit not working
+private val fontTextures: MutableMap<Font, HashMap<Char, Texture>> = mutableMapOf()
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
 class FontExtra(private val font: Font) : Font(font) {
@@ -15,7 +16,7 @@ class FontExtra(private val font: Font) : Font(font) {
         private set
 
     init {
-        if (font !in fontTextures.keys) {
+        if (fontTextures[font] == null) {
             createFontTexture(font)
         } else {
             charTextures = fontTextures[font]!!
@@ -114,13 +115,13 @@ class FontExtra(private val font: Font) : Font(font) {
 
         buffer.flip()
 
-        val charTexture: Texture = Texture(width, height, buffer)
+        val charTexture: Texture = Texture(width, height, buffer, true)
         MemoryUtil.memFree(buffer)
 
         return charTexture
     }
 
-    fun createFontTexture(font: Font) {
+    private fun createFontTexture(font: Font) {
         for (i in 32..255) {
             if (i == 127) continue
 
@@ -132,6 +133,7 @@ class FontExtra(private val font: Font) : Font(font) {
 
         println("[SMGE] > Created font texture for font \"${font.name}\" with size ${font.size2D}")
 
-        fontTextures[this] = charTextures
+        fontTextures[font] = charTextures
     }
+
 }
