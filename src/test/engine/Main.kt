@@ -5,7 +5,7 @@ fun main() {
 
     loadScene(FPSCounterScene())
 
-    gameLoop(60) {
+    gameLoop(0) {
         update()
     }
 

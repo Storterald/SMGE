@@ -22,4 +22,9 @@ open class Object2D(
         if (!components.containsKey(T::class.java)) addComponent(component)
         else components[T::class.java] = component
     }
+
+    inline fun <reified T: Component> getComponent(): T {
+        check(components.containsKey(T::class.java)) { "There was no specified component \"${T::class.java}\"in the object." }
+        return components[T::class.java] as T
+    }
 }
