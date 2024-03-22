@@ -1,5 +1,6 @@
 package nodeLogic
 
+import renderEngine.Mesh
 import scene.Scene
 import kotlin.reflect.KClass
 
@@ -46,7 +47,17 @@ open class Node(id: String = "") {
             field = value
         }
 
-    open fun addChild(node: Node) {
+    lateinit var mesh: Mesh
+
+    fun isMeshInitialized(): Boolean {
+        return this::mesh.isInitialized
+    }
+
+    fun getType(): KClass<*> {
+        return this::class
+    }
+
+    fun addChild(node: Node) {
         require(node != this) { "A node cannot have itself as a child." }
         require(node.parent == null) { "The node is already a child of another node." }
         require(node !is Scene) { "You can't add a scene as a child." }
@@ -86,6 +97,19 @@ open class Node(id: String = "") {
 
     fun getChildrenCount(): Int {
         return children.size
+    }
+
+    fun getChildrenOfType(type: KClass<*>): List<Node> {
+        require(Node::class.java.isAssignableFrom(type.java)) { "The type must be a Node or one of its sub classes." }
+
+        val out: MutableList<Node> = mutableListOf()
+        children.forEach {
+            if (it::class == type) {
+                out.add(it)
+            }
+        }
+
+        return out
     }
 
     fun removeChild(node: Node) {

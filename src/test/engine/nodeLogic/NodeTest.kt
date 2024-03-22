@@ -1,14 +1,15 @@
 package nodeLogic
 
-import GenericScene
-import nodeLogic.nodeLogic2d.CharLabel
-import nodeLogic.nodeLogic2d.Entity2D
-import nodeLogic.nodeLogic2d.TextLabel
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+
+import nodeLogic.nodeLogic2d.CharLabel
+import nodeLogic.nodeLogic2d.Entity2D
+import nodeLogic.nodeLogic2d.TextLabel
 import renderEngine.createDisplay
+import GenericScene
 
 class NodeTest {
     init {
@@ -162,6 +163,11 @@ class NodeTest {
     // ### FUNCTIONS TEST ###
     // ---------------------
 
+    @Test fun getType_returnsCorrectType() {
+        val textLabel = TextLabel(text = "test")
+        assertEquals(TextLabel::class, textLabel.getType())
+    }
+
     @Test fun addChild_worksCorrectly() {
         val node = Node()
         val childNode = Node("childNode")
@@ -284,6 +290,29 @@ class NodeTest {
         node.addChild(childNode4)
 
         assertEquals(4, node.getChildrenCount())
+    }
+
+    @Test fun getChildrenOfType_returnsCorrectChildren() {
+        val node = Node()
+        val childNode1 = TextLabel("childNode1", text = "")
+        node.addChild(childNode1)
+        val childNode2 = CharLabel("childNode2", char = ' ')
+        node.addChild(childNode2)
+        val childNode3 = TextLabel("childNode3", text = "")
+        node.addChild(childNode3)
+        val childNode4 = Entity2D("childNode4")
+        node.addChild(childNode4)
+
+        val children = node.getChildrenOfType(TextLabel::class)
+
+        assertEquals(2, children.size)
+        assertEquals(true, children[0] is TextLabel)
+        assertEquals(true, children[1] is TextLabel)
+
+        children.sortedBy { it.id }
+
+        assertEquals(childNode1, children[0])
+        assertEquals(childNode3, children[1])
     }
 
     @Test fun removeChild_removesChildCorrectly() {
