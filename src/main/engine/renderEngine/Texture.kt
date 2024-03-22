@@ -9,19 +9,22 @@ import java.nio.ByteBuffer
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/graphic/Texture.java
 class Texture {
     private var textureID = 0
+    var transparent = true
 
-    constructor()
-
-    constructor(imageFile: File) {
+    constructor(imageFile: File, transparent: Boolean = true) {
         check(imageFile.exists()) { "The provided image path does not exist." }
+        this.transparent = transparent
         initTextureWithFile(imageFile)
     }
 
-    constructor(imagePath: String): this(File(imagePath))
+    constructor(imagePath: String, transparent: Boolean = true): this(File(imagePath), transparent)
 
-    constructor(width: Int, height: Int, imageBuffer: ByteBuffer) {
+    constructor(width: Int, height: Int, imageBuffer: ByteBuffer, transparent: Boolean = true) {
         require(width >= 0) { "The texture width must be positive" }
         require(height >= 0) { "The texture height mut be positive" }
+
+        this.transparent = transparent
+
         generateTexture(width, height, imageBuffer)
     }
 

@@ -75,12 +75,18 @@ class Mesh(positions: FloatArray, indices: IntArray, private var texture: Textur
 
     fun renderMesh() {
         texture.bind()
+
         glBindVertexArray(vaoID)
 
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
 
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0)
+
+        if (texture.transparent) {
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+            glDisable(GL_BLEND)
+        }
 
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)

@@ -4,7 +4,22 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import org.joml.Vector2f
+
+import renderEngine.Mesh
 import renderEngine.Texture
+import windowSize
+
+private val indices2D = intArrayOf(
+    0, 1, 3,
+    3, 1, 2,
+)
+
+private val textureCoords2D = floatArrayOf(
+    0f, 0f,
+    0f, 1f,
+    1f, 1f,
+    1f, 0f
+)
 
 class Sprite: Object2D {
     constructor(
@@ -27,6 +42,8 @@ class Sprite: Object2D {
 
         this.scale = scale
         this.anchorPoint = anchorPoint
+
+        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -47,6 +64,8 @@ class Sprite: Object2D {
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
+
+        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -70,8 +89,7 @@ class Sprite: Object2D {
 
     private var image: File
 
-    var texture: Texture
-        private set
+    private var texture: Texture
 
     fun setImage(file: File) {
         check(file.exists()) { "The sprite image file doesn't exist." }

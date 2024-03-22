@@ -17,24 +17,11 @@ import renderEngine.Mesh
 import windowID
 import windowSize
 
-private val indices2D = intArrayOf(
-    0, 1, 3,
-    3, 1, 2,
-)
-
-private val textureCoords2D = floatArrayOf(
-    0f, 0f,
-    0f, 1f,
-    1f, 1f,
-    1f, 0f
-)
-
 abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shaders\\VertexShader.glsl", "src\\main\\engine\\shaders\\FragmentShader.glsl")): Node("") {
     init {
         check(windowID != 0L) { "Initialize the display before creating a scene" }
     }
 
-    private val meshes: HashMap<Node, Mesh> = hashMapOf()
     val nodesToRender: HashMap<Node, Boolean> = hashMapOf()
 
     private var startCodeBlocks: HashMap<String, () -> Unit> = hashMapOf()
@@ -54,6 +41,7 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         // Execute user code
         startCodeBlocks.forEach { it.value() }
 
+        /*
         for (node in nodesToRender.keys) {
             if (node is Object2D) {
                 for (componentEntry in node.components) {
@@ -62,17 +50,11 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
                     }
                 }
             }
-
-            // Convert nodes to meshes
-            when (node) {
-                is Sprite -> meshes[node] = Mesh(node.absolutePosition.toVerticesArray(windowSize), indices2D, node.texture, textureCoords2D)
-                is CharLabel -> meshes[node] = Mesh(node.absolutePosition.toVerticesArray(windowSize), indices2D, node.texture, textureCoords2D)
-            }
-        }
+        } */
 
         //Render meshes
-        meshes.forEach {
-            if (nodesToRender[it.key]!!) it.value.renderMesh()
+        nodesToRender.forEach {
+            if (it.value && it.key.isMeshInitialized()) it.key.mesh.renderMesh()
         }
 
         shader.unbind()
@@ -89,6 +71,7 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         // Execute user code
         updateCodeBlocks.forEach { it.value() }
 
+        /*
         for (node in nodesToRender.keys) {
             if (node is Object2D) {
                 for (componentEntry in node.components) {
@@ -97,11 +80,11 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
                     }
                 }
             }
-        }
+        } */
 
         //Render meshes
-        meshes.forEach {
-            if (nodesToRender[it.key]!!) it.value.renderMesh()
+        nodesToRender.forEach {
+            if (it.value && it.key.isMeshInitialized()) it.key.mesh.renderMesh()
         }
 
         shader.unbind()
@@ -123,10 +106,10 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         glDisableVertexAttribArray(0)
 
         // Removes all meshes
-        meshes.forEach {
-            it.value.cleanUp()
+        nodesToRender.forEach {
+            if (it.key.isMeshInitialized()) it.key.mesh.cleanUp()
         }
-        meshes.clear()
+        nodesToRender.clear()
 
         glfwTerminate()
         glfwSetErrorCallback(null)?.free()
