@@ -1,6 +1,6 @@
-package nodeLogic.nodeLogic3d
+package nodes.nodes3d
 
-import nodeLogic.Node
+import nodes.Node
 import org.joml.Vector3f
 
 open class Node3D(

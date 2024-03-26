@@ -6,20 +6,24 @@ import java.awt.*
 import java.awt.image.BufferedImage
 import kotlin.math.max
 
-// TODO fix this shit not working
-private val fontTextures: MutableMap<Font, HashMap<Char, Texture>> = mutableMapOf()
+var fontTextures: HashMap<String, HashMap<Char, Texture>> = hashMapOf()
+val fontsGlyphs: HashMap<String, HashMap<Char, Glyph>> = hashMapOf()
 
 // Completely stolen from https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
 class FontExtra(private val font: Font) : Font(font) {
-    private val glyphs: MutableMap<Char, Glyph> = mutableMapOf()
+    private var glyphs: HashMap<Char, Glyph> = hashMapOf()
     var charTextures: HashMap<Char, Texture> = hashMapOf()
         private set
 
     init {
-        if (fontTextures[font] == null) {
-            createFontTexture(font)
+        if (fontTextures[font.toString()] == null) {
+            val (charTextures, glyphs)  = createFontTexture(font)
+
+            this.charTextures = charTextures
+            this.glyphs = glyphs
         } else {
-            charTextures = fontTextures[font]!!
+            charTextures = fontTextures[font.toString()]!!
+            glyphs = fontsGlyphs[font.toString()]!!
         }
     }
 
@@ -121,19 +125,23 @@ class FontExtra(private val font: Font) : Font(font) {
         return charTexture
     }
 
-    private fun createFontTexture(font: Font) {
+    private fun createFontTexture(font: Font): Pair<HashMap<Char, Texture>, HashMap<Char, Glyph>> {
+        val fontTexture: HashMap<Char, Texture> = hashMapOf()
         for (i in 32..255) {
             if (i == 127) continue
 
             val char = i.toChar()
             val charTexture = createCharTexture(font, char, true) ?: continue
 
-            charTextures[char] = charTexture
+            fontTexture[char] = charTexture
         }
+
+        fontTextures[font.toString()] = fontTexture
+        fontsGlyphs[font.toString()] = glyphs
 
         println("[SMGE] > Created font texture for font \"${font.name}\" with size ${font.size2D}")
 
-        fontTextures[font] = charTextures
+        return Pair(fontTexture, glyphs)
     }
 
 }

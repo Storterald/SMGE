@@ -1,6 +1,7 @@
 package math
 
 import org.joml.Vector2f
+import org.joml.Vector2i
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -37,6 +38,10 @@ operator fun Vector2f.times(multiplier: Float): Vector2f {
 
 operator fun Vector2f.div(divisor: Int): Vector2f {
     return Vector2f(x / divisor, y / divisor)
+}
+
+fun Vector2f.toVector2i(): Vector2i {
+    return Vector2i(x.toInt(), y.toInt())
 }
 
 fun Vector2f.length(): Float {

@@ -1,13 +1,13 @@
-package nodeLogic
+package nodes
 
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-import nodeLogic.nodeLogic2d.CharLabel
-import nodeLogic.nodeLogic2d.Entity2D
-import nodeLogic.nodeLogic2d.TextLabel
+import nodes.nodes2d.CharLabel
+import nodes.nodes2d.Entity2D
+import nodes.nodes2d.TextLabel
 import renderEngine.createDisplay
 import GenericScene
 

@@ -1,15 +1,20 @@
 package renderEngine
 
+import math.toVector2i
 import org.joml.Vector2f
+import org.joml.Vector2i
 import org.lwjgl.glfw.GLFW.*
 import scene.Scene
 import scene.Resource
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
+import org.lwjgl.system.MemoryUtil
 
 import screenResolution
 import windowID
+import windowSize
+import java.nio.IntBuffer
 
 private var currentScene: Scene? = null
     set(value) {
@@ -36,20 +41,19 @@ private fun initDisplay() {
     )
 }
 
-fun createDisplay(windowTitle: String) {
+fun createDisplay(windowTitle: String, windowSize: Vector2i = Vector2i(0)) {
     require(windowTitle != "") { "The title must contain at least one char." }
     require(windowTitle.trim() != "") { "The title must contain at least one non ' ' char." }
     require(windowTitle[0] != ' ') { "The title mustn't have a space as it's first character." }
 
     initDisplay()
 
-    // Create the window
-    windowID = glfwCreateWindow((screenResolution.x / 2.0f).toInt(), (screenResolution.y / 2.0f).toInt(), windowTitle, 0, 0)
-    if (windowID == 0L) throw RuntimeException("Failed to create the GLFW window.")
+    val size = if (windowSize.x == 0 && windowSize.y == 0) screenResolution.toVector2i() else windowSize
 
-    glfwSetKeyCallback(windowID) { window: Long, key: Int, scancode: Int, action: Int, mods: Int ->
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) glfwSetWindowShouldClose(window, true)
-    }
+    // Create the window
+    windowID = glfwCreateWindow(size.x, size.y, windowTitle, 0, 0)
+    if (windowID == 0L) throw RuntimeException("Failed to create the GLFW window.")
+    ::windowSize.set(Vector2f(size))
 
     glfwMakeContextCurrent(windowID)
 
@@ -64,6 +68,7 @@ fun createDisplay(windowTitle: String) {
 
     GL.createCapabilities()
 
+    // Initial background color
     GL11.glClearColor(0.0f, 1.0f, 0.0f, 1.0f)
 }
 

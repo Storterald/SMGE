@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic3d
+package nodes.nodes3d
 
 import org.joml.Vector3f
 

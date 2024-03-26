@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic2d
+package nodes.nodes2d
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
@@ -54,62 +54,62 @@ class TextLabelTest {
     }
 
     @Test fun thirdConstructor_createsTextLabelWithoutThrowing() {
-        assertDoesNotThrow { TextLabel(text = "Test", fontFile = File("src\\test\\resources\\testFont.otf")) }
+        assertDoesNotThrow { TextLabel(text = "Test", fontFile = File("src\\test\\resources\\Minecraft Regular.otf")) }
     }
 
     @Test fun thirdConstructor_getsImageSize() {
-        val textLabel = TextLabel(text = "Test", fontFile = File("src\\test\\resources\\testFont.otf"))
+        val textLabel = TextLabel(text = "Test", fontFile = File("src\\test\\resources\\Minecraft Regular.otf"))
         assertEquals(26.0f, textLabel.size.x)
         assertEquals(15.0f, textLabel.size.y)
     }
 
     @Test fun thirdConstructor_createsAllCharLabelChildren() {
-        val textLabel = TextLabel(text = "Test", fontFile = File("src\\test\\resources\\testFont.otf"))
+        val textLabel = TextLabel(text = "Test", fontFile = File("src\\test\\resources\\Minecraft Regular.otf"))
         assertEquals(4, textLabel.getChildrenCount())
     }
 
     @Test fun fourthConstructor_createsTextLabelWithoutThrowing() {
-        assertDoesNotThrow { TextLabel(fontSize = 35.0f, text = "Test", fontFile = File("src\\test\\resources\\testFont.otf")) }
+        assertDoesNotThrow { TextLabel(fontSize = 35.0f, text = "Test", fontFile = File("src\\test\\resources\\Minecraft Regular.otf")) }
     }
 
     @Test fun fourthConstructor_getsImageSize() {
-        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontFile = File("src\\test\\resources\\testFont.otf"))
+        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontFile = File("src\\test\\resources\\Minecraft Regular.otf"))
         assertEquals(77.0f, textLabel.size.x)
         assertEquals(42.0f, textLabel.size.y)
     }
 
     @Test fun fourthConstructor_createsAllCharLabelChildren() {
-        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontFile = File("src\\test\\resources\\testFont.otf"))
+        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontFile = File("src\\test\\resources\\Minecraft Regular.otf"))
         assertEquals(4, textLabel.getChildrenCount())
     }
 
     @Test fun fifthConstructor_createsTextLabelWithoutThrowing() {
-        assertDoesNotThrow { TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf") }
+        assertDoesNotThrow { TextLabel(text = "Test", fontPath = "src\\test\\resources\\Minecraft Regular.otf") }
     }
 
     @Test fun fifthConstructor_getsImageSize() {
-        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\Minecraft Regular.otf")
         assertEquals(26.0f, textLabel.size.x)
         assertEquals(15.0f, textLabel.size.y)
     }
 
     @Test fun fifthConstructor_createsAllCharLabelChildren() {
-        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(text = "Test", fontPath = "src\\test\\resources\\Minecraft Regular.otf")
         assertEquals(4, textLabel.getChildrenCount())
     }
 
     @Test fun sixthConstructor_createsTextLabelAndWithoutThrowing() {
-        assertDoesNotThrow { TextLabel(fontSize = 35.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf") }
+        assertDoesNotThrow { TextLabel(fontSize = 35.0f, text = "Test", fontPath = "src\\test\\resources\\Minecraft Regular.otf") }
     }
 
     @Test fun sixthConstructor_getsImageSize() {
-        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontPath = "src\\test\\resources\\Minecraft Regular.otf")
         assertEquals(77.0f, textLabel.size.x)
         assertEquals(42.0f, textLabel.size.y)
     }
 
     @Test fun sixthConstructor_createsAllCharLabelChildren() {
-        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(fontSize = 35.0f, text = "Test", fontPath = "src\\test\\resources\\Minecraft Regular.otf")
         assertEquals(4, textLabel.getChildrenCount())
     }
 
@@ -133,14 +133,14 @@ class TextLabelTest {
 
     @Test fun firstSetFont_changesTheFont() {
         val textLabel = TextLabel(text = "Test")
-        textLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, File("src\\test\\resources\\testFont.otf")))
+        textLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, File("src\\test\\resources\\Minecraft Regular.otf")))
 
         assertEquals("Minecraft Regular", textLabel.font.fontName)
     }
 
     @Test fun firstSetFont_changesTheSize() {
         val textLabel = TextLabel(text = "Test")
-        textLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, File("src\\test\\resources\\testFont.otf")))
+        textLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, File("src\\test\\resources\\Minecraft Regular.otf")))
 
         assertEquals(26.0f, textLabel.size.x)
         assertEquals(15.0f, textLabel.size.y)
@@ -148,14 +148,14 @@ class TextLabelTest {
 
     @Test fun secondSetFont_changesTheFont() {
         val textLabel = TextLabel(text = "Test")
-        textLabel.setFont(File("src\\test\\resources\\testFont.otf"))
+        textLabel.setFont(File("src\\test\\resources\\Minecraft Regular.otf"))
 
         assertEquals("Minecraft Regular", textLabel.font.fontName)
     }
 
     @Test fun secondSetFont_changesTheSize() {
         val textLabel = TextLabel(text = "Test")
-        textLabel.setFont(File("src\\test\\resources\\testFont.otf"))
+        textLabel.setFont(File("src\\test\\resources\\Minecraft Regular.otf"))
 
         assertEquals(26.0f, textLabel.size.x)
         assertEquals(15.0f, textLabel.size.y)
@@ -173,14 +173,14 @@ class TextLabelTest {
 
     @Test fun thirdSetFont_changesTheFont() {
         val textLabel = TextLabel(text = "Test")
-        textLabel.setFont("src\\test\\resources\\testFont.otf")
+        textLabel.setFont("src\\test\\resources\\Minecraft Regular.otf")
 
         assertEquals("Minecraft Regular", textLabel.font.fontName)
     }
 
     @Test fun thirdSetFont_changesTheSize() {
         val textLabel = TextLabel(text = "Test")
-        textLabel.setFont("src\\test\\resources\\testFont.otf")
+        textLabel.setFont("src\\test\\resources\\Minecraft Regular.otf")
 
         assertEquals(26.0f, textLabel.size.x)
         assertEquals(15.0f, textLabel.size.y)

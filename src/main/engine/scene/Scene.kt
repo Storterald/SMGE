@@ -7,12 +7,9 @@ import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.glfw.Callbacks
 
-import nodeLogic.Node
-import nodeLogic.nodeLogic2d.CharLabel
-import nodeLogic.nodeLogic2d.Object2D
-import nodeLogic.nodeLogic2d.Sprite
+import nodes.Node
+import nodes.nodes2d.Node2D
 import org.joml.Vector2f
-import renderEngine.Mesh
 
 import windowID
 import windowSize
@@ -34,6 +31,8 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
         }
 
     fun start() {
+        checkForWindowResize()
+
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
         shader.bind()
@@ -54,7 +53,9 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         //Render meshes
         nodesToRender.forEach {
-            if (it.value && it.key.isMeshInitialized()) it.key.mesh.renderMesh()
+            if (it.value && it.key.isMeshInitialized()) {
+                it.key.mesh.renderMesh()
+            }
         }
 
         shader.unbind()
@@ -84,6 +85,15 @@ abstract class Scene(open val shader: Shader = Shader("src\\main\\engine\\shader
 
         //Render meshes
         nodesToRender.forEach {
+//            println("id: \"${it.key.id}\"\n" +
+//                    "OpenGL pos: ${(it.key as Node2D).absolutePosition.toVerticesArray(windowSize).joinToString()}\n" +
+//                    "pos: ${(it.key as Node2D).position.x}, ${(it.key as Node2D).position.y}\n" +
+//                    "size: ${(it.key as Node2D).size.x}, ${(it.key as Node2D).size.y}\n" +
+//                    "AnPs: ${(it.key as Node2D).anchoredPosition.x}, ${(it.key as Node2D).anchoredPosition.y}\n" +
+//                    "AbPs: ${(it.key as Node2D).absolutePosition.x1}, ${(it.key as Node2D).absolutePosition.y1}, " +
+//                    "${(it.key as Node2D).absolutePosition.x2}, ${(it.key as Node2D).absolutePosition.y2}\n"
+//            )
+//            println("Window size: ${windowSize.x}, ${windowSize.y}\n")
             if (it.value && it.key.isMeshInitialized()) it.key.mesh.renderMesh()
         }
 

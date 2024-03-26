@@ -1,6 +1,6 @@
 package scene
 
-import nodeLogic.nodeLogic2d.Object2D
+import nodes.nodes2d.Object2D
 import org.joml.Vector3f
 
 abstract class Component

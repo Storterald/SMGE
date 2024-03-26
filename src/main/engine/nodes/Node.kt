@@ -1,4 +1,4 @@
-package nodeLogic
+package nodes
 
 import renderEngine.Mesh
 import scene.Scene
@@ -73,6 +73,8 @@ open class Node(id: String = "") {
         }
 
         children.add(node)
+
+        node.loadMesh()
     }
 
     fun getChildById(id: String): Node {
@@ -205,4 +207,6 @@ open class Node(id: String = "") {
             }
         }
     }
+
+    open fun loadMesh() {}
 }

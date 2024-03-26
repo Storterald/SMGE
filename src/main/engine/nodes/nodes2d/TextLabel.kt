@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic2d
+package nodes.nodes2d
 
 import org.joml.Vector2f
 import util.FontExtra
@@ -18,10 +18,10 @@ class TextLabel: Object2D {
         this.font = FontExtra(font.deriveFont(font.style, 12.0f))
         this.text = text
 
+        createTexture()
+
         this.scale = scale
         this.anchorPoint = anchorPoint
-
-        createTexture()
     }
 
     constructor(
@@ -39,10 +39,10 @@ class TextLabel: Object2D {
         this.font = FontExtra(font.deriveFont(font.style, fontSize))
         this.text = text
 
+        createTexture()
+
         this.scale = scale
         this.anchorPoint = anchorPoint
-
-        createTexture()
     }
 
     constructor(
@@ -129,14 +129,14 @@ class TextLabel: Object2D {
     }
 
     private fun createTexture() {
+        size = Vector2f(font.getWidth(text), font.getHeight(text))
+
         var drawnText = ""
         for (c in text) {
-            val charLabel = CharLabel(id = if (c == ' ') "" else "$c", position = Vector2f(font.getWidth(drawnText), 0.0f), anchorPoint = Vector2f(0.0f, 1.0f), fontSize = font.size2D, char = c, font = font)
+            val charLabel = CharLabel(id = if (c == ' ') "" else "$c", position = Vector2f(font.getWidth(drawnText), 0.0f), anchorPoint = Vector2f(0.0f), fontSize = font.size2D, char = c, font = font)
             addChild(charLabel)
             drawnText += c
         }
-
-        size = Vector2f(font.getWidth(text), font.getHeight(text))
     }
 
 }

@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic2d
+package nodes.nodes2d
 
 import java.awt.image.BufferedImage
 import java.io.File
@@ -9,17 +9,8 @@ import renderEngine.Mesh
 import renderEngine.Texture
 import windowSize
 
-private val indices2D = intArrayOf(
-    0, 1, 3,
-    3, 1, 2,
-)
-
-private val textureCoords2D = floatArrayOf(
-    0f, 0f,
-    0f, 1f,
-    1f, 1f,
-    1f, 0f
-)
+private val indices2D = intArrayOf(0, 1, 3, 3, 1, 2,)
+private val textureCoords2D = floatArrayOf(0f, 0f, 0f, 1f, 1f, 1f, 1f, 0f)
 
 class Sprite: Object2D {
     constructor(
@@ -42,8 +33,6 @@ class Sprite: Object2D {
 
         this.scale = scale
         this.anchorPoint = anchorPoint
-
-        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -64,8 +53,6 @@ class Sprite: Object2D {
         this.size = size
         this.scale = scale
         this.anchorPoint = anchorPoint
-
-        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -100,10 +87,15 @@ class Sprite: Object2D {
 
         val imageBuffer: BufferedImage = ImageIO.read(file)
         size = Vector2f(imageBuffer.width.toFloat(), imageBuffer.height.toFloat())
+
     }
 
     fun setImage(filePath: String) {
         setImage(File(filePath))
+    }
+
+    override fun loadMesh() {
+        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
 }

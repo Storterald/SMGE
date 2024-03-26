@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic2d
+package nodes.nodes2d
 
 import org.joml.Vector2f
 import java.awt.Font
@@ -10,17 +10,8 @@ import util.FontExtra
 
 import windowSize
 
-private val indices2D = intArrayOf(
-    0, 1, 3,
-    3, 1, 2,
-)
-
-private val textureCoords2D = floatArrayOf(
-    0f, 0f,
-    0f, 1f,
-    1f, 1f,
-    1f, 0f
-)
+private val indices2D = intArrayOf(0, 1, 3, 3, 1, 2,)
+private val textureCoords2D = floatArrayOf(0f, 0f, 0f, 1f, 1f, 1f, 1f, 0f)
 
 class CharLabel: Object2D {
     constructor(
@@ -39,8 +30,6 @@ class CharLabel: Object2D {
         this.size = Vector2f(this.font.getWidth("$char"), this.font.getHeight("$char"))
         this.scale = scale
         this.anchorPoint = anchorPoint
-
-        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -62,8 +51,6 @@ class CharLabel: Object2D {
         this.size = Vector2f(this.font.getWidth("$char"), this.font.getHeight("$char"))
         this.scale = scale
         this.anchorPoint = anchorPoint
-
-        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
     }
 
     constructor(
@@ -108,5 +95,9 @@ class CharLabel: Object2D {
 
     private val font: FontExtra
 
-    private var texture: Texture
+    private val texture: Texture
+
+    override fun loadMesh() {
+        mesh = Mesh(absolutePosition.toVerticesArray(windowSize), indices2D, texture, textureCoords2D)
+    }
 }

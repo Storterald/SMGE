@@ -1,10 +1,13 @@
-package nodeLogic.nodeLogic2d
+package nodes.nodes2d
 
 import math.Rectangle
 import math.minus
+import math.plus
 import math.times
 import org.joml.Vector2f
-import nodeLogic.Node
+import nodes.Node
+
+private var rScale = Vector2f(1.0f)
 
 open class Node2D(
     id: String = "",
@@ -41,9 +44,6 @@ open class Node2D(
         }
 
     open var scale = scale
-        get() {
-            return if (parent != null && parent is Node2D) field * (parent as Node2D).scale else field
-        }
         set(value) {
             require(value.x >= 0.0f) { "The x scale must be positive" }
             require(value.y >= 0.0f) { "The y scale must be positive" }
@@ -53,18 +53,28 @@ open class Node2D(
 
     val scaledSize: Vector2f
         get() {
-            return scale * size
+            rScale = Vector2f(1.0f)
+            return getScaleRecursive() * size
         }
 
     val anchoredPosition: Vector2f
         get() {
-            return position - (anchorPoint * scaledSize)
+            val ap = position - (anchorPoint * scaledSize)
+            return if (parent != null && parent is Node2D) ap + (parent as Node2D).anchoredPosition else ap
         }
 
     val absolutePosition: Rectangle
         get() {
-            val absolutePos = Rectangle(anchoredPosition, scaledSize)
-            return if (parent != null && parent is Node2D) (parent as Node2D).absolutePosition + absolutePos else absolutePos
+            return Rectangle(anchoredPosition, scaledSize)
         }
+
+    private fun getScaleRecursive(): Vector2f {
+        rScale *= scale
+        if (parent != null && parent is Node2D) {
+            (parent as Node2D).getScaleRecursive()
+        }
+
+        return rScale
+    }
 
 }

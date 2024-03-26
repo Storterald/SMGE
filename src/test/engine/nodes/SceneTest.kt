@@ -1,4 +1,4 @@
-package nodeLogic
+package nodes
 
 import GenericScene
 import org.junit.jupiter.api.Assertions.assertEquals

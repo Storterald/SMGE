@@ -1,4 +1,4 @@
-package nodeLogic.nodeLogic2d
+package nodes.nodes2d
 
 import org.joml.Vector2f
 import scene.Component

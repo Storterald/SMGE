@@ -1,7 +1,7 @@
 import math.div
-import nodeLogic.nodeLogic2d.Node2D
-import nodeLogic.nodeLogic2d.Sprite
-import nodeLogic.nodeLogic2d.TextLabel
+import nodes.nodes2d.Node2D
+import nodes.nodes2d.Sprite
+import nodes.nodes2d.TextLabel
 import org.joml.Vector2f
 import org.joml.Vector3f
 import renderEngine.createResource
@@ -19,13 +19,13 @@ class FPSCounterScene: Scene() {
     private var framesButBetter = 0
 
     init {
-        val testNode = Node2D(position = Vector2f(100.0f), anchorPoint = Vector2f(0.3f, 0.25f), scale = Vector2f(0.75f))
+        val testNode = Node2D(id ="empty-node", position = windowSize/2, anchorPoint = Vector2f(0.5f), scale = Vector2f(0.25f), size = Vector2f(300.0f))
         addChild(testNode)
 
-        val sprite = Sprite(id = "dirt",position = windowSize/2, anchorPoint = Vector2f(0.0f), filePath = "src\\test\\resources\\dirt512x.png")
+        val sprite = Sprite(id = "dirt", anchorPoint = Vector2f(1f), filePath = "src\\test\\resources\\dirt512x.png")
         testNode.addChild(sprite)
 
-        val textLabel = TextLabel(position = Vector2f(0.0f, windowSize.y), anchorPoint = Vector2f(0.0f, 1.0f), fontSize = 25.0f, text = "aaaa", fontPath = "src\\test\\resources\\testFont.otf")
+        val textLabel = TextLabel(id = "fps-counter", position = Vector2f(0.0f, windowSize.y - 19.0f), anchorPoint = Vector2f(0.0f, 1.0f), fontSize = 40.0f, text = "Initial Text")
         addChild(textLabel)
 
         createResource(SecondCounter(0))
@@ -33,7 +33,7 @@ class FPSCounterScene: Scene() {
         addCodeBlock("start", CodeBlock.START) {
             shader.createUniform("test", Vector3f(1f, 1f, 1f))
             shader.createUniform("time", frames.toFloat())
-            //textLabel.setText("FPS: 0")
+            textLabel.setText("FPS: 0")
         }
 
         addCodeBlock("update", CodeBlock.UPDATE) {
@@ -41,7 +41,6 @@ class FPSCounterScene: Scene() {
             val currentSecond: Long = round(System.currentTimeMillis().toDouble()/1000).toLong()
 
             if (currentSecond >= lastSecond + 1) {
-                println("[DebugScene] > FPS: $frames")
                 textLabel.setText("FPS: $frames")
                 frames = 0
                 setResource<SecondCounter>(SecondCounter(currentSecond))
